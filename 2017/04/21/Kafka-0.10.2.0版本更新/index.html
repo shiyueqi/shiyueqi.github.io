@@ -1,0 +1,1138 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Kafka,Scala,消息中间件," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/pug.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Kafka-0.10.2.0版本更新一、从0.8.x, 0.9.x , 0.10.0.x或0.10.1.x到0.10.2.0的更新0.10.2.0有协议的改变。按照下面建议的滚动升级方案，可以保证无宕机升级。但在升级前，需要注意0.10.2.0版本中显著的更新内容。
+从0.10.2.0版本开始，Kafka的Java客户端(producer和consumer)实现了与部分老版本的broker(0.1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka-0.10.2.0版本更新">
+<meta property="og:url" content="http://shiyueqi.github.io/2017/04/21/Kafka-0.10.2.0版本更新/index.html">
+<meta property="og:site_name" content="石头头头的博客">
+<meta property="og:description" content="Kafka-0.10.2.0版本更新一、从0.8.x, 0.9.x , 0.10.0.x或0.10.1.x到0.10.2.0的更新0.10.2.0有协议的改变。按照下面建议的滚动升级方案，可以保证无宕机升级。但在升级前，需要注意0.10.2.0版本中显著的更新内容。
+从0.10.2.0版本开始，Kafka的Java客户端(producer和consumer)实现了与部分老版本的broker(0.1">
+<meta property="og:updated_time" content="2017-04-21T02:07:49.108Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kafka-0.10.2.0版本更新">
+<meta name="twitter:description" content="Kafka-0.10.2.0版本更新一、从0.8.x, 0.9.x , 0.10.0.x或0.10.1.x到0.10.2.0的更新0.10.2.0有协议的改变。按照下面建议的滚动升级方案，可以保证无宕机升级。但在升级前，需要注意0.10.2.0版本中显著的更新内容。
+从0.10.2.0版本开始，Kafka的Java客户端(producer和consumer)实现了与部分老版本的broker(0.1">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://shiyueqi.github.io/2017/04/21/Kafka-0.10.2.0版本更新/"/>
+
+
+
+
+
+  <title> Kafka-0.10.2.0版本更新 | 石头头头的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?5e9fafb0a8320f0ead8c2b80d6675a83";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">石头头头的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'cYmyKKAbtcky5-pLdKbh','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/04/21/Kafka-0.10.2.0版本更新/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shi Yueqi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/pug.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="石头头头的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Kafka-0.10.2.0版本更新
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-21T10:07:49+08:00">
+                2017-04-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术博客/" itemprop="url" rel="index">
+                    <span itemprop="name">技术博客</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/21/Kafka-0.10.2.0版本更新/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/04/21/Kafka-0.10.2.0版本更新/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/04/21/Kafka-0.10.2.0版本更新/" class="leancloud_visitors" data-flag-title="Kafka-0.10.2.0版本更新">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Kafka-0-10-2-0_u7248_u672C_u66F4_u65B0"><a href="#Kafka-0-10-2-0_u7248_u672C_u66F4_u65B0" class="headerlink" title="Kafka-0.10.2.0版本更新"></a>Kafka-0.10.2.0版本更新</h1><h2 id="u4E00_u3001_u4ECE0-8-x_2C_0-9-x__2C_0-10-0-x_u62160-10-1-x_u52300-10-2-0_u7684_u66F4_u65B0"><a href="#u4E00_u3001_u4ECE0-8-x_2C_0-9-x__2C_0-10-0-x_u62160-10-1-x_u52300-10-2-0_u7684_u66F4_u65B0" class="headerlink" title="一、从0.8.x, 0.9.x , 0.10.0.x或0.10.1.x到0.10.2.0的更新"></a>一、从0.8.x, 0.9.x , 0.10.0.x或0.10.1.x到0.10.2.0的更新</h2><p>0.10.2.0有协议的改变。按照下面建议的滚动升级方案，可以保证无宕机升级。但在升级前，需要注意0.10.2.0版本中显著的更新内容。</p>
+<p>从0.10.2.0版本开始，Kafka的Java客户端(producer和consumer)实现了与部分老版本的broker(0.10.x)通信的兼容性。0.10.2.0版本的客户端可以与0.10.0或更高版本的broker通信。但是，如果broker的版本低于0.10.0，必须先升级所有Kafka集群中的brokers的版本，才可以继续升级客户端的版本。</p>
+<p>0.10.2.0版本的brokers支持0.8.x或更高版本的客户端。</p>
+<h3 id="1-_u6EDA_u52A8_u5347_u7EA7"><a href="#1-_u6EDA_u52A8_u5347_u7EA7" class="headerlink" title="1.滚动升级"></a>1.滚动升级</h3><ol>
+<li>更新所有brokers上的server.properties文件，并增加以下配置<br><code>broker.protocol.version=CURRENT_KAFKA_VERSION (e.g. 0.8.2, 0.9.0,0.10.0 or 0.10.1).</code><br><code>message.format.version=CURRENT_KAFKA_VERSION (See potential performance impact following the upgrade for the details on what this configuration does.)</code></li>
+<li>逐台升级brokers：停掉broker，更新代码，然后重启</li>
+<li>一旦所有集群节点都升级了，下面就可以逐步升级protocol版本－－通过<code>inter.broker.protocol.version</code>这个配置选项，设置为0.10.2</li>
+<li>如果原有消息版本是0.10.0，可以直接将<code>log.message.format.version</code>设定为0.10.2（这是个空指令，因为0.10.0, 0.10.1和0.10.2的消息格式是相同的）。如果原有消息版本低于0.10.0，则不能直接改变<code>log.message.format.version</code>，在改变这个参数之前，应该将所有consumer客户端都升级到0.10.0.0或者更高版本。</li>
+<li>逐台重启brokers，使新协议生效</li>
+<li>如果此时<code>log.message.format.version</code>依然低于0.10.0，则需要等待所有consumer都升级到0.10.0或者更高版本，然后才能改变每台broker的<code>log.message.format.version</code>到0.10.2，最后逐台重启。</li>
+</ol>
+<p>注意：如果你可以接受宕机，那你停掉所有brokers之后再更新代码然后重启它们。启动将默认采用新协议。</p>
+<p>注意：设定版本协议以及重启可以在所有brokers都升级之后任何时间进行。而不需要在升级之后立刻重启。</p>
+<h3 id="2-_u5347_u7EA7_u4E00_u4E2A0-10-1_u7248_u672C_u7684Kafka_Streams_u5E94_u7528"><a href="#2-_u5347_u7EA7_u4E00_u4E2A0-10-1_u7248_u672C_u7684Kafka_Streams_u5E94_u7528" class="headerlink" title="2.升级一个0.10.1版本的Kafka Streams应用"></a>2.升级一个0.10.1版本的Kafka Streams应用</h3><ul>
+<li><p>Streams应用从0.10.1升级到0.10.2不需要更新broker。一个0.10.2版本的Streams应用可以与0.10.1和0.10.2版本的brokers连接通信（但是不可以与0.10.0版本的brokers连接通信）。</p>
+</li>
+<li><p>需要重新编译代码。仅仅替换Kafka Streams library 的jar文件不会生效，而且会影响应用。</p>
+</li>
+<li><p>如果使用了一个定制的timestamp extractor (即用户实现的)，需要更新代码，<code>因为TimestampExtractor</code> 接口发生了变动。</p>
+</li>
+<li>使用注册了定制的metrics，需要更新代码，因为<code>StreamsMetric</code> 接口发生了变动。</li>
+<li>参考  <a href="http://kafka.apache.org/0102/documentation/streams#streams_api_changes_0102" target="_blank" rel="external">Streams API changes in 0.10.2</a> ，获得更多详细信息。</li>
+</ul>
+<h3 id="3-_u57280-10-2-1_u7248_u672C_u4E2D_u663E_u8457_u7684_u66F4_u65B0"><a href="#3-_u57280-10-2-1_u7248_u672C_u4E2D_u663E_u8457_u7684_u66F4_u65B0" class="headerlink" title="3.在0.10.2.1版本中显著的更新"></a>3.在0.10.2.1版本中显著的更新</h3><ul>
+<li>为提高Kafka Streams应用程序的弹性，<code>StreamsConfig</code>类中的两个配置的默认值发生变更。</li>
+<li>Kafka Streams Producer的 <code>retries</code>的默认值从0改为10。</li>
+<li>Kafka Streams Consumer的 <code>poll.interval.ms</code>默认值从300000改为<code>MAX\_VALUE</code>。</li>
+</ul>
+<h3 id="4-_u57280-10-2-0_u7248_u672C_u4E2D_u663E_u8457_u7684_u66F4_u65B0"><a href="#4-_u57280-10-2-0_u7248_u672C_u4E2D_u663E_u8457_u7684_u66F4_u65B0" class="headerlink" title="4.在0.10.2.0版本中显著的更新"></a>4.在0.10.2.0版本中显著的更新</h3><ul>
+<li>Java客户端(producer和consumer)实现了与部分老版本的brokers(0.10.x)通信的兼容性。0.10.2.0版本的客户端可以与0.10.0或更高版本的broker通信。需要注意的是当使用老版本的brokers时，一些功能不可用或被限制。</li>
+<li>Java consumer客户端的一些方法现在可能抛出InterruptException异常，当调用的线程被中断时。请参考KafkaConsumer的Javadoc，去获得关于这一变更更详细的解释。</li>
+<li>Java consumer客户端现在可以优雅下线。Consumer将会默认等待30秒去完成待处理的请求。一个新的带有timeout参数的关闭API已经被添加到KafkaConsumer中去控制最大的等待时间。</li>
+<li>用逗号分隔多个正则表达式，可以通过MirrorMaker使用新的java consumer的白名单选项完成。这使得行为符合当MirrorMaker使用的旧Scala consumer。</li>
+<li>Streams应用从0.10.1升级到0.10.2不需要更新broker。一个0.10.2版本的Streams应用可以与0.10.1和0.10.2版本的brokers连接通信（但是不可以与0.10.0版本的brokers连接通信）。</li>
+<li>在Streams API中，Zookeeper的依赖被移除。Streams API现在使用Kafka protocol去管理内部的topics，而代替以往的直接操作修改Zookeeper。这消除了通过特殊权限直接连接访问Zookeeper需求，同时&quot; ZOOKEEPER_CONFIG&quot;也不再需要在Streams应用程序的中进行设置。如果Kafka群集是安全的，Streams应用程序必须具有所要求的安全特殊权限才可以创建新主题。</li>
+<li>StreamsConfig类中增加了几个新的字段，包括，&quot;protocol&quot;, &quot;max.idle.ms&quot;, &quot;backoff.ms&quot;, &quot;backoff.ms&quot; 和 &quot;timeout.ms&quot;。用户需要对这些字段的默认值进行关注，如果有需要，可以自行赋值。请参考  <a href="http://kafka.apache.org/0102/documentation/#streamsconfigs" target="_blank" rel="external">5 Kafka Streams Configs</a> 获取更多详细内容。</li>
+<li>Broker配置的<code>topic.replication.factor</code>现在是强制需求的当topic自动创建时。内部的topic自动创建会以<code>GROUP_COORDINATOR_NOT_AVAILABLE</code>失败，直到集群的数量符合副本的要求。</li>
+</ul>
+<h3 id="5-_u65B0_u534F_u8BAE_u7248_u672C"><a href="#5-_u65B0_u534F_u8BAE_u7248_u672C" class="headerlink" title="5.新协议版本"></a>5.新协议版本</h3><ul>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-88%3A+OffsetFetch+Protocol+Update" target="_blank" rel="external">KIP-88</a>: OffsetFetchRequest v2 支持检索所有topics的offsets，当topics array赋值为null。</li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-88%3A+OffsetFetch+Protocol+Update" target="_blank" rel="external">KIP-88</a>: OffsetFetchResponse v2引入新的顶级error_code字段。</li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-103%3A+Separation+of+Internal+and+External+traffic" target="_blank" rel="external">KIP-103</a>:UpdateMetadataRequest v3 end_points array 的元素引入新的listener_name字段。</li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-108%3A+Create+Topic+Policy" target="_blank" rel="external">KIP-108</a>: CreateTopicsRequest v1 引入新的validate_only字段。</li>
+<li><a href="https://cwiki.apache.org/confluence/display/KAFKA/KIP-108%3A+Create+Topic+Policy" target="_blank" rel="external">KIP-108</a>: CreateTopicsResponse v1 topic_errors array 的元素引入新的error_message字段。</li>
+</ul>
+<h3 id="6-_u7248_u672C_u53D1_u5E03_u6587_u6863"><a href="#6-_u7248_u672C_u53D1_u5E03_u6587_u6863" class="headerlink" title="6.版本发布文档"></a>6.版本发布文档</h3><p><a href="https://archive.apache.org/dist/kafka/0.10.1.0/RELEASE_NOTES.html" target="_blank" rel="external">https://archive.apache.org/dist/kafka/0.10.1.0/RELEASE_NOTES.html</a></p>
+<p><a href="https://archive.apache.org/dist/kafka/0.10.1.1/RELEASE_NOTES.html" target="_blank" rel="external">https://archive.apache.org/dist/kafka/0.10.1.1/RELEASE_NOTES.html</a>.</p>
+<h2 id="u4E8C_u3001_u4ECE0-8-x_2C_0-9-x__2C_0-10-0-x_u52300-10-1-0_u7684_u66F4_u65B0"><a href="#u4E8C_u3001_u4ECE0-8-x_2C_0-9-x__2C_0-10-0-x_u52300-10-1-0_u7684_u66F4_u65B0" class="headerlink" title="二、从0.8.x, 0.9.x , 0.10.0.x到0.10.1.0的更新"></a>二、从0.8.x, 0.9.x , 0.10.0.x到0.10.1.0的更新</h2><p>0.10.1.0有协议的改变。按照下面建议的滚动升级方案，可以保证无宕机升级。但是，在升级前需要注意0.10.1.0中隐含的breaking更新内容。</p>
+<p>注意：</p>
+<ol>
+<li>由于引入了新协议，在升级客户端之前，一定要注意需要先升级kafka集群。</li>
+<li>Kafka broker集群是向前兼容的，可以兼容老版本的客户端。即0.10.1.x版本的broker也支持老版本的客户端。</li>
+<li>客户端一般是向后兼容的，不与老版本的broker兼容。即0.10.1.x客户端仅支持0.10.1.x或者更高版本的brokers。</li>
+</ol>
+<h3 id="1-_u6EDA_u52A8_u5347_u7EA7-1"><a href="#1-_u6EDA_u52A8_u5347_u7EA7-1" class="headerlink" title="1.滚动升级"></a>1.滚动升级</h3><ol>
+<li>更新所有brokers上的server.properties文件，并增加以下配置<br><code>broker.protocol.version=CURRENT_KAFKA_VERSION (例如 0.8.2.0, 0.9.0.0, 0.10.0.0).</code><br><code>message.format.version=CURRENT_KAFKA_VERSION (See potential performance impact following the upgrade for the details on what this configuration does.)</code></li>
+<li>逐台升级brokers：停掉broker，更新代码，然后重启</li>
+<li>一旦所有集群节点都升级了，下面就可以逐步升级protocol版本－－通过<code>inter.broker.protocol.version</code>这个配置选项，设置为0.10.1.0</li>
+<li>如果原有消息版本是0.10.0，可以直接将<code>log.message.format.version</code>设定为0.10.1（这是个空指令，因为0.10.0和0.10.1的消息格式是相同的）。如果原有消息版本低于0.10.0，则不能直接改变<code>log.message.format.version</code>，在改变这个参数之前，应该将所有consumer客户端都升级到0.10.0.0或者更高版本。</li>
+<li>逐台重启brokers，使新协议生效</li>
+<li>如果此时<code>log.message.format.version</code>依然低于0.10.0，则需要等待所有consumer都升级到0.10.0或者更高版本，然后才能改变每台broker的<code>log.message.format.version</code>到0.10.1，最后逐台重启。</li>
+</ol>
+<p>注意：如果你可以接受宕机，那你停掉所有brokers之后再更新代码然后重启它们。启动将默认采用新协议。</p>
+<p>注意：设定版本协议以及重启可以在所有brokers都升级之后任何时间进行。而不需要在升级之后立刻重启。</p>
+<h3 id="2-_u57280-10-1-0_u7248_u672C_u4E2D_u6F5C_u5728_u7684breaking_u66F4_u65B0"><a href="#2-_u57280-10-1-0_u7248_u672C_u4E2D_u6F5C_u5728_u7684breaking_u66F4_u65B0" class="headerlink" title="2.在0.10.1.0版本中潜在的breaking更新"></a>2.在0.10.1.0版本中潜在的breaking更新</h3><ul>
+<li>日志删除时间不再基于日志文件的最后变更时间，而是基于日志文件中消息的最大的时间戳</li>
+<li>日志滚动时间不在基于日志创建时间。而是基于消息的时间戳。需要特别指出的是，如果第一条消息的时间戳是T，当新消息的时间戳大于或者等于T＋log.roll.ms时，将会滚动创建新的日志文件</li>
+<li>10.0打开文件的句柄数大约会增加33%，这是因为因为每个日志文件都会存在相应的时间索引文件</li>
+<li>时间索引以及offset索引将使用相同的索引尺寸配置。因为每个时间索引记录大小是offset索引记录大小的1.5倍。用户可能需要提高<code>log.index.size.max.bytes</code>以避免可能频繁出现的日志滚动。</li>
+<li>由于增大了索引文件的数量，某些brokers可能生成大量的日志文件，则broker启动期间日志加载过程会加长。基于我们的实验，设置<code>num.recovery.threads.per.data.dir</code>为1可以降低日志加载时间。</li>
+</ul>
+<h3 id="3-_u5347_u7EA7_u4E00_u4E2A0-10-0_u7248_u672C_u7684Kafka_Streams_u5E94_u7528"><a href="#3-_u5347_u7EA7_u4E00_u4E2A0-10-0_u7248_u672C_u7684Kafka_Streams_u5E94_u7528" class="headerlink" title="3.升级一个0.10.0版本的Kafka Streams应用"></a>3.升级一个0.10.0版本的Kafka Streams应用</h3><ul>
+<li>Streams应用从0.10.0升级到0.10.1必须要升级更新broker。因为一个0.10.1版本的Streams应用只能与0.10.1版本的brokers连接通信。</li>
+<li>有若干个API的更新，不向后兼容（参见更多的细节在 <a href="http://kafka.apache.org/0102/documentation/streams#streams_api_changes_0101" target="_blank" rel="external">10.1版本Streams API的更新</a>）。因此，你需要更新和重新编译你的代码。仅仅替换Kafka Streams library 的jar文件不会生效，而且会影响应用。</li>
+</ul>
+<h3 id="4-_u57280-10-1-0_u7248_u672C_u4E2D_u663E_u8457_u7684_u66F4_u65B0"><a href="#4-_u57280-10-1-0_u7248_u672C_u4E2D_u663E_u8457_u7684_u66F4_u65B0" class="headerlink" title="4.在0.10.1.0版本中显著的更新"></a>4.在0.10.1.0版本中显著的更新</h3><ul>
+<li>Java新版本的consumer不再是beta版本的，推荐在所有新开发中使用这个版本。老的Scala版本的consumers依然支持，但是下一个release版本中将会丢弃，并且在将来主要release版本中都会移除scala版本。</li>
+<li>–new-consumer或者–new.consumer选项：在MirrorMaker工具中不再是必须的，在终端consumer中也不再是必须的；需要传递kafka broker给consumer，而不能再使用zookeeper集群中的配置。另外，终端无法使用旧版本的consumer，将来主要release版本中也不再提供对旧版本consumer的支持。</li>
+<li>Kafka 集群可以使用cluster id用来唯一标识。当broker升级到0.10.1.0版本时，会自动产生一个这样的cluster id。通过配置选项kafka.server:type=KafkaServer，name=ClusterId就可以使用cluster id，同时cluster id会作为metadata返回信息的一部分回馈给客户端。Serializers，client interceptors 和metric reportes可以通过ClusterResourceListener接口获取cluster id。</li>
+<li>BrokerState&quot;RunningAsController&quot;已经移除了。由于某个bug，broker可能会短暂的处于这种状态，因此移除这个状态造成的影响很小。推荐通过kafka.controller:type＝KafkaController，name＝ActiveControllerCount这个指标来检查某个broker是否为controller。</li>
+<li>新版本的java consumer目前支持拥护通过timestamp查询offsets</li>
+<li>新版本的Java consumer目前支持通过后台线程进行心跳联系。新配置选项max.poll.interval.ms是用来检查consumer是否脱离consumer group的时间间隔（默认为5分钟）。配置选项request.timeout.ms一般大于max.poll.interval.ms，因为request.timeout.ms是当consumer进行重新负载均衡时，JoinGroup请求可以阻塞server的最大时间，因此我们只需要使request.timeout.ms大于5分钟就可以了。最后，session.timeout.ms的默认值已经降低到10秒钟了，max.poll.records的默认值已经调整为500条了。</li>
+<li>当使用授权模式时，如果用户对某个topic没有描述授权，broker不再返回<code>TOPIC_AUTHORIZATION_FAILED</code>错误，因为有可能会泄漏topic名字，相反，会返回错误码<code>UNKNOWN_TOPIC_OR_PARTITION</code>。当使用producer或者consumer的客户端遇到unknown topic error时一般会自动重试，所以这可能会造成超时或者延迟。如果想要确认客户端是否发生了这些错误，需要查询客户端日志。</li>
+<li>抓取请求的应答一般有默认大小的限制（默认情况下，consumers是50mb，备份是10mb）。针对每个partition的应答也有限制－consumers和备份是1mb。需要注意的是，这两种限制的任何一个都不是绝对的最大值，下面将会解释。</li>
+<li>即使消息大小大于response/partitions的默认大小限制，consumers和replicas依然会继续获取消息。更加直白的说，如果某次消息抓取中，第一个非空partition的第一个消息大于以上两个限制的任何一个，这条消息仍然会被返回，所以上面才说不是绝对的最大值。</li>
+<li>负载过重的构造者（？）将会被添加到<code>kafka.api.FetchRequest</code>和<code>kafka.javaapi.FetchRequest</code>中，以允许调用者可以指定partitions的次序（因为order在v3中很重要）。原有的构造者（？）将会被丢弃，在请求发送之前，为了避免出现空闲的链接，partitions将会重新随机分配。</li>
+</ul>
+<h3 id="5-_u65B0_u534F_u8BAE_u7248_u672C-1"><a href="#5-_u65B0_u534F_u8BAE_u7248_u672C-1" class="headerlink" title="5.新协议版本"></a>5.新协议版本</h3><ul>
+<li>ListOffsetRequest v1支持准确的基于timestamps的offset查询。</li>
+<li>MetadataResponse v2引入新的域：&quot;cluster_id&quot;</li>
+<li>FetchRequest v3 支持限制应答尺寸（还有针对每个partition的限制），如果要求broker继续执行，则返回的消息可能大于上面的限制。同时，请求中partitions的次序也变得很重要了。</li>
+<li>JoinGroup v1引入新的域：rebalance_timeout。</li>
+</ul>
+<h3 id="6-_u7248_u672C_u53D1_u5E03_u6587_u6863-1"><a href="#6-_u7248_u672C_u53D1_u5E03_u6587_u6863-1" class="headerlink" title="6.版本发布文档"></a>6.版本发布文档</h3><p><a href="https://archive.apache.org/dist/kafka/0.10.1.1/RELEASE_NOTES.html" target="_blank" rel="external">https://archive.apache.org/dist/kafka/0.10.1.1/RELEASE_NOTES.html</a>.</p>
+<h2 id="u4E09_u3001_u4ECE0-8-x_2C_0-9-x_u52300-10-0-0_u7684_u66F4_u65B0"><a href="#u4E09_u3001_u4ECE0-8-x_2C_0-9-x_u52300-10-0-0_u7684_u66F4_u65B0" class="headerlink" title="三、从0.8.x, 0.9.x到0.10.0.0的更新"></a>三、从0.8.x, 0.9.x到0.10.0.0的更新</h2><p>0.10.0.0有潜在的breaking更新内容（请在升级前确认这些更新内容）以及升级可能引发的潜在的性能影响。按照下面建议的滚动升级方案，可以保证升级期间无宕机以及没有性能影响。</p>
+<p>注意：由于引入了新协议。在升级客户端之前一定要先升级Kafka集群。</p>
+<p>注意：客户端版本为0.9.0.0需要注意:由于0.9.0.0版本引入了bug，依赖于zookeeper的客户端（老的scala high-level consumer以及使用老版本consumer的MirroMaker）可能无法与0.10.0.x版本的broker正常工作。因此，在brokers升级到0.10.0.x之前，0.9.0.0客户端应当升级到0.9.0.1。对于0.8.x或者0.9.0.1客户端来说，这是不需要的。</p>
+<h3 id="1-_u6EDA_u52A8_u5347_u7EA7-2"><a href="#1-_u6EDA_u52A8_u5347_u7EA7-2" class="headerlink" title="1.滚动升级"></a>1.滚动升级</h3><ol>
+<li>更新所有brokers上的server.properties文件，并增加以下配置<ol>
+<li>a)broker.protocol.version=CURRENT_KAFKA_VERSION (例如 0.8.2.0, 0.9.0.0).</li>
+<li>b)message.format.version=CURRENT_KAFKA_VERSION (See potential performance impact following the upgrade for the details on what this configuration does.)</li>
+</ol>
+</li>
+<li>升级brokers，逐台停掉broker，更新代码，然后重启。</li>
+<li>一旦全部cluster都升级了，可以通过编辑inter.broker.protocol.version为0.10.0.0，来升级协议版本。注意：不能轻易改动log.message.format.version－－这个选项只能当所有consumers已经升级到0.10.0.0之后才能升级。</li>
+<li>逐台重启brokers，使新协议生效。</li>
+<li>一旦所有consumers都升级到0.10.0，将每台broker升级log.message.format.version到0.10.0，然后重启。</li>
+</ol>
+<p>注意：如果你可以接受宕机，那你停掉所有brokers之后再更新代码然后重启它们。启动将默认采用新协议。</p>
+<p>注意：设定版本协议以及重启可以在所有brokers都升级之后任何时间进行。而不需要在升级之后立刻重启。</p>
+<h3 id="2-_u57280-10-0-0_u4E4B_u540E_u6F5C_u5728_u7684_u6027_u80FD_u5F71_u54CD"><a href="#2-_u57280-10-0-0_u4E4B_u540E_u6F5C_u5728_u7684_u6027_u80FD_u5F71_u54CD" class="headerlink" title="2.在0.10.0.0之后潜在的性能影响"></a>2.在0.10.0.0之后潜在的性能影响</h3><p>0.10.0中的消息格式包含一个新加的时间戳，并对压缩的消息采用相对offsets。磁盘上的消息格式可以通过server.properties文件中log.message.format.version来配置。磁盘上消息格式的默认版本是0.10.0.如果consumer客户端版本早于0.10.0.0，那么只能识别早于0.10.0版本的消息。这种情况下，broker可以将消息格式从0.10.0版本转换为更早的版本，以兼容更早版本的consumer。然而，broker一旦转换则无法使用零拷贝。来自kafka 社区的报告称：升级前后，cpu的利用率由20%提升到100%，这就可以使原本由于拷贝产生性能降低恢复正常。在consumers升级到0.10.0.0之前，为了避免这样的消息转换，可以设置log.message.format.version为0.8.2或者0.9.0.这种方法，broker可以依然使用零拷贝转换，以发送对应格式消息给老的consumers。一旦consumers升级之后，可以在broker上更新消息格式到0.10.0，这样consumer就可以获取包含新增时间戳的消息格式以及经过改善的消息压缩。消息格式的升级保证了兼容性，可以有效的支持一些没有更新版本的客户端。因此，对于避免broker已经更新但是大部分客户端没有更新时broker出现的消息转换，这是非常关键的。</p>
+<p>对于客户端来说，升级到0.10.0.0，没有任何性能影响。</p>
+<p>注意：</p>
+<ol>
+<li>设置消息格式版本，可以确认识别所有原有的消息或者是当前消息格式版本下的消息。否则，0.10.0.0之前的consumer可能会意外中止消费。特别是，在消息格式升级为0.10.0之后，不应当再将消息格式降级为低版本，否则可能会导致consumers意外中止。</li>
+<li>由于每条消息中新引入的时间戳，生产者在发送小消息时会发现吞吐率会降低，这是由于消息头增大了。而且，备份时每条消息也会增加额外的8字节。如果原本已经逼近集群的网络性能瓶颈，则时间戳的引入可能会超出网络负载能力，并引发发送失败。</li>
+<li>注意：如果producer可以压缩，可能会发现producer的吞吐率下降，或者broker压缩性能下降。当接收到压缩后的消息，0.10.0版本的broker会避免重压缩，这可以减少延迟并改善吞吐率。在某些情况下，这可能会降低producer的批量发送量，这将导致较差的吞吐率。如果发生这种情况，用户更改linger.ms以及batch.size来获取更高的吞吐率。另外，如果在producer端采用snappy方式压缩，则比在broker端进行压缩耗费的内存要小，而且向磁盘上写消息对压缩率有副作用。我们打算在将来的kafka release版本中可以配置在哪一方进行压缩。</li>
+</ol>
+<h3 id="3-_u57280-10-0-0_u7248_u672C_u4E2D_u6F5C_u5728_u7684breaking_u66F4_u65B0"><a href="#3-_u57280-10-0-0_u7248_u672C_u4E2D_u6F5C_u5728_u7684breaking_u66F4_u65B0" class="headerlink" title="3.在0.10.0.0版本中潜在的breaking更新"></a>3.在0.10.0.0版本中潜在的breaking更新</h3><ul>
+<li>从kafka 0.10.0.0开始，消息格式版本也代表了kafka版本。例如，消息格式0.9.0即kafka 0.9.0可以支持的最高版本。</li>
+<li>消息格式0.10.0已经引入并且默认情况下会使用。它包含了时间戳域，以及用来压缩消息的相对的offset。</li>
+<li>ProduceRequest／Response v2已经引入，默认情况下支持消息格式0.10.0</li>
+<li>FetchRequest/Response v2已经引入，默认情况下可以支持消息格式0.10.0</li>
+<li>MessageFormatter接口从 def writeTo(key : Array[Byte], value : Array[Byte], output:PrintStream)  变为def writeTo(consumerRecord: ConsumerRecord[Array[Byte], Array[Byte]], output: PrintStream)</li>
+<li>MessageReader接口从def readMessage(): KeyedMessage[Array[Byte], Array[Byte]]变为 def readMessage() : ProducerRecord[Array[Byte], Array[Byte]]</li>
+<li>MessagesFormatter&#39;s包名从kafka.tools变为kafka.common</li>
+<li>MessageReader&#39;s包从kafka.tools变为kafka.common</li>
+<li>MirroMakerMesageHandler 不在暴露接口： handle(record: MessageAndMetadata[Array[Byte], Array[Byte]])，因为此方法从来没调用过。</li>
+<li>7 KafkaMigrationTool不在由kafka封装了。如果你想从0.7迁移到0.10.0，请首先迁移到0.8，然后下面会说如何从0.8迁移到0.10.0</li>
+<li>新版本的consumer已经规范化它的APIs，以接受 java.util.Collection作为方法参数的序列类型。已存的代码可能需要更新到0.10.0客户端库。</li>
+<li>LZ4－压缩消息处理已经改变，采用可共同操作框架说明（LZ4f v1.5.1）。为了与老版本客户端的兼容性，这个改变只在0.10.0或者更高的版本中使用。使用v0/v1（0.9.0的消息格式）生产或者抓取LZ4压缩消息的客户端应当继续使用0.9.0的框架说明。可共同操作的LZ4库的说明可以查看官网。</li>
+</ul>
+<h3 id="4-_u57280-10-0-0_u7248_u672C_u4E2D_u663E_u8457_u7684_u66F4_u65B0"><a href="#4-_u57280-10-0-0_u7248_u672C_u4E2D_u663E_u8457_u7684_u66F4_u65B0" class="headerlink" title="4.在0.10.0.0版本中显著的更新"></a>4.在0.10.0.0版本中显著的更新</h3><ul>
+<li>从kafka 0.10.0.0开始，一个新的客户端库－Kafka Streams在流式处理中开始可用。这个新增kafka客户端库只能工作在0.10.x或者更高kafka版本上。细节信息请阅读</li>
+<li>配置选项receive.buffer.bytes的默认值目前变为64k</li>
+<li>新版本consumer提供了exclude.internal.topics用于严格区分内部使用的topic，防止正则表达式包含内部使用的topics。默认情况是生效的。</li>
+<li>老得Scala版本的producer已经废弃了。用户需要迁移它们的代码到Java producer。</li>
+<li>新版本的consumer API已经标注稳定了。</li>
+</ul>
+<h3 id="5-_u7248_u672C_u53D1_u5E03_u6587_u6863"><a href="#5-_u7248_u672C_u53D1_u5E03_u6587_u6863" class="headerlink" title="5.版本发布文档"></a>5.版本发布文档</h3><p><a href="https://archive.apache.org/dist/kafka/0.10.0.0/RELEASE_NOTES.html" target="_blank" rel="external">https://archive.apache.org/dist/kafka/0.10.0.0/RELEASE_NOTES.html</a></p>
+<p><a href="https://archive.apache.org/dist/kafka/0.10.0.1/RELEASE_NOTES.html" target="_blank" rel="external">https://archive.apache.org/dist/kafka/0.10.0.1/RELEASE_NOTES.html</a>.</p>
+<h2 id="u56DB_u3001_u4ECE0-8-0_2C_0-8-1-x_2C_0-8-2-x_u52300-9-0_u7684_u66F4_u65B0"><a href="#u56DB_u3001_u4ECE0-8-0_2C_0-8-1-x_2C_0-8-2-x_u52300-9-0_u7684_u66F4_u65B0" class="headerlink" title="四、从0.8.0, 0.8.1.x, 0.8.2.x到0.9.0的更新"></a>四、从0.8.0, 0.8.1.x, 0.8.2.x到0.9.0的更新</h2><p>0.9.0.0有潜在的breaking更新内容（请在升级前确认这些更新内容），和以前的版本相比，内部协议也发生了一些变化。这就意味着，升级后的brokers和客户端可能与老版本并不兼容。在升级客户端之前重要的是升级kafka 集群版本。如果下游使用MirroMaker获取消息，集群brokers也应当首先升级。</p>
+<h3 id="1-_u6EDA_u52A8_u5347_u7EA7-3"><a href="#1-_u6EDA_u52A8_u5347_u7EA7-3" class="headerlink" title="1.滚动升级"></a>1.滚动升级</h3><ol>
+<li>更新所有brokers上的server.properties文件：inter.broker.protocol.version＝0.8.2.x</li>
+<li>更新brokers。这一步可以一次性做完：停掉broker，更新代码，然后重启它</li>
+<li>一旦所有集群节点都更新完了，逐步更新inter.broker.protocol.version到0.9.0.0.</li>
+<li>逐台重启所有brokers，使新协议生效。</li>
+</ol>
+<p>注意：如果你可以接受宕机，那你可以先停掉所有brokers，然后更新代码，最后重启所有brokers。重启后将默认采用新协议。</p>
+<p>注意：设定版本协议以及重启可以在所有brokers都升级之后任何时间进行。而不需要在升级之后立刻重启。</p>
+<h3 id="2-_u57280-9-0-0_u7248_u672C_u4E2D_u6F5C_u5728_u7684breaking_u66F4_u65B0"><a href="#2-_u57280-9-0-0_u7248_u672C_u4E2D_u6F5C_u5728_u7684breaking_u66F4_u65B0" class="headerlink" title="2.在0.9.0.0版本中潜在的breaking更新"></a>2.在0.9.0.0版本中潜在的breaking更新</h3><ul>
+<li>不再支持java1.6</li>
+<li>不再支持scala2.9</li>
+<li>大于1000的broker ids默认情况是保留的，用于自动分配broker ids。如果集群已经有大于这个界线的broker ids，确保reserved.broker.max.id适当的增加，以防冲突。</li>
+<li>配置选项replica.lag.max.messages删除了。partition leaders在决定是否删除活跃备份节点时不在关注落后的消息条数。</li>
+<li>压缩的topic不在接受没有key的消息，如果producer尝试发送此类消息，会收到异常的应答。在0.8.x中，没有key的消息将造成日志压缩线程抱怨收到的消息并放弃压缩（即停止压缩所有已经压缩的topic）</li>
+<li>MirroMaker不在支持多个目标集群。只接受一个单独的－consumer.config 参数。想要映射多个源集群，需要每个源集群都有一个MirrorMaker实例，每个实例都有自己的consumer配置</li>
+<li>apache.kafka.clients.tools.＊下的工具迁移到org.apache.kafka.tools.*.所有包含的脚本均会保留原来的功能，只有导入这些类的客户端代码会受影响。</li>
+<li>默认的kafka JVM性能参数（KAFKA_JVM_PERFORMANCE_OPTS）在kafka-run-class.sh中已经改变了</li>
+<li>kafka-topic.sh脚本（kafka.admin.TopicCommand）失败时会返回非0值。</li>
+<li>kafka-topic.sh脚本（kafka.admin.TopicCommand）不在打印警告信息，当topic名字包含一些诸如&#39;.&#39;或者&#39;_&#39;等非法字符时，而是在实际崩溃时打印错误信息。</li>
+<li>kafka-console-producer.sh脚本（kafka.tools.ConsolProducer）将使用java版本的producer，而不再使用老版本的Scala producer</li>
+<li>默认情况下，所有命令行工具都将在stderr中打印日志信息而不是stdout。</li>
+</ul>
+<h3 id="3-_u57280-9-0-1_u7248_u672C_u4E2D_u6F5C_u5728_u7684breaking_u66F4_u65B0"><a href="#3-_u57280-9-0-1_u7248_u672C_u4E2D_u6F5C_u5728_u7684breaking_u66F4_u65B0" class="headerlink" title="3.在0.9.0.1版本中潜在的breaking更新"></a>3.在0.9.0.1版本中潜在的breaking更新</h3><ul>
+<li>新增的broker id创建特征可以通过设置broker.id.generation.enable为false来禁用</li>
+<li>配置选项log.cleaner.enable目前默认情况是true。这意味着使用cleanup.policy＝compact的topics将默认被压缩。 cleaner进程通过log.cleaner.dequpe.buffer.size将会分配128mb的堆空间。可以回顾一下log.cleaner.dedupe.buffer.size以及其它log.cleaner配置值来确认一下如何使用压缩策略。</li>
+<li>配置选项fetch.min.bytes的默认值在新版本的consumer中为1。</li>
+</ul>
+<h3 id="4-_u57280-9-0-1_u7248_u672C_u4E2D_u5220_u9664_u7684_u66F4_u65B0"><a href="#4-_u57280-9-0-1_u7248_u672C_u4E2D_u5220_u9664_u7684_u66F4_u65B0" class="headerlink" title="4.在0.9.0.1版本中删除的更新"></a>4.在0.9.0.1版本中删除的更新</h3><ul>
+<li>kafka-topics.sh脚本（kafka.admin.TopicCommand）中变更topic的配置废弃了。以后可以使用kafka-configs.sh脚本（kafka.admin.ConfigCommand）实现这个功能。</li>
+<li>kafka-consumer-offset-checker.sh（kafka.tools.ConsumerOffsetChecer）已经废弃了。以后可以使用kafka-consumer-groups.sh（kafka.admin.ConsumerGroupCommand）来实现这个功能</li>
+<li>tools.ProducerPerformance类已经移除了。以后可以使用org.apache.kafka.tools.ProducerPerformance使用这个功能（kafka-producer-perf-test.sh将使用新的类）</li>
+<li>producer的配置选项block.on.buffer.full已经废弃了，将会在以后的release版本中删除。当前默认值已经变为false了。KafkaProducer不在抛出BufferExhaustedException异常了，而是使用max.block.ms值进行阻塞，以后会抛出TimeoutException异常。如果blcok.buffer.full配置被设置为ture，将设置max.block.ms值为Long.MAX_VALUE以及metadata.fetch.timeout.ms不再生效（？）。</li>
+</ul>
+<h3 id="5-_u7248_u672C_u53D1_u5E03_u6587_u6863-1"><a href="#5-_u7248_u672C_u53D1_u5E03_u6587_u6863-1" class="headerlink" title="5.版本发布文档"></a>5.版本发布文档</h3><p><a href="https://archive.apache.org/dist/kafka/0.9.0.0/RELEASE_NOTES.html" target="_blank" rel="external">https://archive.apache.org/dist/kafka/0.9.0.0/RELEASE_NOTES.html</a></p>
+<p><a href="https://archive.apache.org/dist/kafka/0.9.0.1/RELEASE_NOTES.html" target="_blank" rel="external">https://archive.apache.org/dist/kafka/0.9.0.1/RELEASE_NOTES.html</a>.</p>
+<h2 id="u4E94_u3001_u4ECE0-8-1_u52300-8-2_u7684_u66F4_u65B0"><a href="#u4E94_u3001_u4ECE0-8-1_u52300-8-2_u7684_u66F4_u65B0" class="headerlink" title="五、从0.8.1到0.8.2的更新"></a>五、从0.8.1到0.8.2的更新</h2><p>0.8.2和0.8.1完全兼容。升级可以逐台进行：先停掉broker，然后升级代码，最后重启它。</p>
+<h3 id="1-_u7248_u672C_u53D1_u5E03_u6587_u6863"><a href="#1-_u7248_u672C_u53D1_u5E03_u6587_u6863" class="headerlink" title="1.版本发布文档"></a>1.版本发布文档</h3><p><a href="https://archive.apache.org/dist/kafka/0.8.2-beta/RELEASE_NOTES.html" target="_blank" rel="external">https://archive.apache.org/dist/kafka/0.8.2-beta/RELEASE_NOTES.html</a></p>
+<p><a href="https://archive.apache.org/dist/kafka/0.8.2.0/RELEASE_NOTES.html" target="_blank" rel="external">https://archive.apache.org/dist/kafka/0.8.2.0/RELEASE_NOTES.html</a></p>
+<p><a href="https://archive.apache.org/dist/kafka/0.8.2.1/RELEASE_NOTES.html" target="_blank" rel="external">https://archive.apache.org/dist/kafka/0.8.2.1/RELEASE_NOTES.html</a></p>
+<p><a href="https://archive.apache.org/dist/kafka/0.8.2.2/RELEASE_NOTES.html" target="_blank" rel="external">https://archive.apache.org/dist/kafka/0.8.2.2/RELEASE_NOTES.html</a>.</p>
+<h2 id="u516D_u3001_u4ECE0-8-0_u52300-8-1_u7684_u66F4_u65B0"><a href="#u516D_u3001_u4ECE0-8-0_u52300-8-1_u7684_u66F4_u65B0" class="headerlink" title="六、从0.8.0到0.8.1的更新"></a>六、从0.8.0到0.8.1的更新</h2><p>0.8.1和0.8.完全兼容。升级可以逐台进行：先停掉broker，然后升级代码，最后重启它。</p>
+<h3 id="1-_u7248_u672C_u53D1_u5E03_u6587_u6863-1"><a href="#1-_u7248_u672C_u53D1_u5E03_u6587_u6863-1" class="headerlink" title="1.版本发布文档"></a>1.版本发布文档</h3><p><a href="https://archive.apache.org/dist/kafka/0.8.1/RELEASE_NOTES.html" target="_blank" rel="external">https://archive.apache.org/dist/kafka/0.8.1/RELEASE_NOTES.html</a></p>
+<p><a href="https://archive.apache.org/dist/kafka/0.8.1.1/RELEASE_NOTES.html" target="_blank" rel="external">https://archive.apache.org/dist/kafka/0.8.1.1/RELEASE_NOTES.html</a>.</p>
+<h2 id="u4E03_u3001_u53C2_u8003_u6587_u732E"><a href="#u4E03_u3001_u53C2_u8003_u6587_u732E" class="headerlink" title="七、参考文献"></a>七、参考文献</h2><p><a href="http://kafka.apache.org/0102/documentation.html#upgrade" target="_blank" rel="external">http://kafka.apache.org/0102/documentation.html#upgrade</a></p>
+<p><a href="http://blog.csdn.net/beitiandijun/article/details/53695895" target="_blank" rel="external">http://blog.csdn.net/beitiandijun/article/details/53695895</a> </p>
+<hr>
+<p>Author: Yueqi Shi</p>
+<p>Date: 2017-04-21 9:30:23 AM </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kafka/" rel="tag"># Kafka</a>
+          
+            <a href="/tags/Scala/" rel="tag"># Scala</a>
+          
+            <a href="/tags/消息中间件/" rel="tag"># 消息中间件</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/28/第一篇博客/" rel="next" title="第一篇博客">
+                <i class="fa fa-chevron-left"></i> 第一篇博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/pug.jpg"
+               alt="Shi Yueqi" />
+          <p class="site-author-name" itemprop="name">Shi Yueqi</p>
+           
+              <p class="site-description motion-element" itemprop="description">In me the tiger sniffs the rose.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/shiyueqi" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/shiyueqi107" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kafka-0-10-2-0_u7248_u672C_u66F4_u65B0"><span class="nav-number">1.</span> <span class="nav-text">Kafka-0.10.2.0版本更新</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E00_u3001_u4ECE0-8-x_2C_0-9-x__2C_0-10-0-x_u62160-10-1-x_u52300-10-2-0_u7684_u66F4_u65B0"><span class="nav-number">1.1.</span> <span class="nav-text">一、从0.8.x, 0.9.x , 0.10.0.x或0.10.1.x到0.10.2.0的更新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_u6EDA_u52A8_u5347_u7EA7"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.滚动升级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-_u5347_u7EA7_u4E00_u4E2A0-10-1_u7248_u672C_u7684Kafka_Streams_u5E94_u7528"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.升级一个0.10.1版本的Kafka Streams应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-_u57280-10-2-1_u7248_u672C_u4E2D_u663E_u8457_u7684_u66F4_u65B0"><span class="nav-number">1.1.3.</span> <span class="nav-text">3.在0.10.2.1版本中显著的更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-_u57280-10-2-0_u7248_u672C_u4E2D_u663E_u8457_u7684_u66F4_u65B0"><span class="nav-number">1.1.4.</span> <span class="nav-text">4.在0.10.2.0版本中显著的更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-_u65B0_u534F_u8BAE_u7248_u672C"><span class="nav-number">1.1.5.</span> <span class="nav-text">5.新协议版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-_u7248_u672C_u53D1_u5E03_u6587_u6863"><span class="nav-number">1.1.6.</span> <span class="nav-text">6.版本发布文档</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E8C_u3001_u4ECE0-8-x_2C_0-9-x__2C_0-10-0-x_u52300-10-1-0_u7684_u66F4_u65B0"><span class="nav-number">1.2.</span> <span class="nav-text">二、从0.8.x, 0.9.x , 0.10.0.x到0.10.1.0的更新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_u6EDA_u52A8_u5347_u7EA7-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.滚动升级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-_u57280-10-1-0_u7248_u672C_u4E2D_u6F5C_u5728_u7684breaking_u66F4_u65B0"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.在0.10.1.0版本中潜在的breaking更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-_u5347_u7EA7_u4E00_u4E2A0-10-0_u7248_u672C_u7684Kafka_Streams_u5E94_u7528"><span class="nav-number">1.2.3.</span> <span class="nav-text">3.升级一个0.10.0版本的Kafka Streams应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-_u57280-10-1-0_u7248_u672C_u4E2D_u663E_u8457_u7684_u66F4_u65B0"><span class="nav-number">1.2.4.</span> <span class="nav-text">4.在0.10.1.0版本中显著的更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-_u65B0_u534F_u8BAE_u7248_u672C-1"><span class="nav-number">1.2.5.</span> <span class="nav-text">5.新协议版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-_u7248_u672C_u53D1_u5E03_u6587_u6863-1"><span class="nav-number">1.2.6.</span> <span class="nav-text">6.版本发布文档</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E09_u3001_u4ECE0-8-x_2C_0-9-x_u52300-10-0-0_u7684_u66F4_u65B0"><span class="nav-number">1.3.</span> <span class="nav-text">三、从0.8.x, 0.9.x到0.10.0.0的更新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_u6EDA_u52A8_u5347_u7EA7-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.滚动升级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-_u57280-10-0-0_u4E4B_u540E_u6F5C_u5728_u7684_u6027_u80FD_u5F71_u54CD"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.在0.10.0.0之后潜在的性能影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-_u57280-10-0-0_u7248_u672C_u4E2D_u6F5C_u5728_u7684breaking_u66F4_u65B0"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.在0.10.0.0版本中潜在的breaking更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-_u57280-10-0-0_u7248_u672C_u4E2D_u663E_u8457_u7684_u66F4_u65B0"><span class="nav-number">1.3.4.</span> <span class="nav-text">4.在0.10.0.0版本中显著的更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-_u7248_u672C_u53D1_u5E03_u6587_u6863"><span class="nav-number">1.3.5.</span> <span class="nav-text">5.版本发布文档</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u56DB_u3001_u4ECE0-8-0_2C_0-8-1-x_2C_0-8-2-x_u52300-9-0_u7684_u66F4_u65B0"><span class="nav-number">1.4.</span> <span class="nav-text">四、从0.8.0, 0.8.1.x, 0.8.2.x到0.9.0的更新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_u6EDA_u52A8_u5347_u7EA7-3"><span class="nav-number">1.4.1.</span> <span class="nav-text">1.滚动升级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-_u57280-9-0-0_u7248_u672C_u4E2D_u6F5C_u5728_u7684breaking_u66F4_u65B0"><span class="nav-number">1.4.2.</span> <span class="nav-text">2.在0.9.0.0版本中潜在的breaking更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-_u57280-9-0-1_u7248_u672C_u4E2D_u6F5C_u5728_u7684breaking_u66F4_u65B0"><span class="nav-number">1.4.3.</span> <span class="nav-text">3.在0.9.0.1版本中潜在的breaking更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-_u57280-9-0-1_u7248_u672C_u4E2D_u5220_u9664_u7684_u66F4_u65B0"><span class="nav-number">1.4.4.</span> <span class="nav-text">4.在0.9.0.1版本中删除的更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-_u7248_u672C_u53D1_u5E03_u6587_u6863-1"><span class="nav-number">1.4.5.</span> <span class="nav-text">5.版本发布文档</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E94_u3001_u4ECE0-8-1_u52300-8-2_u7684_u66F4_u65B0"><span class="nav-number">1.5.</span> <span class="nav-text">五、从0.8.1到0.8.2的更新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_u7248_u672C_u53D1_u5E03_u6587_u6863"><span class="nav-number">1.5.1.</span> <span class="nav-text">1.版本发布文档</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u516D_u3001_u4ECE0-8-0_u52300-8-1_u7684_u66F4_u65B0"><span class="nav-number">1.6.</span> <span class="nav-text">六、从0.8.0到0.8.1的更新</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-_u7248_u672C_u53D1_u5E03_u6587_u6863-1"><span class="nav-number">1.6.1.</span> <span class="nav-text">1.版本发布文档</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E03_u3001_u53C2_u8003_u6587_u732E"><span class="nav-number">1.7.</span> <span class="nav-text">七、参考文献</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shi Yueqi</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://shiyueqi.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://shiyueqi.github.io/2017/04/21/Kafka-0.10.2.0版本更新/';
+          this.page.identifier = '2017/04/21/Kafka-0.10.2.0版本更新/';
+          this.page.title = 'Kafka-0.10.2.0版本更新';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://shiyueqi.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("N7gFtBpJT2kRFRxKVGQNisQ3-gzGzoHsz", "svhqcJfvubefdP37LD07sxhX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
