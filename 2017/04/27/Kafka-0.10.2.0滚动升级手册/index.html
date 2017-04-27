@@ -87,28 +87,31 @@
 
 
 
-<meta name="description" content="Kafka-0.8.2.1 producer&amp;amp;consumer示例githubKafka-0.8.2.1 producer&amp;amp;consumer 示例源码github地址：
-https://github.com/shiyueqi/kafka-test
-Kafka安装与配置Kafka-0.8.2.1安装与配置
-Kafka官方示例Kafka wiki
-https://cwiki.apach">
+<meta name="description" content="Kafka-0.10.2.0滚动升级手册Kafka-0.10.2.0滚动升级方案Kafka-0.10.2.0滚动升级方案
+Kafka-0.10.2.0兼容性Kafka broker
+0.10.2.0版本的brokers支持0.8.x或更高版本的客户端。
+Kafka客户端
+从0.10.2.0版本开始，Kafka的Java客户端(producer和consumer)实现了与部分老版本的broker(0">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kafka-0.8.2.1 producer&consumer示例">
-<meta property="og:url" content="http://shiyueqi.github.io/2017/04/27/Kafka-0.8.2.1 producer&consumer示例/index.html">
+<meta property="og:title" content="Kafka-0.10.2.0滚动升级手册">
+<meta property="og:url" content="http://shiyueqi.github.io/2017/04/27/Kafka-0.10.2.0滚动升级手册/index.html">
 <meta property="og:site_name" content="石头头头的博客">
-<meta property="og:description" content="Kafka-0.8.2.1 producer&amp;amp;consumer示例githubKafka-0.8.2.1 producer&amp;amp;consumer 示例源码github地址：
-https://github.com/shiyueqi/kafka-test
-Kafka安装与配置Kafka-0.8.2.1安装与配置
-Kafka官方示例Kafka wiki
-https://cwiki.apach">
-<meta property="og:updated_time" content="2017-04-27T03:31:09.383Z">
+<meta property="og:description" content="Kafka-0.10.2.0滚动升级手册Kafka-0.10.2.0滚动升级方案Kafka-0.10.2.0滚动升级方案
+Kafka-0.10.2.0兼容性Kafka broker
+0.10.2.0版本的brokers支持0.8.x或更高版本的客户端。
+Kafka客户端
+从0.10.2.0版本开始，Kafka的Java客户端(producer和consumer)实现了与部分老版本的broker(0">
+<meta property="og:image" content="http://shiyueqi.github.io/images/kafka_zookeeper_list.PNG">
+<meta property="og:image" content="http://shiyueqi.github.io/images/滚动升级producer异常.PNG">
+<meta property="og:image" content="http://shiyueqi.github.io/images/滚动升级consumer未消费异常msg.PNG">
+<meta property="og:updated_time" content="2017-04-27T07:26:16.638Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Kafka-0.8.2.1 producer&consumer示例">
-<meta name="twitter:description" content="Kafka-0.8.2.1 producer&amp;amp;consumer示例githubKafka-0.8.2.1 producer&amp;amp;consumer 示例源码github地址：
-https://github.com/shiyueqi/kafka-test
-Kafka安装与配置Kafka-0.8.2.1安装与配置
-Kafka官方示例Kafka wiki
-https://cwiki.apach">
+<meta name="twitter:title" content="Kafka-0.10.2.0滚动升级手册">
+<meta name="twitter:description" content="Kafka-0.10.2.0滚动升级手册Kafka-0.10.2.0滚动升级方案Kafka-0.10.2.0滚动升级方案
+Kafka-0.10.2.0兼容性Kafka broker
+0.10.2.0版本的brokers支持0.8.x或更高版本的客户端。
+Kafka客户端
+从0.10.2.0版本开始，Kafka的Java客户端(producer和consumer)实现了与部分老版本的broker(0">
 
 
 
@@ -136,13 +139,13 @@ https://cwiki.apach">
 
 
 
-  <link rel="canonical" href="http://shiyueqi.github.io/2017/04/27/Kafka-0.8.2.1 producer&consumer示例/"/>
+  <link rel="canonical" href="http://shiyueqi.github.io/2017/04/27/Kafka-0.10.2.0滚动升级手册/"/>
 
 
 
 
 
-  <title> Kafka-0.8.2.1 producer&consumer示例 | 石头头头的博客 </title>
+  <title> Kafka-0.10.2.0滚动升级手册 | 石头头头的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -321,7 +324,7 @@ https://cwiki.apach">
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/04/27/Kafka-0.8.2.1 producer&consumer示例/">
+    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/04/27/Kafka-0.10.2.0滚动升级手册/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Shi Yueqi">
@@ -342,7 +345,7 @@ https://cwiki.apach">
             
             
               
-                Kafka-0.8.2.1 producer&consumer示例
+                Kafka-0.10.2.0滚动升级手册
               
             
           </h1>
@@ -357,7 +360,7 @@ https://cwiki.apach">
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-27T11:31:09+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-27T15:26:16+08:00">
                 2017-04-27
               </time>
             
@@ -398,9 +401,9 @@ https://cwiki.apach">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/04/27/Kafka-0.8.2.1 producer&consumer示例/#comments" itemprop="discussionUrl">
+                <a href="/2017/04/27/Kafka-0.10.2.0滚动升级手册/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/04/27/Kafka-0.8.2.1 producer&consumer示例/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/04/27/Kafka-0.10.2.0滚动升级手册/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -408,7 +411,7 @@ https://cwiki.apach">
 
           
           
-             <span id="/2017/04/27/Kafka-0.8.2.1 producer&consumer示例/" class="leancloud_visitors" data-flag-title="Kafka-0.8.2.1 producer&consumer示例">
+             <span id="/2017/04/27/Kafka-0.10.2.0滚动升级手册/" class="leancloud_visitors" data-flag-title="Kafka-0.10.2.0滚动升级手册">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -437,251 +440,93 @@ https://cwiki.apach">
       
 
       
-        <h1 id="Kafka-0-8-2-1_producer_26amp_3Bconsumer_u793A_u4F8B"><a href="#Kafka-0-8-2-1_producer_26amp_3Bconsumer_u793A_u4F8B" class="headerlink" title="Kafka-0.8.2.1 producer&amp;consumer示例"></a>Kafka-0.8.2.1 producer&amp;consumer示例</h1><h2 id="github"><a href="#github" class="headerlink" title="github"></a>github</h2><p>Kafka-0.8.2.1 producer&amp;consumer 示例源码github地址：</p>
-<p><a href="https://github.com/shiyueqi/kafka-test" target="_blank" rel="external">https://github.com/shiyueqi/kafka-test</a></p>
-<h2 id="Kafka_u5B89_u88C5_u4E0E_u914D_u7F6E"><a href="#Kafka_u5B89_u88C5_u4E0E_u914D_u7F6E" class="headerlink" title="Kafka安装与配置"></a>Kafka安装与配置</h2><p><a href="https://shiyueqi.github.io/2017/04/27/Kafka-0.8.2.1%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/" title="Kafka-0.8.2.1安装与配置">Kafka-0.8.2.1安装与配置</a></p>
-<h2 id="Kafka_u5B98_u65B9_u793A_u4F8B"><a href="#Kafka_u5B98_u65B9_u793A_u4F8B" class="headerlink" title="Kafka官方示例"></a>Kafka官方示例</h2><p>Kafka wiki</p>
-<p><a href="https://cwiki.apache.org/confluence/display/KAFKA/Consumer+Group+Example" target="_blank" rel="external">https://cwiki.apache.org/confluence/display/KAFKA/Consumer+Group+Example</a></p>
-<p>0.8.2版本的producer代码</p>
-<p><a href="https://github.com/apache/kafka/blob/0.8.2/examples/src/main/java/kafka/examples/Producer.java" title="0.8.2版本的producer代码" target="_blank" rel="external">https://github.com/apache/kafka/blob/0.8.2/examples/src/main/java/kafka/examples/Producer.java</a></p>
-<p>0.8.2版本的consumer代码</p>
-<p><a href="https://github.com/apache/kafka/blob/0.8.2/examples/src/main/java/kafka/examples/Consumer.java" title="0.8.2版本的consumer代码" target="_blank" rel="external">https://github.com/apache/kafka/blob/0.8.2/examples/src/main/java/kafka/examples/Consumer.java</a></p>
-<p>0.10.2.0版本的producer代码</p>
-<p><a href="https://github.com/apache/kafka/blob/0.10.2/examples/src/main/java/kafka/examples/Producer.java" title="0.10.2.0版本的producer代码" target="_blank" rel="external">https://github.com/apache/kafka/blob/0.10.2/examples/src/main/java/kafka/examples/Producer.java</a></p>
-<p>0.10.2.0版本的consumer代码</p>
-<p><a href="https://github.com/apache/kafka/blob/0.10.2/examples/src/main/java/kafka/examples/Consumer.java" title="0.10.2.0版本的consumer代码" target="_blank" rel="external">https://github.com/apache/kafka/blob/0.10.2/examples/src/main/java/kafka/examples/Consumer.java</a></p>
-<h2 id="Kafka-0-8-2-1_producer"><a href="#Kafka-0-8-2-1_producer" class="headerlink" title="Kafka-0.8.2.1 producer"></a>Kafka-0.8.2.1 producer</h2><p>maven依赖</p>
-<pre><code>&lt;dependencies&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.apache.kafka&lt;/groupId&gt;
-        &lt;artifactId&gt;kafka-clients&lt;/artifactId&gt;
-        &lt;version&gt;0.8.2.1&lt;/version&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;
-</code></pre><p>代码</p>
-<pre><code>package com.unionpay.kafka.test;
-
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
-
-import java.util.Properties;
-import java.util.concurrent.ExecutionException;
-
-/**
- * date: 2017/04/21 14:54.
- * author: Yueqi Shi
- */
-public class ProducerMain {
-    public  static final String KAFKA_TOPIC = &quot;topic_1&quot;;
-
-    private static final String BROKERS_ADDRESS = &quot;172.18.55.21:9092,172.18.55.21:9093&quot;;
-
-    private static final int REQUEST_REQUIRED_ACKS = 1;
-
-    public static final String MESSAGE = &quot;message&quot;;
-
-    private static final String CLIENT_ID = &quot;producer_test_id&quot;;
-
-    private KafkaProducer&lt;String, String&gt; producer;
-
-    public ProducerMain() {
-        producer = new KafkaProducer&lt;String, String&gt;(buildProperties());
-
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                System.out.print(&quot;Kafka producer graceful shutdown.&quot;);
-                ProducerMain.this.shuntown();
-            }
-        });
-    }
-
-    private Properties buildProperties() {
-        Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BROKERS_ADDRESS);
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, &quot;org.apache.kafka.common.serialization.StringSerializer&quot;);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, &quot;org.apache.kafka.common.serialization.StringSerializer&quot;);
-        props.put(ProducerConfig.ACKS_CONFIG, String.valueOf(REQUEST_REQUIRED_ACKS));
-        props.put(ProducerConfig.CLIENT_ID_CONFIG, CLIENT_ID);
-
-        return props;
-    }
-
-    /**
-     * 开始生产msg
-     */
-    public void run() {
-        for (int i = 0; i &lt; 10000; i++) {
-            String message = ProducerMain.MESSAGE + &quot;_&quot; + i;
-
-            try {
-                producer.send(new ProducerRecord&lt;String, String&gt;(ProducerMain.KAFKA_TOPIC, message)).get();
-
-                //Thread.sleep(1000);
-                System.out.println(&quot;produce: &quot; + message + &quot; success.&quot;);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                System.out.println(&quot;produce: &quot; + message + &quot; fail.&quot;);
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-                System.out.println(&quot;produce: &quot; + message + &quot; fail.&quot;);
-            }
-        }
-    }
-
-    /**
-     * shuntown
-     */
-    public void shuntown() {
-        if (null != producer) {
-            producer.close();
-            producer = null;
-        }
-    }
-
-    public static void main(String[] args) {
-        new ProducerMain().run();
-    }
-}
-</code></pre><p>代码说明</p>
+        <h1 id="Kafka-0-10-2-0_u6EDA_u52A8_u5347_u7EA7_u624B_u518C"><a href="#Kafka-0-10-2-0_u6EDA_u52A8_u5347_u7EA7_u624B_u518C" class="headerlink" title="Kafka-0.10.2.0滚动升级手册"></a>Kafka-0.10.2.0滚动升级手册</h1><h2 id="Kafka-0-10-2-0_u6EDA_u52A8_u5347_u7EA7_u65B9_u6848"><a href="#Kafka-0-10-2-0_u6EDA_u52A8_u5347_u7EA7_u65B9_u6848" class="headerlink" title="Kafka-0.10.2.0滚动升级方案"></a>Kafka-0.10.2.0滚动升级方案</h2><p><a href="https://shiyueqi.github.io/2017/04/21/Kafka-0.10.2.0%E6%BB%9A%E5%8A%A8%E5%8D%87%E7%BA%A7%E6%96%B9%E6%A1%88/" title="Kafka-0.10.2.0滚动升级方案">Kafka-0.10.2.0滚动升级方案</a></p>
+<h2 id="Kafka-0-10-2-0_u517C_u5BB9_u6027"><a href="#Kafka-0-10-2-0_u517C_u5BB9_u6027" class="headerlink" title="Kafka-0.10.2.0兼容性"></a>Kafka-0.10.2.0兼容性</h2><p><strong>Kafka broker</strong></p>
+<p>0.10.2.0版本的brokers支持0.8.x或更高版本的客户端。</p>
+<p><strong>Kafka客户端</strong></p>
+<p>从0.10.2.0版本开始，Kafka的Java客户端(producer和consumer)实现了与部分老版本的broker(0.10.x)通信的兼容性。</p>
+<p>0.10.2.0版本的客户端可以与0.10.0或更高版本的broker通信。但是，如果broker的版本低于0.10.0，必须先升级所有Kafka集群中的brokers的版本，才可以继续升级客户端的版本。</p>
+<h2 id="0-8-2-1_u54110-10-2-0_u6EDA_u52A8_u5347_u7EA7_u624B_u518C"><a href="#0-8-2-1_u54110-10-2-0_u6EDA_u52A8_u5347_u7EA7_u624B_u518C" class="headerlink" title="0.8.2.1向0.10.2.0滚动升级手册"></a>0.8.2.1向0.10.2.0滚动升级手册</h2><h3 id="1-__u5B89_u88C5_u914D_u7F6EKafka-0-8-2-1"><a href="#1-__u5B89_u88C5_u914D_u7F6EKafka-0-8-2-1" class="headerlink" title="1. 安装配置Kafka-0.8.2.1"></a>1. 安装配置Kafka-0.8.2.1</h3><pre><code>[https://shiyueqi.github.io/2017/04/27/Kafka-0.8.2.1%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/](https://shiyueqi.github.io/2017/04/27/Kafka-0.8.2.1%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/ &quot;Kafka-0.8.2.1安装配置&quot;)
+</code></pre><h3 id="2-__u5B89_u88C5Kafka-0-10-2-0"><a href="#2-__u5B89_u88C5Kafka-0-10-2-0" class="headerlink" title="2. 安装Kafka-0.10.2.0"></a>2. 安装Kafka-0.10.2.0</h3><p>下载地址：<a href="http://apache.claz.org/kafka/0.10.2.0/" title="Kafka-0.10.2.0下载地址" target="_blank" rel="external">http://apache.claz.org/kafka/0.10.2.0/</a></p>
+<p>Kafka-0.10.2.0安装方法与0.8.2.1相同。安装完成后如下图</p>
+<p><img src="/images/kafka_zookeeper_list.PNG" alt="kafka_zookeeper_list">    </p>
 <ul>
-<li><p>需指定topic名称</p>
-</li>
-<li><p>Kafka的broker集群地址</p>
+<li>kafka_2.10-0.8.2.1：Kafka伪集群，待升级。模拟生产环境正在运行的Kafka集群。broker.id=0</li>
+<li>kafka_2.10-0.8.2.1_2：Kafka伪集群，待升级。模拟生产环境正在运行的Kafka集群。broker.id=1</li>
+<li>kafka_2.12-0.10.2.0：最新版本Kafka集群，准备启用。broker.id=0</li>
+<li>kafka_2.12-0.10.2.0_2：最新版本Kafka集群，准备启用。broker.id=1</li>
+<li>kafka-logs：Kafka日志文件目录。</li>
+<li>zookeeper-3.4.9：Zookeeper伪集群，无需操作</li>
+<li>zookeeper-3.4.9_2：Zookeeper伪集群，无需操作</li>
+</ul>
+<h3 id="3-__u914D_u7F6EKafka-0-10-2-0"><a href="#3-__u914D_u7F6EKafka-0-10-2-0" class="headerlink" title="3. 配置Kafka-0.10.2.0"></a>3. 配置Kafka-0.10.2.0</h3><p>0.8.2.1核心配置</p>
+<pre><code>broker.id=0  
+host.name=172.18.55.21
+port=9092 
+log.dirs=/home/yqshi/kafka/kafka-logs/kafka_2.10-0.8.2.1
+zookeeper.connect=172.18.55.21:2181,172.18.55.21:2182
+</code></pre><p>0.10.2.0核心配置</p>
+<pre><code>broker.id=0
+listeners=PLAINTEXT://172.18.55.21:9092  
+host.name=172.18.55.21
+port=9092 
+log.dirs=/home/yqshi/kafka/kafka-logs/kafka_2.10-0.8.2.1
+zookeeper.connect=172.18.55.21:2181,172.18.55.21:2182
+inter.broker.protocol.version=0.8.2.1
+log.message.format.version=0.8.2.1
+</code></pre><p>至此，完成了broker.id=1的Kafka-0.10.2.0配置。重复上述配置完成第二台以及其他实例的配置。</p>
+<p>注意事项：</p>
+<ul>
+<li>新版本与旧版本的log.dirs指定相同的路径，否则会导致信息丢失</li>
+<li>新版本于旧版本broker.id保持一致。</li>
+<li>需要在新版本的server.properties中，写入以下信息，这两个参数很重要！<ul>
+<li>inter.broker.protocol.version=旧版本号</li>
+<li>log.message.format.version=旧版本号</li>
+</ul>
 </li>
 </ul>
-<h2 id="Kafka-0-8-2-1_consumer"><a href="#Kafka-0-8-2-1_consumer" class="headerlink" title="Kafka-0.8.2.1 consumer"></a>Kafka-0.8.2.1 consumer</h2><p>maven依赖</p>
-<pre><code>&lt;dependencies&gt;
-    &lt;dependency&gt;
-        &lt;groupId&gt;org.apache.kafka&lt;/groupId&gt;
-        &lt;artifactId&gt;kafka_2.10&lt;/artifactId&gt;
-        &lt;version&gt;0.8.2.1&lt;/version&gt;
-    &lt;/dependency&gt;
-&lt;/dependencies&gt;
-</code></pre><p>代码</p>
-<p>ConsumerExecutorService类，即消费消息后，执行类</p>
-<pre><code>package com.unionpay.kafka.test;
-
-import kafka.consumer.ConsumerIterator;
-import kafka.consumer.KafkaStream;
-
-/**
- * date: 2017/04/24 13:53.
- * author: Yueqi Shi
- */
-public class ConsumerExecutorService implements Runnable {
-    private KafkaStream stream;
-
-    public ConsumerExecutorService(KafkaStream stream) {
-        this.stream = stream;
-    }
-
-    @Override
-    public void run() {
-        ConsumerIterator&lt;byte[], byte[]&gt; it = stream.iterator();
-        while (it.hasNext()) {
-            String message = new String(it.next().message());
-            System.out.println(&quot;consume: &quot; + message);
-        }
-    }
-}
-</code></pre><p>ConsumreMain类</p>
-<pre><code>package com.unionpay.kafka.test;
-
-import kafka.consumer.Consumer;
-import kafka.consumer.ConsumerConfig;
-import kafka.consumer.KafkaStream;
-import kafka.javaapi.consumer.ConsumerConnector;
-
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-/**
- * date: 2017/04/21 15:11.
- * author: Yueqi Shi
- */
-public class ConsumerMain {
-    public static final String KAFKA_TOPIC = &quot;topic_1&quot;;
-
-    private static final String ZOOKEEPER_ADDRESS = &quot;172.18.55.21:2181,172.18.55.21:2182&quot;;
-
-    private static final int THREADS_NUM = 1;
-
-    private static final String CLIENT_ID = &quot;consumer_test_id&quot;;
-
-    private final ConsumerConnector consumerConnector;
-
-    private ExecutorService executor;
-
-    public ConsumerMain() {
-        consumerConnector = Consumer.createJavaConsumerConnector(buildProperties());
-        executor = Executors.newFixedThreadPool(THREADS_NUM);
-    }
-
-    /**
-     * 构造连接参数
-     * @return
-     */
-    private ConsumerConfig buildProperties() {
-        Properties props = new Properties();
-        props.put(&quot;zookeeper.connect&quot;, ZOOKEEPER_ADDRESS);
-        props.put(&quot;group.id&quot;, &quot;test_group&quot;);
-
-        props.put(&quot;zookeeper.session.timeout.ms&quot;, &quot;10000&quot;);
-        props.put(&quot;zookeeper.sync.time.ms&quot;, &quot;200&quot;);
-        props.put(&quot;auto.commit.interval.ms&quot;, &quot;1000&quot;);
-        props.put(&quot;auto.offset.reset&quot;, &quot;smallest&quot;);
-        props.put(&quot;client.id&quot;, CLIENT_ID);
-        return new ConsumerConfig(props);
-    }
-
-    /**
-     * 开始消费
-     */
-    public void run() {
-        Map&lt;String, Integer&gt; topicCountMap = new HashMap&lt;String, Integer&gt;();
-        topicCountMap.put(KAFKA_TOPIC, THREADS_NUM);
-
-        Map&lt;String, List&lt;KafkaStream&lt;byte[], byte[]&gt;&gt;&gt; consumerMap = consumerConnector.createMessageStreams(topicCountMap);
-        List&lt;KafkaStream&lt;byte[], byte[]&gt;&gt; streams = consumerMap.get(KAFKA_TOPIC);
-
-        for (final KafkaStream stream : streams) {
-            executor.submit(new ConsumerExecutorService(stream));
-        }
-    }
-
-    /**
-     * shutdown
-     */
-    public void shutdown() {
-        if (consumerConnector != null) consumerConnector.shutdown();
-        if (executor != null) executor.shutdown();
-        try {
-            if (!executor.awaitTermination(5000, TimeUnit.MILLISECONDS)) {
-                System.out.println(&quot;Timed out waiting for consumer threads to shut down, exiting uncleanly&quot;);
-            }
-        } catch (InterruptedException e) {
-            System.out.println(&quot;Interrupted during shutdown, exiting uncleanly&quot;);
-        }
-    }
-
-
-    public static void main(String[] args) {
-        new ConsumerMain().run();
-    }
-}
-</code></pre><p>代码说明</p>
-<ul>
-<li>需指定topic</li>
-<li>需指定Zookeeper集群地址</li>
-<li>需指定group.id。在Kafka的consumer中，是以group来进行消费，一个group中有一个consumer示例消费后，其他不会进行消费。</li>
-</ul>
+<h3 id="4-__u9010_u53F0_u5173_u6389Kafka-0-8-2-1_u5B9E_u4F8B"><a href="#4-__u9010_u53F0_u5173_u6389Kafka-0-8-2-1_u5B9E_u4F8B" class="headerlink" title="4. 逐台关掉Kafka-0.8.2.1实例"></a>4. 逐台关掉Kafka-0.8.2.1实例</h3><p>在关闭broker实例的时候，查阅了一些资料，在这里提一下。</p>
+<p><strong>0.8.1.x版本</strong></p>
+<p>在Kafka-0.8.1.x版本中，Kafka源码中/kafka/admin/目录下有ShutdownBroker这个类，可以通过这个类实现优雅下线（graceful shutdown）。因此可以通过kafka安装目录下的/bin/kafka-run-class.sh脚本，来运行指定的类的方法，实现优雅停机。</p>
+<pre><code>sh kafka-run-class.sh kafka.admin.ShutdownBroker --zookeeper 172.18.055.21:2181,172.18.55.21:2182 --broker 1 --num.retries 3 --retry.interval.ms 600
+</code></pre><p><strong>0.8.2+版本</strong></p>
+<p>kafka.admin.ShutdownBroker这个类被移除了，因此不能通过上述方法实现停机。</p>
+<p>在Kafka-0.8.2+版本中，可以直接运行kill pid，但不要kill -9 pid。 kafka.controller.KafkaController.scala类中，实现了优雅shutdown。</p>
+<h3 id="5-_u542F_u52A8Kafka-0-10-2-0_u5B9E_u4F8B"><a href="#5-_u542F_u52A8Kafka-0-10-2-0_u5B9E_u4F8B" class="headerlink" title="5.启动Kafka-0.10.2.0实例"></a>5.启动Kafka-0.10.2.0实例</h3><p>关闭一台Kafka-0.8.2.1实例，则立刻启动一台对应的broker.id的Kafka-0.10.2.0实例。</p>
+<pre><code>sh kafka-server-start.sh ../config/server.properties &amp;
+</code></pre><p>重复4-5步骤，将Kafka集群所有的实例，代码都升级为最新的0.10.2.0</p>
+<h3 id="6-__u66F4_u65B0_u534F_u8BAE_u7248_u672C"><a href="#6-__u66F4_u65B0_u534F_u8BAE_u7248_u672C" class="headerlink" title="6. 更新协议版本"></a>6. 更新协议版本</h3><p>一旦集群所有节点都升级了，下面就可以逐步升级protocol版本－通过inter.broker.protocol.version这个配置选项，设置为0.10.2.0.</p>
+<p>即更新Kafka-0.10.2.0实例的/config/server.properties文件，</p>
+<pre><code>inter.broker.protocol.version=0.10.2.0
+</code></pre><p>重启当前实例，使新协议生效。</p>
+<p>重复第6步操作，将集群所有的Kafka实例的协议版本均升级为0.10.2.0，并完成重启操作。</p>
+<h3 id="7-__u66F4_u65B0consumer_u5BA2_u6237_u7AEF_u4EE3_u7801"><a href="#7-__u66F4_u65B0consumer_u5BA2_u6237_u7AEF_u4EE3_u7801" class="headerlink" title="7. 更新consumer客户端代码"></a>7. 更新consumer客户端代码</h3><p>将所有consumer的依赖版本升级为0.10.2.0.然后重新编译、打包、重启consumer客户端应用。</p>
+<h3 id="8-__u66F4_u65B0_u65E5_u5FD7_u683C_u5F0F_u7248_u672C"><a href="#8-__u66F4_u65B0_u65E5_u5FD7_u683C_u5F0F_u7248_u672C" class="headerlink" title="8. 更新日志格式版本"></a>8. 更新日志格式版本</h3><p>更新每台broker的log.message.format.version。</p>
+<pre><code>log.message.format.version=0.10.2.0
+</code></pre><p>逐台重启broker实例</p>
+<h3 id="9-__u6CE8_u610F_u4E8B_u9879"><a href="#9-__u6CE8_u610F_u4E8B_u9879" class="headerlink" title="9. 注意事项"></a>9. 注意事项</h3><ol>
+<li><p>如果可以接受宕机，可以在停掉所有brokers之后再更新代码，然后重启brokers。启动后将默认采用新协议。</p>
+</li>
+<li><p>设定版本协议以及重启可以在所有brokers都升级之后任何时间进行。而不需要在升级之后立刻重启。</p>
+</li>
+<li><p>由于Kafka-0.10.2.0的broker是与0.8+版本的客户端API兼容，因此在完成第5步broker的更新操作后，即使当前的配置如下</p>
+<pre><code>inter.broker.protocol.version=0.8.2.1
+log.message.format.version=0.8.2.1
+</code></pre><p> 均为旧值，但是不影响现有业务的调用。</p>
+</li>
+<li><p>在Kafka broker kill之后，会触发Kafka partation的leader重新选举。在这样一段的时间窗口内，producer发送的消息会发送失败。</p>
+<p> <img src="/images/滚动升级producer异常.PNG" alt="滚动升级producer异常"></p>
+<p> 同时，consumer也无法消费到发送失败的消息。</p>
+<p> <img src="/images/滚动升级consumer未消费异常msg.PNG" alt="滚动升级consumer未消费异常msg"></p>
+<p> 但是我怀疑是不是我关闭Kafka进程的姿势不对。。。。</p>
+</li>
+</ol>
+<h2 id="u53C2_u8003_u6587_u732E"><a href="#u53C2_u8003_u6587_u732E" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="http://kafka.apache.org/0102/documentation.html#upgrade" target="_blank" rel="external">http://kafka.apache.org/0102/documentation.html#upgrade</a></p>
+<p><a href="https://shiyueqi.github.io/2017/04/21/Kafka-0.10.2.0%E6%BB%9A%E5%8A%A8%E5%8D%87%E7%BA%A7%E6%96%B9%E6%A1%88/" title="Kafka-0.10.2.0滚动升级方案">https://shiyueqi.github.io/2017/04/21/Kafka-0.10.2.0%E6%BB%9A%E5%8A%A8%E5%8D%87%E7%BA%A7%E6%96%B9%E6%A1%88/</a></p>
+<h2 id="u7248_u6743_u58F0_u660E"><a href="#u7248_u6743_u58F0_u660E" class="headerlink" title="版权声明"></a>版权声明</h2><p>转载请注明出处</p>
 <hr>
 <p>Author: Yueqi Shi</p>
-<p>Date: 2017-04-27 11:20:00 AM </p>
+<p>Date: 2017-04-27 15:17:00 AM </p>
 
       
     </div>
@@ -728,8 +573,8 @@ public class ConsumerMain {
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/04/27/Kafka-0.8.2.1安装配置/" rel="next" title="Kafka-0.8.2.1安装配置">
-                <i class="fa fa-chevron-left"></i> Kafka-0.8.2.1安装配置
+              <a href="/2017/04/27/Kafka-流量控制Quota功能/" rel="next" title="Kafka-流量控制Quota功能">
+                <i class="fa fa-chevron-left"></i> Kafka-流量控制Quota功能
               </a>
             
           </div>
@@ -737,10 +582,6 @@ public class ConsumerMain {
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/04/27/Kafka-流量控制Quota功能/" rel="prev" title="Kafka-流量控制Quota功能">
-                Kafka-流量控制Quota功能 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -896,7 +737,7 @@ public class ConsumerMain {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kafka-0-8-2-1_producer_26amp_3Bconsumer_u793A_u4F8B"><span class="nav-number">1.</span> <span class="nav-text">Kafka-0.8.2.1 producer&consumer示例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#github"><span class="nav-number">1.1.</span> <span class="nav-text">github</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka_u5B89_u88C5_u4E0E_u914D_u7F6E"><span class="nav-number">1.2.</span> <span class="nav-text">Kafka安装与配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka_u5B98_u65B9_u793A_u4F8B"><span class="nav-number">1.3.</span> <span class="nav-text">Kafka官方示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka-0-8-2-1_producer"><span class="nav-number">1.4.</span> <span class="nav-text">Kafka-0.8.2.1 producer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka-0-8-2-1_consumer"><span class="nav-number">1.5.</span> <span class="nav-text">Kafka-0.8.2.1 consumer</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kafka-0-10-2-0_u6EDA_u52A8_u5347_u7EA7_u624B_u518C"><span class="nav-number">1.</span> <span class="nav-text">Kafka-0.10.2.0滚动升级手册</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka-0-10-2-0_u6EDA_u52A8_u5347_u7EA7_u65B9_u6848"><span class="nav-number">1.1.</span> <span class="nav-text">Kafka-0.10.2.0滚动升级方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka-0-10-2-0_u517C_u5BB9_u6027"><span class="nav-number">1.2.</span> <span class="nav-text">Kafka-0.10.2.0兼容性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0-8-2-1_u54110-10-2-0_u6EDA_u52A8_u5347_u7EA7_u624B_u518C"><span class="nav-number">1.3.</span> <span class="nav-text">0.8.2.1向0.10.2.0滚动升级手册</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-__u5B89_u88C5_u914D_u7F6EKafka-0-8-2-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 安装配置Kafka-0.8.2.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-__u5B89_u88C5Kafka-0-10-2-0"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 安装Kafka-0.10.2.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-__u914D_u7F6EKafka-0-10-2-0"><span class="nav-number">1.3.3.</span> <span class="nav-text">3. 配置Kafka-0.10.2.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-__u9010_u53F0_u5173_u6389Kafka-0-8-2-1_u5B9E_u4F8B"><span class="nav-number">1.3.4.</span> <span class="nav-text">4. 逐台关掉Kafka-0.8.2.1实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-_u542F_u52A8Kafka-0-10-2-0_u5B9E_u4F8B"><span class="nav-number">1.3.5.</span> <span class="nav-text">5.启动Kafka-0.10.2.0实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-__u66F4_u65B0_u534F_u8BAE_u7248_u672C"><span class="nav-number">1.3.6.</span> <span class="nav-text">6. 更新协议版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-__u66F4_u65B0consumer_u5BA2_u6237_u7AEF_u4EE3_u7801"><span class="nav-number">1.3.7.</span> <span class="nav-text">7. 更新consumer客户端代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-__u66F4_u65B0_u65E5_u5FD7_u683C_u5F0F_u7248_u672C"><span class="nav-number">1.3.8.</span> <span class="nav-text">8. 更新日志格式版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-__u6CE8_u610F_u4E8B_u9879"><span class="nav-number">1.3.9.</span> <span class="nav-text">9. 注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u53C2_u8003_u6587_u732E"><span class="nav-number">1.4.</span> <span class="nav-text">参考文献</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u7248_u6743_u58F0_u660E"><span class="nav-number">1.5.</span> <span class="nav-text">版权声明</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -1040,9 +881,9 @@ public class ConsumerMain {
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://shiyueqi.github.io/2017/04/27/Kafka-0.8.2.1 producer&consumer示例/';
-          this.page.identifier = '2017/04/27/Kafka-0.8.2.1 producer&consumer示例/';
-          this.page.title = 'Kafka-0.8.2.1 producer&consumer示例';
+          this.page.url = 'http://shiyueqi.github.io/2017/04/27/Kafka-0.10.2.0滚动升级手册/';
+          this.page.identifier = '2017/04/27/Kafka-0.10.2.0滚动升级手册/';
+          this.page.title = 'Kafka-0.10.2.0滚动升级手册';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://shiyueqi.disqus.com/embed.js';
