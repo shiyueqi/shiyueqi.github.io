@@ -87,34 +87,18 @@
 
 
 
-<meta name="description" content="Kafka-开源monitor调研Kafka-web-console
-Kafka-web-console开源项目已不再继续维护，开源开发者推荐使用Kafka-manage进行替代。
-Scala语言开发。
-Github: https://github.com/claudemamo/kafka-web-console
-
-KafkaOffsetMonitor
-KafkaOffsetMonitor开源项目">
+<meta name="description" content="一、Kafka PageCache简介Kafka重度依赖底层操作系统提供的PageCache功能。当上层有写操作时，操作系统只是将数据写入PageCache，同时标记Page属性为Dirty。当读操作发生时，先从PageCache中查找，如果发生缺页才进行磁盘调度，最终返回需要的数据。实际上PageCache是把尽可能多的空闲内存都当做了磁盘缓存来使用。同时如果有其他进程申请内存，回收PageCa">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Kafka-开源monitor调研">
-<meta property="og:url" content="http://shiyueqi.github.io/2017/04/21/Kafka-开源monitor调研/index.html">
+<meta property="og:title" content="Kafka-Pagecache原理">
+<meta property="og:url" content="http://shiyueqi.github.io/2017/04/27/Kafka-Pagecache原理/index.html">
 <meta property="og:site_name" content="石头头头的博客">
-<meta property="og:description" content="Kafka-开源monitor调研Kafka-web-console
-Kafka-web-console开源项目已不再继续维护，开源开发者推荐使用Kafka-manage进行替代。
-Scala语言开发。
-Github: https://github.com/claudemamo/kafka-web-console
-
-KafkaOffsetMonitor
-KafkaOffsetMonitor开源项目">
-<meta property="og:updated_time" content="2017-04-21T03:12:29.129Z">
+<meta property="og:description" content="一、Kafka PageCache简介Kafka重度依赖底层操作系统提供的PageCache功能。当上层有写操作时，操作系统只是将数据写入PageCache，同时标记Page属性为Dirty。当读操作发生时，先从PageCache中查找，如果发生缺页才进行磁盘调度，最终返回需要的数据。实际上PageCache是把尽可能多的空闲内存都当做了磁盘缓存来使用。同时如果有其他进程申请内存，回收PageCa">
+<meta property="og:image" content="http://shiyueqi.github.io/images/传统IO流程.jpg">
+<meta property="og:image" content="http://shiyueqi.github.io/images/Kafka的IO流程.jpg">
+<meta property="og:updated_time" content="2017-04-27T08:32:56.648Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Kafka-开源monitor调研">
-<meta name="twitter:description" content="Kafka-开源monitor调研Kafka-web-console
-Kafka-web-console开源项目已不再继续维护，开源开发者推荐使用Kafka-manage进行替代。
-Scala语言开发。
-Github: https://github.com/claudemamo/kafka-web-console
-
-KafkaOffsetMonitor
-KafkaOffsetMonitor开源项目">
+<meta name="twitter:title" content="Kafka-Pagecache原理">
+<meta name="twitter:description" content="一、Kafka PageCache简介Kafka重度依赖底层操作系统提供的PageCache功能。当上层有写操作时，操作系统只是将数据写入PageCache，同时标记Page属性为Dirty。当读操作发生时，先从PageCache中查找，如果发生缺页才进行磁盘调度，最终返回需要的数据。实际上PageCache是把尽可能多的空闲内存都当做了磁盘缓存来使用。同时如果有其他进程申请内存，回收PageCa">
 
 
 
@@ -142,13 +126,13 @@ KafkaOffsetMonitor开源项目">
 
 
 
-  <link rel="canonical" href="http://shiyueqi.github.io/2017/04/21/Kafka-开源monitor调研/"/>
+  <link rel="canonical" href="http://shiyueqi.github.io/2017/04/27/Kafka-Pagecache原理/"/>
 
 
 
 
 
-  <title> Kafka-开源monitor调研 | 石头头头的博客 </title>
+  <title> Kafka-Pagecache原理 | 石头头头的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -327,7 +311,7 @@ KafkaOffsetMonitor开源项目">
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/04/21/Kafka-开源monitor调研/">
+    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/04/27/Kafka-Pagecache原理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Shi Yueqi">
@@ -348,7 +332,7 @@ KafkaOffsetMonitor开源项目">
             
             
               
-                Kafka-开源monitor调研
+                Kafka-Pagecache原理
               
             
           </h1>
@@ -363,8 +347,8 @@ KafkaOffsetMonitor开源项目">
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-21T11:12:29+08:00">
-                2017-04-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-27T16:32:56+08:00">
+                2017-04-27
               </time>
             
 
@@ -404,9 +388,9 @@ KafkaOffsetMonitor开源项目">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/04/21/Kafka-开源monitor调研/#comments" itemprop="discussionUrl">
+                <a href="/2017/04/27/Kafka-Pagecache原理/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/04/21/Kafka-开源monitor调研/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/04/27/Kafka-Pagecache原理/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -414,7 +398,7 @@ KafkaOffsetMonitor开源项目">
 
           
           
-             <span id="/2017/04/21/Kafka-开源monitor调研/" class="leancloud_visitors" data-flag-title="Kafka-开源monitor调研">
+             <span id="/2017/04/27/Kafka-Pagecache原理/" class="leancloud_visitors" data-flag-title="Kafka-Pagecache原理">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -443,69 +427,49 @@ KafkaOffsetMonitor开源项目">
       
 
       
-        <h1 id="Kafka-_u5F00_u6E90monitor_u8C03_u7814"><a href="#Kafka-_u5F00_u6E90monitor_u8C03_u7814" class="headerlink" title="Kafka-开源monitor调研"></a>Kafka-开源monitor调研</h1><h2 id="Kafka-web-console"><a href="#Kafka-web-console" class="headerlink" title="Kafka-web-console"></a>Kafka-web-console</h2><ol>
-<li>Kafka-web-console开源项目已不再继续维护，开源开发者推荐使用Kafka-manage进行替代。</li>
-<li>Scala语言开发。</li>
-<li>Github: <a href="https://github.com/claudemamo/kafka-web-console" target="_blank" rel="external">https://github.com/claudemamo/kafka-web-console</a></li>
-</ol>
-<h2 id="KafkaOffsetMonitor"><a href="#KafkaOffsetMonitor" class="headerlink" title="KafkaOffsetMonitor"></a>KafkaOffsetMonitor</h2><ol>
-<li>KafkaOffsetMonitor开源项目已不再继续开发。功能简单，直观，提供查询功能，jar包部署。</li>
-<li>Scala语言开发。</li>
-<li>Github: <a href="https://github.com/quantifind/KafkaOffsetMonitor" target="_blank" rel="external">https://github.com/quantifind/KafkaOffsetMonitor</a></li>
-</ol>
-<h2 id="Availability-Monitor-for-Kafka"><a href="#Availability-Monitor-for-Kafka" class="headerlink" title="Availability-Monitor-for-Kafka"></a>Availability-Monitor-for-Kafka</h2><ol>
-<li>Availability-Monitor-for-Kafka是微软Microsoft开源的Kafka监控项目。使用简单，jar包部署。</li>
-<li>社区一般活跃，暂无release版本。</li>
-<li>Java语言开发；与maven集成；与SQL Server集成。</li>
-<li>最新支持到Kafka 0.8.1.1版本</li>
-<li>Github: <a href="https://github.com/Microsoft/Availability-Monitor-for-Kafka" target="_blank" rel="external">https://github.com/Microsoft/Availability-Monitor-for-Kafka</a></li>
-</ol>
-<h2 id="Kafka-monitor"><a href="#Kafka-monitor" class="headerlink" title="Kafka-monitor"></a>Kafka-monitor</h2><ol>
-<li>Kafka-monitor是Linkedin官方提供Kafka监控工具。代码提供3个branch分别对Kafka0.8，0.9，0.10提供支持。</li>
-<li>社区一般活跃，暂时只发布一个release版本。2016年4月开始开发，开源时间较短。</li>
-<li>Java语言开发。与gradle集成。</li>
-<li>最新支持到Kafka 0.10.0.1</li>
-<li>Github: <a href="https://github.com/linkedin/kafka-monitor" target="_blank" rel="external">https://github.com/linkedin/kafka-monitor</a></li>
-</ol>
-<h2 id="Kafka-manage"><a href="#Kafka-manage" class="headerlink" title="Kafka-manage"></a>Kafka-manage</h2><ol>
-<li>Kafka-manage是Yahoo官方提供的Kafka监控工具。</li>
-<li>开源项目社区非常活跃，已发布21个release版本。2015年1月29日开始开发，总计446 commits。</li>
-<li>功能非常强大、全面。对新版Kafka有一定支持，但不一定会支持到最新版本功能。如0.10版本消息携带timestamp即时间戳字段，可以根据时间戳进行消息查询（暂不确定，待确认）。</li>
-<li>Scala语言开发。</li>
-<li>要求Kafka 0.8.1.1 或 0.8.2.<em> 或 0.9.0.</em> 或0.10.0.*。</li>
-<li>要求JDK8。</li>
-<li>最新支持到Kafka 0.10.1.0</li>
-<li>Github: <a href="https://github.com/yahoo/kafka-manager" target="_blank" rel="external">https://github.com/yahoo/kafka-manager</a></li>
-</ol>
-<p><strong>支持以下功能：</strong></p>
-<blockquote>
+        <h2 id="u4E00_u3001Kafka_PageCache_u7B80_u4ECB"><a href="#u4E00_u3001Kafka_PageCache_u7B80_u4ECB" class="headerlink" title="一、Kafka PageCache简介"></a>一、Kafka PageCache简介</h2><p>Kafka重度依赖底层操作系统提供的PageCache功能。当上层有写操作时，操作系统只是将数据写入PageCache，同时标记Page属性为Dirty。当读操作发生时，先从PageCache中查找，如果发生缺页才进行磁盘调度，最终返回需要的数据。实际上PageCache是把尽可能多的空闲内存都当做了磁盘缓存来使用。同时如果有其他进程申请内存，回收PageCache的代价又很小，所以现代的OS都支持PageCache。</p>
+<p>使用PageCache功能同时可以避免在JVM内部缓存数据，JVM为我们提供了强大的GC能力，同时也引入了一些问题不适用与Kafka的设计。</p>
+<p>如果在Heap内管理缓存，JVM的GC线程会频繁扫描Heap空间，带来不必要的开销。如果Heap过大，执行一次Full GC对系统的可用性来说将是极大的挑战。</p>
+<p>所有在JVM内的对象都不免带有一个Object Overhead(千万不可小视)，内存的有效空间利用率会因此降低。</p>
+<p>所有的In-Process Cache在OS中都有一份同样的PageCache。所以通过将缓存只放在PageCache，可以至少让可用缓存空间翻倍。</p>
+<p>如果Kafka重启，所有的In-Process Cache都会失效，为了防止内存中的数据随着kafka重启而丢失，因此Kafka将消息数据存储在PageCache中，而在遇到上述状况，Kafka重启后，OS管理的PageCache依然可以继续使用。</p>
+<h2 id="u4E8C_u3001Kafka_Sendfile_u6280_u672F"><a href="#u4E8C_u3001Kafka_Sendfile_u6280_u672F" class="headerlink" title="二、Kafka Sendfile技术"></a>二、Kafka Sendfile技术</h2><p>PageCache还只是第一步，Kafka为了进一步的优化性能还采用了Sendfile技术。在解释Sendfile之前，首先介绍一下传统的网络I/O操作流程，大体上分为以下4步。</p>
 <ol>
-<li>管理多个集群(clusters)</li>
-<li>群集状态的简单检查–主题、消费者、偏移量、服务实例、副本分布、分区分布 (topics, consumers, offsets, brokers, replica distribution, partition distribution)</li>
-<li>运行leader副本选举</li>
-<li>生成partition的分配，(通过选项来选择使用哪个broker)</li>
-<li>运行Partition的重新分配（基于4.生成partition的分配）</li>
-<li>通过可选的topic配置，创建一个topic（0.8.1.1与0.8.2 +有不同的配置）</li>
-<li>删除topic(仅在0.8.2 +版本中支持，且需要在broker配置delete.topic.enable=true)</li>
-<li>topic列表现在显示标记为删除的内容（仅在0.8.2 +版本中支持）</li>
-<li>批量生成多个topic的partition分配，(可以通过选项来选择使用哪个broker)</li>
-<li>运行多topic的partition的批量重分配</li>
-<li>为已存在的topic新增partitions</li>
-<li>更新现已存在topic的配置</li>
-<li>选择是否为broker级别和topic级别的指标而启用JMX轮询。</li>
-<li>选择过滤出在zookeeper中没有ids/owners/&amp;offsets/directories的消费者。</li>
+<li>OS 从硬盘把数据读到内核区的PageCache。</li>
+<li>用户进程把数据从内核区Copy到用户区。</li>
+<li>然后用户进程再把数据写入到Socket，数据流入内核区的Socket Buffer上。</li>
+<li>OS 再把数据从Buffer中Copy到网卡的Buffer上，这样完成一次发送。</li>
 </ol>
-</blockquote>
-<h2 id="u7ED3_u8BBA"><a href="#u7ED3_u8BBA" class="headerlink" title="结论"></a>结论</h2><ol>
-<li>前三个开源Kafka监控项目基本无需考虑。</li>
-<li>Kafka-monitor优势在于官方出品，属嫡系产品。虽然项目起步较晚，但未来前景可观。</li>
-<li>Kafka-manage优势在于社区活跃，功能支持强大，release版本众多，饱经生产考验。</li>
-<li>具体功能对比需实际部署使用两款monitor产品，进行各方面对比完成。</li>
+<p><img src="/images/传统IO流程.jpg" alt="传统IO流程"></p>
+<p>整个过程共经历两次Context Switch，四次System Call。同一份数据在内核Buffer与用户Buffer之间重复拷贝，效率低下。其中2、3两步没有必要，完全可以直接在内核区完成数据拷贝。这也正是Sendfile所解决的问题，经过Sendfile优化后，整个I/O过程就变成了下面这个样子。</p>
+<p><img src="/images/Kafka的IO流程.jpg" alt="Kafka的IO流程"></p>
+<p>通过以上的介绍不难看出，Kafka的设计初衷是尽一切努力在内存中完成数据交换，无论是对外作为一整个消息系统，或是内部同底层操作系统的交互。如果Producer和Consumer之间生产和消费进度上配合得当，完全可以实现数据交换零I/O。这也就是为什么说Kafka使用“硬盘”并没有带来过多性能损失的原因。</p>
+<h2 id="u4E09_u3001Tips"><a href="#u4E09_u3001Tips" class="headerlink" title="三、Tips"></a>三、Tips</h2><ol>
+<li>Kafka官方并不建议通过Broker端的log.flush.interval.messages和log.flush.interval.ms来强制写盘，认为数据的可靠性应该通过Replica来保证，而强制Flush数据到磁盘会对整体性能产生影响。</li>
+<li>可以通过调整/proc/sys/vm/dirty_background_ratio和/proc/sys/vm/dirty_ratio来调优性能。</li>
+<li>脏页率超过第一个指标会启动pdflush开始Flush Dirty PageCache。</li>
+<li>脏页率超过第二个指标会阻塞所有的写操作来进行Flush。</li>
+<li>根据不同的业务需求可以适当的降低dirty_background_ratio和提高dirty_ratio。</li>
 </ol>
-<p>注：Kafka 0.10.2.0 于2017年2月14日发布，此版本修复超过200个bugs，合并超过500个Pull Request。使用Scala-2.12。</p>
+<h2 id="u56DB_u3001_u7ED3_u8BBA"><a href="#u56DB_u3001_u7ED3_u8BBA" class="headerlink" title="四、结论"></a>四、结论</h2><ol>
+<li>Kafka在运行过程中，会尽可能多的把空闲内存都当做了磁盘缓存来使用。</li>
+<li>当上层有写操作时，操作系统只是将数据写入PageCache，同时标记Page属性为Dirty。</li>
+<li>当读操作发生时，先从PageCache中查找，如果发生缺页才进行磁盘调度，最终返回需要的数据。</li>
+<li>同时如果有其他进程申请内存，会回收抢占一部分PageCache，但也会导致Kafka吞吐量下降会不稳定。这个我们做过相应的测试工作。</li>
+<li>Kafka使用PageCache功能同时可以避免在JVM内部缓存数据</li>
+<li>Kafka重启后，OS管理的PageCache不会被释放，依然可以继续使用。</li>
+<li>Kafka使用了Sendfile技术，使数据交换的I/O过程均处于内核态运行。</li>
+<li>Kafka的刷盘机制，会将PageCache中的消息数据刷到磁盘当中，保证数据不会丢失。但这部分消息是否仍然存在PageCache中，这个我们不确定，需要后续通过阅读源码来解决。</li>
+</ol>
+<h2 id="u4E94_u3001_u53C2_u8003_u6587_u732E"><a href="#u4E94_u3001_u53C2_u8003_u6587_u732E" class="headerlink" title="五、参考文献"></a>五、参考文献</h2><ol>
+<li><a href="http://www.dataguru.cn/article-9854-1.html" target="_blank" rel="external">http://www.dataguru.cn/article-9854-1.html</a></li>
+<li><a href="http://www.linuxidc.com/Linux/2015-05/117022.htm" target="_blank" rel="external">http://www.linuxidc.com/Linux/2015-05/117022.htm</a></li>
+<li><a href="https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines" target="_blank" rel="external">https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines</a></li>
+</ol>
+<h2 id="u516D_u3001_u7248_u6743_u58F0_u660E"><a href="#u516D_u3001_u7248_u6743_u58F0_u660E" class="headerlink" title="六、版权声明"></a>六、版权声明</h2><p>转载请注明出处：<a href="https://shiyueqi.github.io/2017/04/21/Kafka-Pagecache原理/">https://shiyueqi.github.io/2017/04/21/Kafka-Pagecache原理/</a></p>
 <hr>
 <p>Author: Yueqi Shi</p>
-<p>Date: 2017-04-21 11:12:00 AM </p>
+<p>Date: 2017-04-27 16:31:00 AM</p>
 
       
     </div>
@@ -552,8 +516,8 @@ KafkaOffsetMonitor开源项目">
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/04/21/Kafka-0.8.x,0.9.x,0.10.x版本差异/" rel="next" title="Kafka-0.8.x,0.9.x,0.10.x版本差异">
-                <i class="fa fa-chevron-left"></i> Kafka-0.8.x,0.9.x,0.10.x版本差异
+              <a href="/2017/04/27/Kafka-0.10.2.0滚动升级手册/" rel="next" title="Kafka-0.10.2.0滚动升级手册">
+                <i class="fa fa-chevron-left"></i> Kafka-0.10.2.0滚动升级手册
               </a>
             
           </div>
@@ -561,10 +525,6 @@ KafkaOffsetMonitor开源项目">
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/04/27/Zookeeper-3.4.9安装配置/" rel="prev" title="Zookeeper-3.4.9安装配置">
-                Zookeeper-3.4.9安装配置 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -720,7 +680,7 @@ KafkaOffsetMonitor开源项目">
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kafka-_u5F00_u6E90monitor_u8C03_u7814"><span class="nav-number">1.</span> <span class="nav-text">Kafka-开源monitor调研</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka-web-console"><span class="nav-number">1.1.</span> <span class="nav-text">Kafka-web-console</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KafkaOffsetMonitor"><span class="nav-number">1.2.</span> <span class="nav-text">KafkaOffsetMonitor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Availability-Monitor-for-Kafka"><span class="nav-number">1.3.</span> <span class="nav-text">Availability-Monitor-for-Kafka</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka-monitor"><span class="nav-number">1.4.</span> <span class="nav-text">Kafka-monitor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka-manage"><span class="nav-number">1.5.</span> <span class="nav-text">Kafka-manage</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u7ED3_u8BBA"><span class="nav-number">1.6.</span> <span class="nav-text">结论</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E00_u3001Kafka_PageCache_u7B80_u4ECB"><span class="nav-number">1.</span> <span class="nav-text">一、Kafka PageCache简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E8C_u3001Kafka_Sendfile_u6280_u672F"><span class="nav-number">2.</span> <span class="nav-text">二、Kafka Sendfile技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E09_u3001Tips"><span class="nav-number">3.</span> <span class="nav-text">三、Tips</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u56DB_u3001_u7ED3_u8BBA"><span class="nav-number">4.</span> <span class="nav-text">四、结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E94_u3001_u53C2_u8003_u6587_u732E"><span class="nav-number">5.</span> <span class="nav-text">五、参考文献</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u516D_u3001_u7248_u6743_u58F0_u660E"><span class="nav-number">6.</span> <span class="nav-text">六、版权声明</span></a></li></ol></div>
             
 
           </div>
@@ -864,9 +824,9 @@ KafkaOffsetMonitor开源项目">
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://shiyueqi.github.io/2017/04/21/Kafka-开源monitor调研/';
-          this.page.identifier = '2017/04/21/Kafka-开源monitor调研/';
-          this.page.title = 'Kafka-开源monitor调研';
+          this.page.url = 'http://shiyueqi.github.io/2017/04/27/Kafka-Pagecache原理/';
+          this.page.identifier = '2017/04/27/Kafka-Pagecache原理/';
+          this.page.title = 'Kafka-Pagecache原理';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://shiyueqi.disqus.com/embed.js';
