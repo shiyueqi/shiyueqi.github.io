@@ -87,31 +87,34 @@
 
 
 
-<meta name="description" content="Kafka-0.10.2.0滚动升级手册Kafka-0.10.2.0滚动升级方案Kafka-0.10.2.0滚动升级方案
-Kafka-0.10.2.0兼容性Kafka broker
+<meta name="description" content="一、Kafka-0.10.2.0滚动升级方案Kafka-0.10.2.0滚动升级方案
+二、Kafka-0.10.2.0兼容性Kafka broker
 0.10.2.0版本的brokers支持0.8.x或更高版本的客户端。
 Kafka客户端
-从0.10.2.0版本开始，Kafka的Java客户端(producer和consumer)实现了与部分老版本的broker(0">
+从0.10.2.0版本开始，Kafka的Java客户端(producer和consumer)实现了与部分老版本的broker(0.10.x)通信的兼容性。
+0.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kafka-0.10.2.0滚动升级手册">
 <meta property="og:url" content="http://shiyueqi.github.io/2017/04/27/Kafka-0.10.2.0滚动升级手册/index.html">
 <meta property="og:site_name" content="石头头头的博客">
-<meta property="og:description" content="Kafka-0.10.2.0滚动升级手册Kafka-0.10.2.0滚动升级方案Kafka-0.10.2.0滚动升级方案
-Kafka-0.10.2.0兼容性Kafka broker
+<meta property="og:description" content="一、Kafka-0.10.2.0滚动升级方案Kafka-0.10.2.0滚动升级方案
+二、Kafka-0.10.2.0兼容性Kafka broker
 0.10.2.0版本的brokers支持0.8.x或更高版本的客户端。
 Kafka客户端
-从0.10.2.0版本开始，Kafka的Java客户端(producer和consumer)实现了与部分老版本的broker(0">
+从0.10.2.0版本开始，Kafka的Java客户端(producer和consumer)实现了与部分老版本的broker(0.10.x)通信的兼容性。
+0.">
 <meta property="og:image" content="http://shiyueqi.github.io/images/kafka_zookeeper_list.PNG">
 <meta property="og:image" content="http://shiyueqi.github.io/images/滚动升级producer异常.PNG">
 <meta property="og:image" content="http://shiyueqi.github.io/images/滚动升级consumer未消费异常msg.PNG">
-<meta property="og:updated_time" content="2017-04-27T07:26:16.638Z">
+<meta property="og:updated_time" content="2017-04-27T07:33:32.405Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka-0.10.2.0滚动升级手册">
-<meta name="twitter:description" content="Kafka-0.10.2.0滚动升级手册Kafka-0.10.2.0滚动升级方案Kafka-0.10.2.0滚动升级方案
-Kafka-0.10.2.0兼容性Kafka broker
+<meta name="twitter:description" content="一、Kafka-0.10.2.0滚动升级方案Kafka-0.10.2.0滚动升级方案
+二、Kafka-0.10.2.0兼容性Kafka broker
 0.10.2.0版本的brokers支持0.8.x或更高版本的客户端。
 Kafka客户端
-从0.10.2.0版本开始，Kafka的Java客户端(producer和consumer)实现了与部分老版本的broker(0">
+从0.10.2.0版本开始，Kafka的Java客户端(producer和consumer)实现了与部分老版本的broker(0.10.x)通信的兼容性。
+0.">
 
 
 
@@ -360,7 +363,7 @@ Kafka客户端
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-27T15:26:16+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-27T15:33:32+08:00">
                 2017-04-27
               </time>
             
@@ -440,14 +443,14 @@ Kafka客户端
       
 
       
-        <h1 id="Kafka-0-10-2-0_u6EDA_u52A8_u5347_u7EA7_u624B_u518C"><a href="#Kafka-0-10-2-0_u6EDA_u52A8_u5347_u7EA7_u624B_u518C" class="headerlink" title="Kafka-0.10.2.0滚动升级手册"></a>Kafka-0.10.2.0滚动升级手册</h1><h2 id="Kafka-0-10-2-0_u6EDA_u52A8_u5347_u7EA7_u65B9_u6848"><a href="#Kafka-0-10-2-0_u6EDA_u52A8_u5347_u7EA7_u65B9_u6848" class="headerlink" title="Kafka-0.10.2.0滚动升级方案"></a>Kafka-0.10.2.0滚动升级方案</h2><p><a href="https://shiyueqi.github.io/2017/04/21/Kafka-0.10.2.0%E6%BB%9A%E5%8A%A8%E5%8D%87%E7%BA%A7%E6%96%B9%E6%A1%88/" title="Kafka-0.10.2.0滚动升级方案">Kafka-0.10.2.0滚动升级方案</a></p>
-<h2 id="Kafka-0-10-2-0_u517C_u5BB9_u6027"><a href="#Kafka-0-10-2-0_u517C_u5BB9_u6027" class="headerlink" title="Kafka-0.10.2.0兼容性"></a>Kafka-0.10.2.0兼容性</h2><p><strong>Kafka broker</strong></p>
+        <h2 id="u4E00_u3001Kafka-0-10-2-0_u6EDA_u52A8_u5347_u7EA7_u65B9_u6848"><a href="#u4E00_u3001Kafka-0-10-2-0_u6EDA_u52A8_u5347_u7EA7_u65B9_u6848" class="headerlink" title="一、Kafka-0.10.2.0滚动升级方案"></a>一、Kafka-0.10.2.0滚动升级方案</h2><p><a href="https://shiyueqi.github.io/2017/04/21/Kafka-0.10.2.0%E6%BB%9A%E5%8A%A8%E5%8D%87%E7%BA%A7%E6%96%B9%E6%A1%88/" title="Kafka-0.10.2.0滚动升级方案">Kafka-0.10.2.0滚动升级方案</a></p>
+<h2 id="u4E8C_u3001Kafka-0-10-2-0_u517C_u5BB9_u6027"><a href="#u4E8C_u3001Kafka-0-10-2-0_u517C_u5BB9_u6027" class="headerlink" title="二、Kafka-0.10.2.0兼容性"></a>二、Kafka-0.10.2.0兼容性</h2><p><strong>Kafka broker</strong></p>
 <p>0.10.2.0版本的brokers支持0.8.x或更高版本的客户端。</p>
 <p><strong>Kafka客户端</strong></p>
 <p>从0.10.2.0版本开始，Kafka的Java客户端(producer和consumer)实现了与部分老版本的broker(0.10.x)通信的兼容性。</p>
 <p>0.10.2.0版本的客户端可以与0.10.0或更高版本的broker通信。但是，如果broker的版本低于0.10.0，必须先升级所有Kafka集群中的brokers的版本，才可以继续升级客户端的版本。</p>
-<h2 id="0-8-2-1_u54110-10-2-0_u6EDA_u52A8_u5347_u7EA7_u624B_u518C"><a href="#0-8-2-1_u54110-10-2-0_u6EDA_u52A8_u5347_u7EA7_u624B_u518C" class="headerlink" title="0.8.2.1向0.10.2.0滚动升级手册"></a>0.8.2.1向0.10.2.0滚动升级手册</h2><h3 id="1-__u5B89_u88C5_u914D_u7F6EKafka-0-8-2-1"><a href="#1-__u5B89_u88C5_u914D_u7F6EKafka-0-8-2-1" class="headerlink" title="1. 安装配置Kafka-0.8.2.1"></a>1. 安装配置Kafka-0.8.2.1</h3><pre><code>[https://shiyueqi.github.io/2017/04/27/Kafka-0.8.2.1%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/](https://shiyueqi.github.io/2017/04/27/Kafka-0.8.2.1%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/ &quot;Kafka-0.8.2.1安装配置&quot;)
-</code></pre><h3 id="2-__u5B89_u88C5Kafka-0-10-2-0"><a href="#2-__u5B89_u88C5Kafka-0-10-2-0" class="headerlink" title="2. 安装Kafka-0.10.2.0"></a>2. 安装Kafka-0.10.2.0</h3><p>下载地址：<a href="http://apache.claz.org/kafka/0.10.2.0/" title="Kafka-0.10.2.0下载地址" target="_blank" rel="external">http://apache.claz.org/kafka/0.10.2.0/</a></p>
+<h2 id="u4E09_u30010-8-2-1_u54110-10-2-0_u6EDA_u52A8_u5347_u7EA7_u624B_u518C"><a href="#u4E09_u30010-8-2-1_u54110-10-2-0_u6EDA_u52A8_u5347_u7EA7_u624B_u518C" class="headerlink" title="三、0.8.2.1向0.10.2.0滚动升级手册"></a>三、0.8.2.1向0.10.2.0滚动升级手册</h2><h3 id="1-__u5B89_u88C5_u914D_u7F6EKafka-0-8-2-1"><a href="#1-__u5B89_u88C5_u914D_u7F6EKafka-0-8-2-1" class="headerlink" title="1. 安装配置Kafka-0.8.2.1"></a>1. 安装配置Kafka-0.8.2.1</h3><p><a href="https://shiyueqi.github.io/2017/04/27/Kafka-0.8.2.1%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/" title="Kafka-0.8.2.1安装配置">https://shiyueqi.github.io/2017/04/27/Kafka-0.8.2.1%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</a></p>
+<h3 id="2-__u5B89_u88C5Kafka-0-10-2-0"><a href="#2-__u5B89_u88C5Kafka-0-10-2-0" class="headerlink" title="2. 安装Kafka-0.10.2.0"></a>2. 安装Kafka-0.10.2.0</h3><p>下载地址：<a href="http://apache.claz.org/kafka/0.10.2.0/" title="Kafka-0.10.2.0下载地址" target="_blank" rel="external">http://apache.claz.org/kafka/0.10.2.0/</a></p>
 <p>Kafka-0.10.2.0安装方法与0.8.2.1相同。安装完成后如下图</p>
 <p><img src="/images/kafka_zookeeper_list.PNG" alt="kafka_zookeeper_list">    </p>
 <ul>
@@ -474,7 +477,7 @@ log.dirs=/home/yqshi/kafka/kafka-logs/kafka_2.10-0.8.2.1
 zookeeper.connect=172.18.55.21:2181,172.18.55.21:2182
 inter.broker.protocol.version=0.8.2.1
 log.message.format.version=0.8.2.1
-</code></pre><p>至此，完成了broker.id=1的Kafka-0.10.2.0配置。重复上述配置完成第二台以及其他实例的配置。</p>
+</code></pre><p>至此，完成了broker.id=0的Kafka-0.10.2.0配置。重复上述配置完成第二台以及其他实例的配置。</p>
 <p>注意事项：</p>
 <ul>
 <li>新版本与旧版本的log.dirs指定相同的路径，否则会导致信息丢失</li>
@@ -521,9 +524,9 @@ log.message.format.version=0.8.2.1
 <p> 但是我怀疑是不是我关闭Kafka进程的姿势不对。。。。</p>
 </li>
 </ol>
-<h2 id="u53C2_u8003_u6587_u732E"><a href="#u53C2_u8003_u6587_u732E" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="http://kafka.apache.org/0102/documentation.html#upgrade" target="_blank" rel="external">http://kafka.apache.org/0102/documentation.html#upgrade</a></p>
+<h2 id="u56DB_u3001_u53C2_u8003_u6587_u732E"><a href="#u56DB_u3001_u53C2_u8003_u6587_u732E" class="headerlink" title="四、参考文献"></a>四、参考文献</h2><p><a href="http://kafka.apache.org/0102/documentation.html#upgrade" target="_blank" rel="external">http://kafka.apache.org/0102/documentation.html#upgrade</a></p>
 <p><a href="https://shiyueqi.github.io/2017/04/21/Kafka-0.10.2.0%E6%BB%9A%E5%8A%A8%E5%8D%87%E7%BA%A7%E6%96%B9%E6%A1%88/" title="Kafka-0.10.2.0滚动升级方案">https://shiyueqi.github.io/2017/04/21/Kafka-0.10.2.0%E6%BB%9A%E5%8A%A8%E5%8D%87%E7%BA%A7%E6%96%B9%E6%A1%88/</a></p>
-<h2 id="u7248_u6743_u58F0_u660E"><a href="#u7248_u6743_u58F0_u660E" class="headerlink" title="版权声明"></a>版权声明</h2><p>转载请注明出处</p>
+<h2 id="u4E94_u3001_u7248_u6743_u58F0_u660E"><a href="#u4E94_u3001_u7248_u6743_u58F0_u660E" class="headerlink" title="五、版权声明"></a>五、版权声明</h2><p>转载请注明出处： <a href="https://shiyueqi.github.io/2017/04/27/Kafka-0.10.2.0%E6%BB%9A%E5%8A%A8%E5%8D%87%E7%BA%A7%E6%89%8B%E5%86%8C/">https://shiyueqi.github.io/2017/04/27/Kafka-0.10.2.0%E6%BB%9A%E5%8A%A8%E5%8D%87%E7%BA%A7%E6%89%8B%E5%86%8C/</a></p>
 <hr>
 <p>Author: Yueqi Shi</p>
 <p>Date: 2017-04-27 15:17:00 AM </p>
@@ -737,7 +740,7 @@ log.message.format.version=0.8.2.1
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kafka-0-10-2-0_u6EDA_u52A8_u5347_u7EA7_u624B_u518C"><span class="nav-number">1.</span> <span class="nav-text">Kafka-0.10.2.0滚动升级手册</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka-0-10-2-0_u6EDA_u52A8_u5347_u7EA7_u65B9_u6848"><span class="nav-number">1.1.</span> <span class="nav-text">Kafka-0.10.2.0滚动升级方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka-0-10-2-0_u517C_u5BB9_u6027"><span class="nav-number">1.2.</span> <span class="nav-text">Kafka-0.10.2.0兼容性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0-8-2-1_u54110-10-2-0_u6EDA_u52A8_u5347_u7EA7_u624B_u518C"><span class="nav-number">1.3.</span> <span class="nav-text">0.8.2.1向0.10.2.0滚动升级手册</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-__u5B89_u88C5_u914D_u7F6EKafka-0-8-2-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">1. 安装配置Kafka-0.8.2.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-__u5B89_u88C5Kafka-0-10-2-0"><span class="nav-number">1.3.2.</span> <span class="nav-text">2. 安装Kafka-0.10.2.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-__u914D_u7F6EKafka-0-10-2-0"><span class="nav-number">1.3.3.</span> <span class="nav-text">3. 配置Kafka-0.10.2.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-__u9010_u53F0_u5173_u6389Kafka-0-8-2-1_u5B9E_u4F8B"><span class="nav-number">1.3.4.</span> <span class="nav-text">4. 逐台关掉Kafka-0.8.2.1实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-_u542F_u52A8Kafka-0-10-2-0_u5B9E_u4F8B"><span class="nav-number">1.3.5.</span> <span class="nav-text">5.启动Kafka-0.10.2.0实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-__u66F4_u65B0_u534F_u8BAE_u7248_u672C"><span class="nav-number">1.3.6.</span> <span class="nav-text">6. 更新协议版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-__u66F4_u65B0consumer_u5BA2_u6237_u7AEF_u4EE3_u7801"><span class="nav-number">1.3.7.</span> <span class="nav-text">7. 更新consumer客户端代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-__u66F4_u65B0_u65E5_u5FD7_u683C_u5F0F_u7248_u672C"><span class="nav-number">1.3.8.</span> <span class="nav-text">8. 更新日志格式版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-__u6CE8_u610F_u4E8B_u9879"><span class="nav-number">1.3.9.</span> <span class="nav-text">9. 注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u53C2_u8003_u6587_u732E"><span class="nav-number">1.4.</span> <span class="nav-text">参考文献</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u7248_u6743_u58F0_u660E"><span class="nav-number">1.5.</span> <span class="nav-text">版权声明</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E00_u3001Kafka-0-10-2-0_u6EDA_u52A8_u5347_u7EA7_u65B9_u6848"><span class="nav-number">1.</span> <span class="nav-text">一、Kafka-0.10.2.0滚动升级方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E8C_u3001Kafka-0-10-2-0_u517C_u5BB9_u6027"><span class="nav-number">2.</span> <span class="nav-text">二、Kafka-0.10.2.0兼容性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E09_u30010-8-2-1_u54110-10-2-0_u6EDA_u52A8_u5347_u7EA7_u624B_u518C"><span class="nav-number">3.</span> <span class="nav-text">三、0.8.2.1向0.10.2.0滚动升级手册</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-__u5B89_u88C5_u914D_u7F6EKafka-0-8-2-1"><span class="nav-number">3.1.</span> <span class="nav-text">1. 安装配置Kafka-0.8.2.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-__u5B89_u88C5Kafka-0-10-2-0"><span class="nav-number">3.2.</span> <span class="nav-text">2. 安装Kafka-0.10.2.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-__u914D_u7F6EKafka-0-10-2-0"><span class="nav-number">3.3.</span> <span class="nav-text">3. 配置Kafka-0.10.2.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-__u9010_u53F0_u5173_u6389Kafka-0-8-2-1_u5B9E_u4F8B"><span class="nav-number">3.4.</span> <span class="nav-text">4. 逐台关掉Kafka-0.8.2.1实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-_u542F_u52A8Kafka-0-10-2-0_u5B9E_u4F8B"><span class="nav-number">3.5.</span> <span class="nav-text">5.启动Kafka-0.10.2.0实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-__u66F4_u65B0_u534F_u8BAE_u7248_u672C"><span class="nav-number">3.6.</span> <span class="nav-text">6. 更新协议版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-__u66F4_u65B0consumer_u5BA2_u6237_u7AEF_u4EE3_u7801"><span class="nav-number">3.7.</span> <span class="nav-text">7. 更新consumer客户端代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-__u66F4_u65B0_u65E5_u5FD7_u683C_u5F0F_u7248_u672C"><span class="nav-number">3.8.</span> <span class="nav-text">8. 更新日志格式版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-__u6CE8_u610F_u4E8B_u9879"><span class="nav-number">3.9.</span> <span class="nav-text">9. 注意事项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u56DB_u3001_u53C2_u8003_u6587_u732E"><span class="nav-number">4.</span> <span class="nav-text">四、参考文献</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E94_u3001_u7248_u6743_u58F0_u660E"><span class="nav-number">5.</span> <span class="nav-text">五、版权声明</span></a></li></ol></div>
             
 
           </div>
