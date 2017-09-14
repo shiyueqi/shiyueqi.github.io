@@ -95,7 +95,7 @@
 <meta property="og:description" content="一、Kafka PageCache简介Kafka重度依赖底层操作系统提供的PageCache功能。当上层有写操作时，操作系统只是将数据写入PageCache，同时标记Page属性为Dirty。当读操作发生时，先从PageCache中查找，如果发生缺页才进行磁盘调度，最终返回需要的数据。实际上PageCache是把尽可能多的空闲内存都当做了磁盘缓存来使用。同时如果有其他进程申请内存，回收PageCa">
 <meta property="og:image" content="http://shiyueqi.github.io/images/传统IO流程.jpg">
 <meta property="og:image" content="http://shiyueqi.github.io/images/Kafka的IO流程.jpg">
-<meta property="og:updated_time" content="2017-04-27T08:59:58.646Z">
+<meta property="og:updated_time" content="2017-09-14T07:58:41.402Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka-Pagecache原理">
 <meta name="twitter:description" content="一、Kafka PageCache简介Kafka重度依赖底层操作系统提供的PageCache功能。当上层有写操作时，操作系统只是将数据写入PageCache，同时标记Page属性为Dirty。当读操作发生时，先从PageCache中查找，如果发生缺页才进行磁盘调度，最终返回需要的数据。实际上PageCache是把尽可能多的空闲内存都当做了磁盘缓存来使用。同时如果有其他进程申请内存，回收PageCa">
@@ -347,7 +347,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-27T16:59:58+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-27T16:31:00+08:00">
                 2017-04-27
               </time>
             
@@ -466,7 +466,7 @@
 <li><a href="http://www.linuxidc.com/Linux/2015-05/117022.htm" target="_blank" rel="external">http://www.linuxidc.com/Linux/2015-05/117022.htm</a></li>
 <li><a href="https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines" target="_blank" rel="external">https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines</a></li>
 </ol>
-<h2 id="u516D_u3001_u7248_u6743_u58F0_u660E"><a href="#u516D_u3001_u7248_u6743_u58F0_u660E" class="headerlink" title="六、版权声明"></a>六、版权声明</h2><p>转载请注明出处：<a href="https://shiyueqi.github.io/2017/04/27/Kafka-Pagecache原理/">https://shiyueqi.github.io/2017/04/21/Kafka-Pagecache原理/</a></p>
+<h2 id="u516D_u3001_u7248_u6743_u58F0_u660E"><a href="#u516D_u3001_u7248_u6743_u58F0_u660E" class="headerlink" title="六、版权声明"></a>六、版权声明</h2><p>转载请注明出处：<a href="https://shiyueqi.github.io/2017/04/27/Kafka-Pagecache原理/">https://shiyueqi.github.io/2017/04/27/Kafka-Pagecache原理/</a></p>
 <hr>
 <p>Author: Yueqi Shi</p>
 <p>Date: 2017-04-27 16:31:00 AM</p>
@@ -526,8 +526,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/04/27/Kafka-0.8.2.1安装配置/" rel="prev" title="Kafka-0.8.2.1安装配置">
-                Kafka-0.8.2.1安装配置 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/09/13/Kafka-简介/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -607,7 +607,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
