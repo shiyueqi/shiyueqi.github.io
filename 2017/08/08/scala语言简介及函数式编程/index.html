@@ -1,0 +1,1195 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="kafka,scala," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/pug.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="简介Scala 是 Scalable Language 的简写，是一门多范式的编程语言，一种类似java的编程语言，集成面向对象编程和函数式编程的各种特性。
+联邦理工学院洛桑（EPFL）的Martin Odersky于2001年基于Funnel的工作开始设计Scala。Funnel是把函数式编程思想和Petri网相结合的一种编程语言。
+Odersky先前的工作是Generic Java和javac">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scala语言简介及函数式编程">
+<meta property="og:url" content="http://shiyueqi.github.io/2017/08/08/scala语言简介及函数式编程/index.html">
+<meta property="og:site_name" content="石头头头的博客">
+<meta property="og:description" content="简介Scala 是 Scalable Language 的简写，是一门多范式的编程语言，一种类似java的编程语言，集成面向对象编程和函数式编程的各种特性。
+联邦理工学院洛桑（EPFL）的Martin Odersky于2001年基于Funnel的工作开始设计Scala。Funnel是把函数式编程思想和Petri网相结合的一种编程语言。
+Odersky先前的工作是Generic Java和javac">
+<meta property="og:image" content="http://shiyueqi.github.io/images/scala_home.jpg">
+<meta property="og:image" content="http://shiyueqi.github.io/images/scala_cmd.jpg">
+<meta property="og:updated_time" content="2017-09-15T09:43:18.038Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="scala语言简介及函数式编程">
+<meta name="twitter:description" content="简介Scala 是 Scalable Language 的简写，是一门多范式的编程语言，一种类似java的编程语言，集成面向对象编程和函数式编程的各种特性。
+联邦理工学院洛桑（EPFL）的Martin Odersky于2001年基于Funnel的工作开始设计Scala。Funnel是把函数式编程思想和Petri网相结合的一种编程语言。
+Odersky先前的工作是Generic Java和javac">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://shiyueqi.github.io/2017/08/08/scala语言简介及函数式编程/"/>
+
+
+
+
+
+  <title> scala语言简介及函数式编程 | 石头头头的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?5e9fafb0a8320f0ead8c2b80d6675a83";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">石头头头的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'cYmyKKAbtcky5-pLdKbh','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/08/08/scala语言简介及函数式编程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shi Yueqi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/pug.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="石头头头的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                scala语言简介及函数式编程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-08T14:45:00+08:00">
+                2017-08-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/scala/" itemprop="url" rel="index">
+                    <span itemprop="name">scala</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/08/08/scala语言简介及函数式编程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/08/08/scala语言简介及函数式编程/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/08/08/scala语言简介及函数式编程/" class="leancloud_visitors" data-flag-title="scala语言简介及函数式编程">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="u7B80_u4ECB"><a href="#u7B80_u4ECB" class="headerlink" title="简介"></a>简介</h1><p>Scala 是 Scalable Language 的简写，是一门多范式的编程语言，一种类似java的编程语言，集成面向对象编程和函数式编程的各种特性。</p>
+<p>联邦理工学院洛桑（EPFL）的Martin Odersky于2001年基于Funnel的工作开始设计Scala。Funnel是把函数式编程思想和Petri网相结合的一种编程语言。</p>
+<p>Odersky先前的工作是Generic Java和javac（Sun Java编译器）。Java平台的Scala于2003年底/2004年初发布。.NET平台的Scala发布于2004年6月。该语言第二个版本，v2.0，发布于2006年3月。</p>
+<p>截至目前，最新版本是版本2.12.2 。</p>
+<p>2009年4月，Twitter宣布他们已经把大部分后端程序从Ruby迁移到Scala，其余部分也打算要迁移。此外， Wattzon已经公开宣称，其整个平台都已经是基于Scala基础设施编写的。</p>
+<h1 id="u7279_u6027"><a href="#u7279_u6027" class="headerlink" title="特性"></a>特性</h1><h2 id="u9762_u5411_u5BF9_u8C61_u7279_u6027"><a href="#u9762_u5411_u5BF9_u8C61_u7279_u6027" class="headerlink" title="面向对象特性"></a>面向对象特性</h2><p>Scala是一种纯面向对象的语言，每个值都是对象。对象的数据类型以及行为由类和特质描述。<br>类抽象机制的扩展有两种途径：一种途径是子类继承，另一种途径是灵活的混入机制（类似java interface，但有很大的不同）。这两种途径能避免多重继承的种种问题。</p>
+<h2 id="u51FD_u6570_u5F0F_u7F16_u7A0B"><a href="#u51FD_u6570_u5F0F_u7F16_u7A0B" class="headerlink" title="函数式编程"></a>函数式编程</h2><p>Scala也是一种函数式语言，其函数也能当成值来使用。Scala提供了轻量级的语法用以定义匿名函数，支持高阶函数，允许嵌套多层函数，并支持柯里化。Scala的case class及其内置的模式匹配相当于函数式编程语言中常用的代数类型。<br>更进一步，程序员可以利用Scala的模式匹配，编写类似正则表达式的代码处理XML数据。</p>
+<h2 id="u9759_u6001_u7C7B_u578B"><a href="#u9759_u6001_u7C7B_u578B" class="headerlink" title="静态类型"></a>静态类型</h2><p>Scala具备类型系统，通过编译时检查，保证代码的安全性和一致性。类型系统具体支持以下特性：</p>
+<ul>
+<li>泛型类</li>
+<li>协变和逆变</li>
+<li>标注</li>
+<li>类型参数的上下限约束</li>
+<li>把类别和抽象类型作为对象成员</li>
+<li>复合类型</li>
+<li>引用自己时显式指定类型</li>
+<li>视图</li>
+<li>多态方法</li>
+</ul>
+<h2 id="u6269_u5C55_u6027"><a href="#u6269_u5C55_u6027" class="headerlink" title="扩展性"></a>扩展性</h2><p>Scala的设计秉承一项事实，即在实践中，某个领域特定的应用程序开发往往需要特定于该领域的语言扩展。Scala提供了许多独特的语言机制，可以以库的形式轻易无缝添加新的语言结构：</p>
+<ul>
+<li>任何方法可用作前缀或后缀操作符</li>
+<li>可以根据预期类型自动构造闭包。</li>
+</ul>
+<h2 id="u5E76_u53D1_u6027"><a href="#u5E76_u53D1_u6027" class="headerlink" title="并发性"></a>并发性</h2><p>Scala使用Actor作为其并发模型，Actor是类似线程的实体，通过邮箱发收消息。Actor可以复用线程，因此可以在程序中可以使用数百万个Actor,而线程只能创建数千个。在2.10之后的版本中，使用Akka作为其默认Actor实现。</p>
+<h2 id="Scala_Web__u6846_u67B6"><a href="#Scala_Web__u6846_u67B6" class="headerlink" title="Scala Web 框架"></a>Scala Web 框架</h2><p>以下列出了两个目前比较流行的 Scala 的 Web应用框架：</p>
+<ul>
+<li><a href="http://liftweb.net/" title="Lift 框架" target="_blank" rel="external">Lift 框架</a></li>
+<li><a href="http://www.playframework.org/" title="Play 框架" target="_blank" rel="external">Play 框架</a></li>
+</ul>
+<h1 id="scala_u5B89_u88C5_u4E0E_u914D_u7F6E"><a href="#scala_u5B89_u88C5_u4E0E_u914D_u7F6E" class="headerlink" title="scala安装与配置"></a>scala安装与配置</h1><h2 id="jdk_u5B89_u88C5"><a href="#jdk_u5B89_u88C5" class="headerlink" title="jdk安装"></a>jdk安装</h2><p>不再赘述</p>
+<h2 id="scala_u4E0B_u8F7D"><a href="#scala_u4E0B_u8F7D" class="headerlink" title="scala下载"></a>scala下载</h2><p><a href="http://www.scala-lang.org/download/" title="http://www.scala-lang.org/download/" target="_blank" rel="external">scala官方下载地址</a></p>
+<h2 id="u914D_u7F6E"><a href="#u914D_u7F6E" class="headerlink" title="配置"></a>配置</h2><ol>
+<li>配置SCALA_HOME环境变量</li>
+</ol>
+<p><img src="/images/scala_home.jpg" alt="scala_home"></p>
+<ol>
+<li><p>环境变量Path中加入%SCALA_HOME%\bin;</p>
+</li>
+<li><p>运行scala命令</p>
+</li>
+</ol>
+<p><img src="/images/scala_cmd.jpg" alt="scala_cmd"></p>
+<h1 id="scala_u57FA_u7840_u8BED_u6CD5"><a href="#scala_u57FA_u7840_u8BED_u6CD5" class="headerlink" title="scala基础语法"></a>scala基础语法</h1><p>Scala 与 Java 的最大区别是：Scala 语句末尾的分号 ; 是可选的。</p>
+<p>我们可以认为 Scala 程序是对象的集合，通过调用彼此的方法来实现消息传递。接下来理解下，类，对象，方法，实例变量的概念：</p>
+<ul>
+<li>对象 - 对象有属性和行为。例如：一只狗的状属性有：颜色，名字，行为有：叫、跑、吃等。对象是一个类的实例。</li>
+<li>类 - 类是对象的抽象，而对象是类的具体实例。</li>
+<li>方法 - 方法描述的基本的行为，一个类可以包含多个方法。</li>
+<li>字段 - 每个对象都有它唯一的实例变量集合，即字段。对象的属性通过给字段赋值来创建。</li>
+</ul>
+<h2 id="hello_world"><a href="#hello_world" class="headerlink" title="hello world"></a>hello world</h2><p>依然从hello world开始</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">HelloWorld</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    println(<span class="string">"Hello, world!"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="u4E0Ejava_u5BF9_u6BD4"><a href="#u4E0Ejava_u5BF9_u6BD4" class="headerlink" title="与java对比"></a>与java对比</h2><p>再看一个例子</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HelloWorldTest</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">printHelloWorld</span>(</span>msg: <span class="type">String</span>) : <span class="type">Unit</span>= &#123;</span><br><span class="line">    println(msg)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">getMsg</span>(</span>msg: <span class="type">String</span>) : <span class="type">String</span> = &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"HelloWorldTest Class: "</span> + msg</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">HelloWorldTest</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    <span class="keyword">var</span> msg = <span class="string">"hello world."</span></span><br><span class="line">    <span class="keyword">val</span> helloWorldObj = <span class="keyword">new</span> <span class="type">HelloWorldTest</span>()</span><br><span class="line">    helloWorldObj.printHelloWorld(msg);</span><br><span class="line"></span><br><span class="line">    msg = <span class="string">"hello world twice."</span></span><br><span class="line">    helloWorldObj.printHelloWorld(msg)</span><br><span class="line"></span><br><span class="line">    println(helloWorldObj.getMsg(msg))</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>object：</p>
+<p>  Scala中没有static静态修饰符，在object下的成员全部都是静态的，如果在类中声明了与该类相同的名字的object则该object是该类的“伴生对象”</p>
+<p>  可以理解把类中的static集中放到了object对象中，伴生对象和类文件必须是同一个源文件，可以用伴生对象做一些初始化的操作。</p>
+</li>
+<li><p>class：</p>
+<p>  和java中的class类似。</p>
+</li>
+<li><p>extends</p>
+<p>  同java</p>
+</li>
+<li><p>trait（interface）：</p>
+<p>  在java中可以通过interface实现多重继承，在Scala中可以通过特征（trait）实现多重继承，不过与java不同的是，它可以定义自己的属性和实现方法体，在没有自己的实现方法体时可以认为它时java interface是等价的，在有自己的实现方法时，相当于java中的抽象类。在Scala中也是一般只能继承一个父类，可以通过多个with进行多重继承。</p>
+</li>
+</ul>
+<h2 id="u57FA_u672C_u8BED_u6CD5"><a href="#u57FA_u672C_u8BED_u6CD5" class="headerlink" title="基本语法"></a>基本语法</h2><ul>
+<li>区分大小写 -  Scala是大小写敏感的，这意味着标识Hello 和 hello在Scala中会有不同的含义。</li>
+<li><p>类名 - 对于所有的类名的第一个字母要大写。</p>
+<p>  如果需要使用几个单词来构成一个类的名称，每个单词的第一个字母要大写。</p>
+<p>  示例：class MyFirstScalaClass</p>
+</li>
+<li><p>方法名称 - 所有的方法名称的第一个字母用小写。</p>
+</li>
+<li><p>如果若干单词被用于构成方法的名称，则每个单词的第一个字母应大写。</p>
+<p>  示例：def myMethodName()</p>
+</li>
+<li><p>程序文件名 - 程序文件的名称应该与对象名称完全匹配。</p>
+<p>  保存文件时，应该保存它使用的对象名称（记住Scala是区分大小写），并追加”.scala”为文件扩展名。 （如果文件名和对象名称不匹配，程序将无法编译）。</p>
+<p>  示例: 假设”HelloWorld”是对象的名称。那么该文件应保存为’HelloWorld.scala”</p>
+</li>
+<li>def main(args: Array[String]) - Scala程序从main()方法开始处理，这是每一个Scala程序的强制程序入口部分。</li>
+</ul>
+<h2 id="scala_u5173_u952E_u5B57"><a href="#scala_u5173_u952E_u5B57" class="headerlink" title="scala关键字"></a>scala关键字</h2><p>下表列出了 scala 保留关键字，我们不能使用以下关键字作为变量：<br>    <table><br>        <tr><br>            <td>abstract</td><br>            <td>case</td><br>            <td>catch</td><br>            <td>class</td><br>        </tr><br>        <tr><br>            <td>def</td><br>            <td>do</td><br>            <td>else</td><br>            <td>extends</td><br>        </tr><br>        <tr><br>            <td>false</td><br>            <td>final</td><br>            <td>finally</td><br>            <td>for</td><br>        </tr><br>        <tr><br>            <td>forSome</td><br>            <td>if</td><br>            <td>implicit</td><br>            <td>import</td><br>        </tr><br>        <tr><br>            <td>lazy</td><br>            <td>match</td><br>            <td>new</td><br>            <td>null</td><br>        </tr><br>        <tr><br>            <td>object</td><br>            <td>override</td><br>            <td>package</td><br>            <td>private</td><br>        </tr><br>        <tr><br>            <td>protected</td><br>            <td>return</td><br>            <td>sealed</td><br>            <td>super</td><br>        </tr><br>        <tr><br>            <td>this</td><br>            <td>throw</td><br>            <td>trait</td><br>            <td>try</td><br>        </tr><br>        <tr><br>            <td>true</td><br>            <td>type</td><br>            <td>val</td><br>            <td>var</td><br>        </tr><br>        <tr><br>            <td>while</td><br>            <td>with</td><br>            <td>yield</td><br>            <td>&nbsp;</td><br>        </tr><br>        <tr><br>            <td>-</td><br>            <td>:</td><br>            <td>=</td><br>            <td>=&gt;</td><br>        </tr><br>        <tr><br>            <td>&lt;-</td><br>            <td>&lt;:</td><br>            <td>&lt;%</td><br>            <td>&gt;:</td><br>        </tr><br>        <tr><br>            <td>#</td><br>            <td>@</td><br>            <td></td><br>            <td></td><br>        </tr><br>    </table></p>
+<h2 id="scala__u6CE8_u91CA_uFF08_u5176_u5B9E_u8DDFjava_u4E00_u6837_uFF09"><a href="#scala__u6CE8_u91CA_uFF08_u5176_u5B9E_u8DDFjava_u4E00_u6837_uFF09" class="headerlink" title="scala 注释（其实跟java一样）"></a>scala 注释（其实跟java一样）</h2><p>Scala 同 Java 支持单行和多行注释。</p>
+<h2 id="u6362_u884C_u7B26"><a href="#u6362_u884C_u7B26" class="headerlink" title="换行符"></a>换行符</h2><p>Scala是面向行的语言，语句可以用分号（;）结束或换行符。Scala 程序里,语句末尾的分号通常是可选的。如果你愿意可以输入一个,但若一行里仅 有一个语句也可不写。另一方面,如果一行里写多个语句那么分号是需要的。例如</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> s = <span class="string">"hello world!"</span>; println(s)</span><br></pre></td></tr></table></figure>
+<h2 id="u5F15_u7528"><a href="#u5F15_u7528" class="headerlink" title="引用"></a>引用</h2><p>Scala 使用 import 关键字引用包。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.awt.<span class="type">Color</span>  <span class="comment">// 引入Color</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> java.awt._  <span class="comment">// 引入包内所有成员</span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">handler</span>(</span>evt: event.<span class="type">ActionEvent</span>) &#123; <span class="comment">// java.awt.event.ActionEvent</span></span><br><span class="line">  ...  <span class="comment">// 因为引入了java.awt，所以可以省去前面的部分</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>import语句可以出现在任何地方，而不是只能在文件顶部。import的效果从开始延伸到语句块的结束。这可以大幅减少名称冲突的可能性。<br>如果想要引入包中的几个成员，可以使用selector（选取器）：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.awt.&#123;<span class="type">Color</span>, <span class="type">Font</span>&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 重命名成员</span></span><br><span class="line"><span class="keyword">import</span> java.util.&#123;<span class="type">HashMap</span> =&gt; <span class="type">JavaHashMap</span>&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// 隐藏成员</span></span><br><span class="line"><span class="keyword">import</span> java.util.&#123;<span class="type">HashMap</span> =&gt; _, _&#125; <span class="comment">// 引入了util包的所有成员，但是HashMap被隐藏了</span></span><br></pre></td></tr></table></figure>
+<p>注意：默认情况下，Scala 总会引入 java.lang.<em> 、 scala.</em> 和 Predef._，这里也能解释，为什么以scala开头的包，在使用时都是省去scala.的。</p>
+<h1 id="scala__u53D8_u91CF"><a href="#scala__u53D8_u91CF" class="headerlink" title="scala 变量"></a>scala 变量</h1><h2 id="u53D8_u91CF_u58F0_u660E"><a href="#u53D8_u91CF_u58F0_u660E" class="headerlink" title="变量声明"></a>变量声明</h2><p>在 Scala 中，使用关键词 “var” 声明变量，使用关键词 “val” 声明常量(类似java中的final修饰符)。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> testMsg : <span class="type">String</span> = <span class="string">"testMsg"</span></span><br><span class="line"><span class="keyword">val</span> testNum : <span class="type">Int</span> = <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>变量testMsg可以修改，不断赋值；而常量testNum不能被更改。</p>
+<h2 id="u53D8_u91CF_u7C7B_u578B_u58F0_u660E"><a href="#u53D8_u91CF_u7C7B_u578B_u58F0_u660E" class="headerlink" title="变量类型声明"></a>变量类型声明</h2><p>变量的类型在变量名之后等号之前声明。定义变量的类型的语法格式如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="type">VariableName</span> : <span class="type">DataType</span> [=  <span class="type">Initial</span> <span class="type">Value</span>]</span><br><span class="line"><span class="keyword">val</span> <span class="type">VariableName</span> : <span class="type">DataType</span> [=  <span class="type">Initial</span> <span class="type">Value</span>]</span><br></pre></td></tr></table></figure>
+<p>变量声明不一定需要初始值，以下也是正确的：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> testNum :<span class="type">Int</span></span><br><span class="line"><span class="keyword">val</span> testMsg :<span class="type">String</span></span><br></pre></td></tr></table></figure>
+<h2 id="u53D8_u91CF_u7C7B_u578B_u5F15_u7528"><a href="#u53D8_u91CF_u7C7B_u578B_u5F15_u7528" class="headerlink" title="变量类型引用"></a>变量类型引用</h2><p>在 Scala 中声明变量和常量不一定要指明数据类型，在没有指明数据类型的情况下，其数据类型是通过变量或常量的初始值推断出来的。所以，如果在没有指明数据类型的情况下声明变量或常量必须要给出其初始值，否则将会报错。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> testNum = <span class="number">10</span></span><br><span class="line"><span class="keyword">val</span> testMsg = <span class="string">"Hello World!"</span></span><br></pre></td></tr></table></figure>
+<p>以上实例中，testNum 会被推断为 Int 类型，testMsg 会被推断为 String 类型。</p>
+<h2 id="Scala__u591A_u4E2A_u53D8_u91CF_u58F0_u660E"><a href="#Scala__u591A_u4E2A_u53D8_u91CF_u58F0_u660E" class="headerlink" title="Scala 多个变量声明"></a>Scala 多个变量声明</h2><p>Scala 支持多个变量的声明：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> xmax, ymax = <span class="number">100</span>  <span class="comment">// xmax, ymax都声明为100</span></span><br></pre></td></tr></table></figure>
+<h1 id="Scala__u8BBF_u95EE_u4FEE_u9970_u7B26"><a href="#Scala__u8BBF_u95EE_u4FEE_u9970_u7B26" class="headerlink" title="Scala 访问修饰符"></a>Scala 访问修饰符</h1><p>Scala 访问修饰符基本和Java的一样，分别有：private，protected，public。</p>
+<p>如果没有指定访问修饰符符，默认情况下，Scala对象的访问级别都是 public。<br>Scala 中的 private 限定符，比 Java 更严格，在嵌套类情况下，外层类甚至不能访问被嵌套类的私有成员。</p>
+<h2 id="private_u6210_u5458"><a href="#private_u6210_u5458" class="headerlink" title="private成员"></a>private成员</h2><p>用private关键字修饰，带有此标记的成员仅在包含了成员定义的类或对象内部可见，同样的规则还适用内部类。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PrivateAccessTest</span> &#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Inner</span>&#123;</span></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">def</span> <span class="title">privateMethod</span>(</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">      println(<span class="string">"private method."</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">publicMethod</span>(</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">      println(<span class="string">"public method."</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">InnerMost</span>&#123;</span></span><br><span class="line">      privateMethod() <span class="comment">// 正确</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">new</span> <span class="type">Inner</span>().privateMethod() <span class="comment">//错误</span></span><br><span class="line">  <span class="keyword">new</span> <span class="type">Inner</span>().publicMethod() <span class="comment">//正确</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>new Inner().privateMethod()访问不合法是因为 privateMethod方法 在 Inner 类中被声明为 private，而访问不在类Inner之内。但在 InnerMost 里访问privateMethod方法就没有问题的，因为这个访问包含在 Inner 类之内。</p>
+<p>Java中允许这两种访问，因为它允许外部类访问内部类的私有成员。</p>
+<h2 id="protected_u6210_u5458"><a href="#protected_u6210_u5458" class="headerlink" title="protected成员"></a>protected成员</h2><p>在 scala 中，对保护（Protected）成员的访问比 java 更严格一些。因为它只允许保护成员在定义了该成员的的类的子类中被访问。而在java中，用protected关键字修饰的成员，除了定义了该成员的类的子类可以访问，同一个包里的其他类也可以进行访问。</p>
+<h2 id="public_u6210_u5458"><a href="#public_u6210_u5458" class="headerlink" title="public成员"></a>public成员</h2><p>Scala中，如果没有指定任何的修饰符，则默认为 public。这样的成员在任何地方都可以被访问。</p>
+<h2 id="u4F5C_u7528_u57DF_u4FDD_u62A4"><a href="#u4F5C_u7528_u57DF_u4FDD_u62A4" class="headerlink" title="作用域保护"></a>作用域保护</h2><p>Scala中，访问修饰符可以通过使用限定词强调。格式为:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span>[x]</span><br></pre></td></tr></table></figure>
+<p>这里的x指代某个所属的包、类或单例对象。如果写成private[x],读作”这个成员除了对[…]中的类或[…]中的包中的类及它们的伴生对像可见外，对其它所有类都是private。</p>
+<h1 id="scala_if_else"><a href="#scala_if_else" class="headerlink" title="scala if else"></a>scala if else</h1><p>同java</p>
+<h1 id="scala_u5FAA_u73AF"><a href="#scala_u5FAA_u73AF" class="headerlink" title="scala循环"></a>scala循环</h1><p>循环类型同java，主要分为while循环，do…while循环和for循环。但for循环在写法上有较大不同。</p>
+<h2 id="for_u5FAA_u73AF"><a href="#for_u5FAA_u73AF" class="headerlink" title="for循环"></a>for循环</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>( <span class="keyword">var</span> x &lt;- <span class="type">Range</span> )&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Range 可以是一个数字区间表示 i to j ，或者 i until j。左箭头 &lt;- 用于为变量 x 赋值。</p>
+<h2 id="i_to_j"><a href="#i_to_j" class="headerlink" title="i to j"></a>i to j</h2><p>表示 i&lt;= x &lt;= j</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (a &lt;- <span class="number">1</span> to <span class="number">5</span>) &#123;</span><br><span class="line">  println(<span class="string">"value is: "</span> + a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="i_until_j"><a href="#i_until_j" class="headerlink" title="i until j"></a>i until j</h2><p>表示 i&lt;= x &lt; j</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (a &lt;- <span class="number">1</span> until <span class="number">5</span>) &#123;</span><br><span class="line">  println(<span class="string">"value is: "</span> + a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="for_u96C6_u5408_u5FAA_u73AF"><a href="#for_u96C6_u5408_u5FAA_u73AF" class="headerlink" title="for集合循环"></a>for集合循环</h2><figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> numList = <span class="type">List</span>(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>( a &lt;- numList )&#123;</span><br><span class="line">  println( <span class="string">"Value of a: "</span> + a );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="for__u5FAA_u73AF_u8FC7_u6EE4"><a href="#for__u5FAA_u73AF_u8FC7_u6EE4" class="headerlink" title="for 循环过滤"></a>for 循环过滤</h2><p>Scala 可以使用一个或多个 if 语句来过滤一些元素。通用表达式如下。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>( <span class="keyword">var</span> x &lt;- <span class="type">List</span></span><br><span class="line">  <span class="keyword">if</span> condition1; <span class="keyword">if</span> condition2...)&#123;</span><br><span class="line">    statement(s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>例子如下</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> numList = <span class="type">List</span>(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span>(a &lt;- numList</span><br><span class="line">  <span class="keyword">if</span> a != <span class="number">3</span>; <span class="keyword">if</span> a &lt; <span class="number">5</span>) &#123;</span><br><span class="line">    println( <span class="string">"Value of a: "</span> + a )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="for__u4F7F_u7528_yield"><a href="#for__u4F7F_u7528_yield" class="headerlink" title="for 使用 yield"></a>for 使用 yield</h2><p>将 for 循环的返回值作为一个变量存储。语法格式如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> retVal = <span class="keyword">for</span>&#123; <span class="keyword">var</span> x &lt;- <span class="type">List</span></span><br><span class="line">  <span class="keyword">if</span> condition1; <span class="keyword">if</span> condition2...</span><br><span class="line">&#125;<span class="keyword">yield</span> x</span><br></pre></td></tr></table></figure>
+<h1 id="scala_u51FD_u6570"><a href="#scala_u51FD_u6570" class="headerlink" title="scala函数"></a>scala函数</h1><h2 id="u51FD_u6570_u58F0_u660E"><a href="#u51FD_u6570_u58F0_u660E" class="headerlink" title="函数声明"></a>函数声明</h2><p>Scala 函数声明格式如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">functionName</span> (</span>[参数列表]) : [<span class="keyword">return</span> <span class="class"><span class="keyword">type</span>]</span></span><br></pre></td></tr></table></figure>
+<p>如果不写等于号和方法主体，那么方法会被隐式声明为”抽象(abstract)”。</p>
+<h2 id="u51FD_u6570_u5B9A_u4E49"><a href="#u51FD_u6570_u5B9A_u4E49" class="headerlink" title="函数定义"></a>函数定义</h2><p>方法定义由一个def 关键字开始，紧接着是可选的参数列表，一个冒号”：” 和方法的返回类型，一个等于号”=”，最后是方法的主体。<br>Scala 函数定义格式如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">functionName</span> (</span>[参数列表]) : [<span class="keyword">return</span> <span class="class"><span class="keyword">type</span>] =</span> &#123;</span><br><span class="line">   function body</span><br><span class="line">   <span class="keyword">return</span> [expr]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果函数没有返回值，可以返回为 Unit，这个类似于 Java 的 void</p>
+<h2 id="scala_u51FD_u6570-_u51FD_u6570_u4F20_u540D_u8C03_u7528"><a href="#scala_u51FD_u6570-_u51FD_u6570_u4F20_u540D_u8C03_u7528" class="headerlink" title="scala函数-函数传名调用"></a>scala函数-函数传名调用</h2><p>Scala的解释器在解析函数参数(function arguments)时有两种方式：</p>
+<ul>
+<li>传值调用（call-by-value）：先计算参数表达式的值，再应用到函数内部；</li>
+<li>传名调用（call-by-name）：将未计算的参数表达式直接应用到函数内部</li>
+</ul>
+<p>在进入函数内部前，传值调用方式就已经将参数表达式的值计算完毕，而传名调用是在函数内部进行参数表达式的值计算的。</p>
+<p>例子如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">CallByNameFunction</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    delayed(time())</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">time</span>(</span>) : <span class="type">Long</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> currentTime : <span class="type">Long</span> = <span class="type">System</span>.currentTimeMillis()</span><br><span class="line">    println(<span class="string">"get current time: "</span> + currentTime)</span><br><span class="line">    <span class="keyword">return</span> currentTime</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span><br><span class="line">    * 传名调用</span><br><span class="line">    * =&gt;表示执行结果为Long的表达式</span><br><span class="line">    * @param code</span><br><span class="line">    */</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">delayed</span>(</span> code: =&gt; <span class="type">Long</span> ) : <span class="type">Unit</span> = &#123;</span><br><span class="line">    println(<span class="string">"start."</span>)</span><br><span class="line">    <span class="keyword">for</span> (i &lt;- <span class="number">1</span> to <span class="number">5</span>) &#123;</span><br><span class="line">      code <span class="comment">//这行才会调用传入的代码块</span></span><br><span class="line">      <span class="type">Thread</span>.sleep(<span class="number">1000</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    println(<span class="string">"end."</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="scala_u51FD_u6570-_u6307_u5B9A_u51FD_u6570_u53C2_u6570_u540D"><a href="#scala_u51FD_u6570-_u6307_u5B9A_u51FD_u6570_u53C2_u6570_u540D" class="headerlink" title="scala函数-指定函数参数名"></a>scala函数-指定函数参数名</h2><p>一般情况下函数调用参数，就按照函数定义时的参数顺序一个个传递。但是也可以通过指定函数参数名，并且不需要按照顺序向函数传递参数，实例如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">SpecifyParamFunction</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    printInt(b=<span class="number">5</span>, a=<span class="number">7</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">printInt</span>(</span>a:<span class="type">Int</span>, b:<span class="type">Int</span> ) = &#123;</span><br><span class="line">    println(<span class="string">"Value of a : "</span> + a )</span><br><span class="line">    println(<span class="string">"Value of b : "</span> + b )</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="scala_u51FD_u6570-_u53EF_u53D8_u53C2_u6570"><a href="#scala_u51FD_u6570-_u53EF_u53D8_u53C2_u6570" class="headerlink" title="scala函数-可变参数"></a>scala函数-可变参数</h2><p>Scala 允许你指明函数的最后一个参数可以是重复的，即我们不需要指定函数参数的个数，可以向函数传入可变长度参数列表。<br>Scala 通过在参数的类型之后放一个星号来设置可变参数(可重复的参数)。例如：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">VariableParamFunction</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    printStrings(<span class="string">"Java"</span>, <span class="string">"Scala"</span>, <span class="string">"C++"</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">printStrings</span>(</span>args: <span class="type">String</span>*) = &#123;</span><br><span class="line">    <span class="keyword">var</span> i: <span class="type">Int</span> = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> (arg &lt;- args) &#123;</span><br><span class="line">      println(<span class="string">"Arg value["</span> + i + <span class="string">"] = "</span> + arg)</span><br><span class="line">      i = i + <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="scala_u51FD_u6570-_u9ED8_u8BA4_u53C2_u6570_u503C"><a href="#scala_u51FD_u6570-_u9ED8_u8BA4_u53C2_u6570_u503C" class="headerlink" title="scala函数-默认参数值"></a>scala函数-默认参数值</h2><p>Scala 可以为函数参数指定默认参数值，使用了默认参数，你在调用函数的过程中可以不需要传递参数，这时函数就会调用它的默认参数值，如果传递了参数，则传递值会取代默认值。实例如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">DefaultParamFunction</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    println(<span class="string">"result: "</span> + addInt())</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">addInt</span>(</span>a: <span class="type">Int</span> = <span class="number">5</span>, b: <span class="type">Int</span> = <span class="number">7</span>): <span class="type">Int</span> = &#123;</span><br><span class="line">    <span class="keyword">var</span> sum: <span class="type">Int</span> = <span class="number">0</span></span><br><span class="line">    sum = a + b</span><br><span class="line">    sum</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="scala_u51FD_u6570-_u9AD8_u9636_u51FD_u6570"><a href="#scala_u51FD_u6570-_u9AD8_u9636_u51FD_u6570" class="headerlink" title="scala函数-高阶函数"></a>scala函数-高阶函数</h2><p>高阶函数（Higher-Order Function）就是操作其他函数的函数。<br>Scala 中允许使用高阶函数, 高阶函数可以使用<strong>其他函数作为参数</strong>，或者<strong>使用函数作为输出结果</strong>。</p>
+<p>以下实例中，invoke() 函数使用了另外一个函数 f 和 值 v 作为参数，而函数 f 又调用了参数 v：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">HigherOrderFunction</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    println( invoke( layout, <span class="number">10</span>) )</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 函数 f 和 值 v 作为参数，而函数 f 又调用了参数 v</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">invoke</span>(</span>f: <span class="type">Int</span> =&gt; <span class="type">String</span>, v: <span class="type">Int</span>): <span class="type">String</span> = f(v)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">layout</span>(</span>x: <span class="type">Int</span>) : <span class="type">String</span> = &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"int: ["</span> + x.toString() + <span class="string">"]"</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">layout</span>(</span>x: <span class="type">String</span>) : <span class="type">String</span> = &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"string: ["</span> + x.toString() + <span class="string">"]"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="scala_u51FD_u6570-_u51FD_u6570_u5D4C_u5957"><a href="#scala_u51FD_u6570-_u51FD_u6570_u5D4C_u5957" class="headerlink" title="scala函数-函数嵌套"></a>scala函数-函数嵌套</h2><p>我们可以在 Scala 函数内定义函数，定义在函数内的函数称之为局部函数。</p>
+<p>以下实例我们实现阶乘运算，并使用内嵌函数：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">NestingFunction</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    println(factorial(<span class="number">0</span>))</span><br><span class="line">    println(factorial(<span class="number">1</span>))</span><br><span class="line">    println(factorial(<span class="number">2</span>))</span><br><span class="line">    println(factorial(<span class="number">3</span>))</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span><br><span class="line">    * 阶乘运算</span><br><span class="line">    * @param i</span><br><span class="line">    * @return</span><br><span class="line">    */</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">factorial</span>(</span>i: <span class="type">Int</span>): <span class="type">Int</span> = &#123;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fact</span>(</span>i: <span class="type">Int</span>, accumulator: <span class="type">Int</span>): <span class="type">Int</span> = &#123;</span><br><span class="line">      <span class="keyword">if</span> (i &lt;= <span class="number">1</span>)</span><br><span class="line">        accumulator</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">        fact(i - <span class="number">1</span>, i * accumulator)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fact(i, <span class="number">1</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="scala_u51FD_u6570-_u533F_u540D_u51FD_u6570"><a href="#scala_u51FD_u6570-_u533F_u540D_u51FD_u6570" class="headerlink" title="scala函数-匿名函数"></a>scala函数-匿名函数</h2><p>Scala 中定义匿名函数的语法很简单，箭头左边是参数列表，右边是函数体。</p>
+<p>下面的表达式就定义了一个接受一个Int类型输入参数的匿名函数:</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> inc = (x:<span class="type">Int</span>) =&gt; x+<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>以上实例的 inc 现在可作为一个函数，使用方式如下</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> x = inc(<span class="number">7</span>)-<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>同样可以在匿名函数中定义多个参数：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> mul = (x: <span class="type">Int</span>, y: <span class="type">Int</span>) =&gt; x*y</span><br></pre></td></tr></table></figure>
+<p>mul 现在可作为一个函数，使用方式如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">println(mul(<span class="number">3</span>, <span class="number">4</span>))</span><br></pre></td></tr></table></figure>
+<p>也可以不给匿名函数设置参数，如下所示：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> testMsg = () =&gt; &#123; println(<span class="string">"test msg."</span>) &#125;</span><br></pre></td></tr></table></figure>
+<p>使用方式如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">println( testMsg() )</span><br></pre></td></tr></table></figure>
+<h2 id="scala_u51FD_u6570-_u504F_u5E94_u7528_u51FD_u6570"><a href="#scala_u51FD_u6570-_u504F_u5E94_u7528_u51FD_u6570" class="headerlink" title="scala函数-偏应用函数"></a>scala函数-偏应用函数</h2><p>Scala 偏应用函数是一种表达式，你不需要提供函数需要的所有参数，只需要提供部分，或不提供所需参数。</p>
+<p>比如如下例子：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Test</span> &#123;</span></span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">      <span class="keyword">val</span> date = <span class="keyword">new</span> <span class="type">Date</span></span><br><span class="line">      log(date, <span class="string">"message1"</span> )</span><br><span class="line">      <span class="type">Thread</span>.sleep(<span class="number">1000</span>)</span><br><span class="line">      log(date, <span class="string">"message2"</span> )</span><br><span class="line">      <span class="type">Thread</span>.sleep(<span class="number">1000</span>)</span><br><span class="line">      log(date, <span class="string">"message3"</span> )</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">def</span> <span class="title">log</span>(</span>date: <span class="type">Date</span>, message: <span class="type">String</span>)  = &#123;</span><br><span class="line">     println(date + <span class="string">"----"</span> + message)</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实例中，log() 方法接收两个参数：date 和 message。我们在程序执行时调用了三次，参数 date 值都相同，message 不同。<br>scala中可以使用偏应用函数优化以上方法，绑定第一个 date 参数，第二个参数使用下划线(_)替换缺失的参数列表，并把这个新的函数值的索引的赋给变量。以上实例修改如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">PartialFunction</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    <span class="keyword">val</span> date = <span class="keyword">new</span> <span class="type">Date</span></span><br><span class="line">    <span class="keyword">val</span> logWithDateBound = log(date, _ : <span class="type">String</span>)</span><br><span class="line"></span><br><span class="line">    logWithDateBound(<span class="string">"message1"</span> )</span><br><span class="line">    <span class="type">Thread</span>.sleep(<span class="number">1000</span>)</span><br><span class="line">    logWithDateBound(<span class="string">"message2"</span> )</span><br><span class="line">    <span class="type">Thread</span>.sleep(<span class="number">1000</span>)</span><br><span class="line">    logWithDateBound(<span class="string">"message3"</span> )</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">log</span>(</span>date: <span class="type">Date</span>, message: <span class="type">String</span>)  = &#123;</span><br><span class="line">    println(date + <span class="string">"----"</span> + message)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="scala_u51FD_u6570-_u51FD_u6570_u67EF_u91CC_u5316_28Currying_29"><a href="#scala_u51FD_u6570-_u51FD_u6570_u67EF_u91CC_u5316_28Currying_29" class="headerlink" title="scala函数-函数柯里化(Currying)"></a>scala函数-函数柯里化(Currying)</h2><p>柯里化(Currying)指的是将原来接受两个参数的函数变成新的接受一个参数的函数的过程。新的函数返回一个以原有第二个参数为参数的函数。</p>
+<p>实例如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span>(</span>x:<span class="type">Int</span>,y:<span class="type">Int</span>) = x+y</span><br></pre></td></tr></table></figure>
+<p>那么我们应用的时候，应该是这样用：add(1,2)。 现在我们把这个函数变一下形：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span>(</span>x:<span class="type">Int</span>)(y:<span class="type">Int</span>) = x + y</span><br></pre></td></tr></table></figure>
+<p>那么我们应用的时候，应该是这样用：add(1)(2),最后结果都一样是3，这种方式（过程）就叫<strong>柯里化</strong>。</p>
+<p>实现过程如下：</p>
+<p>add(1)(2) 实际上是依次调用两个普通函数（非柯里化函数），第一次调用使用一个参数 x，返回一个函数类型的值，第二次使用参数y调用这个函数类型的值。</p>
+<p>实质上最先演变成这样一个方法：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span>(</span>x:<span class="type">Int</span>)=(y:<span class="type">Int</span>)=&gt;x+y</span><br></pre></td></tr></table></figure>
+<p>这个函数是一个匿名函数，接收一个x为参数，返回一个匿名函数。而返回的匿名函数的定义是：接收一个Int型参数y，函数体为x+y。现在对这个方法进行调用。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> result = add(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>返回一个result，那result的值应该是一个匿名函数：(y:Int)=&gt;1+y</p>
+<p>继续调用result，得到结果为3。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sum = result(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>Currying 的重要意义在于可以把函数完全变成「接受一个参数；返回一个值」的固定形式，这样对于讨论和优化会更加方便。</p>
+<h1 id="scala_u95ED_u5305"><a href="#scala_u95ED_u5305" class="headerlink" title="scala闭包"></a>scala闭包</h1><p>闭包是一个函数，返回值依赖于声明在函数外部的一个或多个变量。<br>闭包通常来讲可以简单的认为是可以访问一个函数里面局部变量的另外一个函数。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> factor = <span class="number">3</span>  </span><br><span class="line"><span class="keyword">val</span> multi = (i:<span class="type">Int</span>) =&gt; i * factor</span><br></pre></td></tr></table></figure>
+<p>在 multi函数 中有两个变量：i 和 factor。其中的一个 i 是函数的形式参数，在 multi 函数被调用时，i 被赋予一个新的值。然而，factor不是形式参数，而是成员变量，而且这个变量定义在函数外面。</p>
+<p>这样定义的函数变量 multi 成为一个”闭包”，因为它引用到函数外面定义的变量，定义这个函数的过程是将这个自由变量捕获而构成一个封闭的函数。  </p>
+<h1 id="scala_u6570_u7EC4"><a href="#scala_u6570_u7EC4" class="headerlink" title="scala数组"></a>scala数组</h1><p>基本同Java</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> z: <span class="type">Array</span>[<span class="type">String</span>] = <span class="keyword">new</span> <span class="type">Array</span>[<span class="type">String</span>](<span class="number">3</span>)</span><br><span class="line">z(<span class="number">0</span>) = <span class="string">"Java"</span></span><br><span class="line">z(<span class="number">1</span>) = <span class="string">"Scala"</span></span><br><span class="line">z(<span class="number">2</span>) = <span class="string">"C++"</span></span><br></pre></td></tr></table></figure>
+<p>区别是索引通过（），而java中通过[]</p>
+<h1 id="scala_u96C6_u5408"><a href="#scala_u96C6_u5408" class="headerlink" title="scala集合"></a>scala集合</h1><p>Scala提供了一套很好的集合实现，提供了一些集合类型的抽象。</p>
+<p>包括List, Set, Map，等等。</p>
+<p>同时兼容JAVA数据结构</p>
+<h1 id="scala_trait"><a href="#scala_trait" class="headerlink" title="scala trait"></a>scala trait</h1><p>Scala Trait(特征) 相当于 Java 的接口，实际上它比接口还功能强大。</p>
+<p>与接口不同的是，它还可以定义属性和方法的实现。</p>
+<p>一般情况下Scala的类只能够继承单一父类，但是如果是 Trait(特征) 的话就可以继承多个，从结果来看就是实现了多重继承。</p>
+<p>Trait(特征) 定义的方式与类类似，但它使用的关键字是 trait，如下所示：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">trait</span> <span class="title">TraitTest</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">isEqual</span>(</span>x: <span class="type">Any</span>): <span class="type">Boolean</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">isNotEqual</span>(</span>x: <span class="type">Any</span>): <span class="type">Boolean</span> = !isEqual(x)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上Trait(特征)由两个方法组成：isEqual 和 isNotEqual。isEqual 方法没有定义方法的实现，isNotEqual定义了方法的实现。子类继承特征可以实现未被实现的方法。所以其实 Scala Trait(特征)更像 Java 的抽象类。</p>
+<h1 id="scala_u7C7B_u548C_u5BF9_u8C61"><a href="#scala_u7C7B_u548C_u5BF9_u8C61" class="headerlink" title="scala类和对象"></a>scala类和对象</h1><h2 id="scala_u7C7B"><a href="#scala_u7C7B" class="headerlink" title="scala类"></a>scala类</h2><p>首先看一个例子：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span>(</span>xc: <span class="type">Int</span>, yc: <span class="type">Int</span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> x: <span class="type">Int</span> = xc</span><br><span class="line">  <span class="keyword">var</span> y: <span class="type">Int</span> = yc</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">move</span>(</span>dx: <span class="type">Int</span>, dy: <span class="type">Int</span>) &#123;</span><br><span class="line">    x = dx</span><br><span class="line">    y = dy</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">toString</span>:</span> <span class="type">String</span> = &#123;</span><br><span class="line">    <span class="string">"&#123;x: "</span> + x + <span class="string">", y: "</span> + y + <span class="string">"&#125;"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与Java中不同的是</p>
+<ul>
+<li>scala类名称后直接加上构造函数的参数列表，这个构造函数就是主构造函数</li>
+<li>Scala中有只有一个主要构造函数，其他都是辅助构造函数</li>
+<li>主构造函数和类的定义混杂在一起的，即定义类的时候，就指明了这个类的成员变量参数</li>
+<li>辅助构造函数必须调用主构造函数或者通过this(…)之间相互调用。</li>
+</ul>
+<h2 id="scala_u5BF9_u8C61"><a href="#scala_u5BF9_u8C61" class="headerlink" title="scala对象"></a>scala对象</h2><p>Scala比Java更面向对象的一个方面是Scala没有静态成员。替代品是，Scala有单例对象：singleton object。</p>
+<p>当单例对象与某个类共享同一个名称时，他被称作是这个类的伴生对象：companion object。你必须在同一个源文件里定义类和它的伴生对象。类被称为是这个单例对象的伴生类：companion class。类和它的伴生对象可以互相访问其私有成员。</p>
+<p>类和单例对象间的一个差别是，单例对象不带参数，而类可以。</p>
+<h2 id="apply_u65B9_u6CD5"><a href="#apply_u65B9_u6CD5" class="headerlink" title="apply方法"></a>apply方法</h2><p>Scala 的apply 有2 张形式，一种是 伴生对象的apply ，一种是 伴生类中的apply</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">Point</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">apply</span>(</span>xc: <span class="type">Int</span>, yc: <span class="type">Int</span>): <span class="type">Point</span> = &#123;</span><br><span class="line">    <span class="keyword">new</span> <span class="type">Point</span>(xc, yc)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">ClassObjectTest</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    <span class="keyword">val</span> pt = <span class="keyword">new</span> <span class="type">Point</span>(<span class="number">10</span>, <span class="number">20</span>)</span><br><span class="line">    pt.move(<span class="number">10</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> pt2 = <span class="type">Point</span>(<span class="number">30</span>, <span class="number">30</span>)</span><br><span class="line"></span><br><span class="line">    println(pt.toString)</span><br><span class="line">    println(pt2.toString)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>val pt2 = Point(30, 30)，调用的是Object下的apply()方法，由于此时并没有创建类的对象，所以也只能调用Object下的静态方法。</p>
+<p>val pt = new Point(10, 20), 创建了一个类的对象，并且返回给了变量pt。</p>
+<p>object apply() 是一种比较普遍用法,主要用来解决复杂对象的初始化问题。</p>
+<h1 id="scala_u6A21_u5F0F_u5339_u914D"><a href="#scala_u6A21_u5F0F_u5339_u914D" class="headerlink" title="scala模式匹配"></a>scala模式匹配</h1><p>Scala 提供了强大的模式匹配机制，应用也非常广泛。</p>
+<p>一个模式匹配包含了一系列备选项，每个都开始于关键字 case。每个备选项都包含了一个模式及一到多个表达式。箭头符号 =&gt; 隔开了模式和表达式。</p>
+<p>实例如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">CaseTest</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    println(matchTest(<span class="number">3</span>))</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">matchTest</span>(</span>x: <span class="type">Int</span>): <span class="type">String</span> = x <span class="keyword">match</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span> =&gt; <span class="string">"one"</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">2</span> =&gt; <span class="string">"two"</span></span><br><span class="line">    <span class="keyword">case</span> _ =&gt; <span class="string">"many"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="scala_u5F02_u5E38_u5904_u7406"><a href="#scala_u5F02_u5E38_u5904_u7406" class="headerlink" title="scala异常处理"></a>scala异常处理</h1><p>Scala 的异常处理和Java 类似。</p>
+<p>实例如下：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">ExceptionTest</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">val</span> f = throwException</span><br><span class="line">    &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">      <span class="keyword">case</span> ex: <span class="type">IllegalArgumentException</span> =&gt;&#123;</span><br><span class="line">        println(<span class="string">"Illegal argument exception"</span>)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">case</span> ex: <span class="type">Exception</span> =&gt; &#123;</span><br><span class="line">        println(<span class="string">"Exception"</span>)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      println(<span class="string">"Exiting finally..."</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">throwException</span>(</span>) = &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">IllegalArgumentException</span>()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>只是scala的Exception捕获采用模式匹配方法。</p>
+<h1 id="scala_u6587_u4EF6I/O"><a href="#scala_u6587_u4EF6I/O" class="headerlink" title="scala文件I/O"></a>scala文件I/O</h1><p>Scala 进行文件写操作，直接用的都是 java中 的 I/O 类 （<strong>java.io.File</strong>)：i</p>
+<p>写文件实例：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">WriteTest</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    <span class="keyword">val</span> writer = <span class="keyword">new</span> <span class="type">BufferedWriter</span>(<span class="keyword">new</span> <span class="type">OutputStreamWriter</span>(<span class="keyword">new</span> <span class="type">FileOutputStream</span>(<span class="string">"test.txt"</span>)));</span><br><span class="line">    writer.write(<span class="string">"buffered writer: scala write I/O test."</span>)</span><br><span class="line">    writer.flush()</span><br><span class="line">    writer.close()</span><br><span class="line">    println(<span class="string">"Finished writing."</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从控制台读取用户输入：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">ConsoleReadLineTest</span> &#123;</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) &#123;</span><br><span class="line">    println(<span class="string">"Please input single line. "</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">val</span> line = <span class="type">StdIn</span>.readLine</span><br><span class="line">    println(<span class="string">"The line is: "</span> + line)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/kafka/" rel="tag"># kafka</a>
+          
+            <a href="/tags/scala/" rel="tag"># scala</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/27/Kafka-Pagecache原理/" rel="next" title="Kafka-Pagecache原理">
+                <i class="fa fa-chevron-left"></i> Kafka-Pagecache原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/08/linux pidstat命令--进程监控/" rel="prev" title="linux pidstat命令--进程监控">
+                linux pidstat命令--进程监控 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/pug.jpg"
+               alt="Shi Yueqi" />
+          <p class="site-author-name" itemprop="name">Shi Yueqi</p>
+           
+              <p class="site-description motion-element" itemprop="description">In me the tiger sniffs the rose.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/shiyueqi" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/shiyueqi107" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#u7B80_u4ECB"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u7279_u6027"><span class="nav-number">2.</span> <span class="nav-text">特性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u9762_u5411_u5BF9_u8C61_u7279_u6027"><span class="nav-number">2.1.</span> <span class="nav-text">面向对象特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u51FD_u6570_u5F0F_u7F16_u7A0B"><span class="nav-number">2.2.</span> <span class="nav-text">函数式编程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u9759_u6001_u7C7B_u578B"><span class="nav-number">2.3.</span> <span class="nav-text">静态类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u6269_u5C55_u6027"><span class="nav-number">2.4.</span> <span class="nav-text">扩展性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5E76_u53D1_u6027"><span class="nav-number">2.5.</span> <span class="nav-text">并发性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scala_Web__u6846_u67B6"><span class="nav-number">2.6.</span> <span class="nav-text">Scala Web 框架</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala_u5B89_u88C5_u4E0E_u914D_u7F6E"><span class="nav-number">3.</span> <span class="nav-text">scala安装与配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#jdk_u5B89_u88C5"><span class="nav-number">3.1.</span> <span class="nav-text">jdk安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scala_u4E0B_u8F7D"><span class="nav-number">3.2.</span> <span class="nav-text">scala下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u914D_u7F6E"><span class="nav-number">3.3.</span> <span class="nav-text">配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala_u57FA_u7840_u8BED_u6CD5"><span class="nav-number">4.</span> <span class="nav-text">scala基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#hello_world"><span class="nav-number">4.1.</span> <span class="nav-text">hello world</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E0Ejava_u5BF9_u6BD4"><span class="nav-number">4.2.</span> <span class="nav-text">与java对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u57FA_u672C_u8BED_u6CD5"><span class="nav-number">4.3.</span> <span class="nav-text">基本语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scala_u5173_u952E_u5B57"><span class="nav-number">4.4.</span> <span class="nav-text">scala关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scala__u6CE8_u91CA_uFF08_u5176_u5B9E_u8DDFjava_u4E00_u6837_uFF09"><span class="nav-number">4.5.</span> <span class="nav-text">scala 注释（其实跟java一样）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u6362_u884C_u7B26"><span class="nav-number">4.6.</span> <span class="nav-text">换行符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5F15_u7528"><span class="nav-number">4.7.</span> <span class="nav-text">引用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala__u53D8_u91CF"><span class="nav-number">5.</span> <span class="nav-text">scala 变量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u53D8_u91CF_u58F0_u660E"><span class="nav-number">5.1.</span> <span class="nav-text">变量声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u53D8_u91CF_u7C7B_u578B_u58F0_u660E"><span class="nav-number">5.2.</span> <span class="nav-text">变量类型声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u53D8_u91CF_u7C7B_u578B_u5F15_u7528"><span class="nav-number">5.3.</span> <span class="nav-text">变量类型引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scala__u591A_u4E2A_u53D8_u91CF_u58F0_u660E"><span class="nav-number">5.4.</span> <span class="nav-text">Scala 多个变量声明</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scala__u8BBF_u95EE_u4FEE_u9970_u7B26"><span class="nav-number">6.</span> <span class="nav-text">Scala 访问修饰符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#private_u6210_u5458"><span class="nav-number">6.1.</span> <span class="nav-text">private成员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#protected_u6210_u5458"><span class="nav-number">6.2.</span> <span class="nav-text">protected成员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#public_u6210_u5458"><span class="nav-number">6.3.</span> <span class="nav-text">public成员</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4F5C_u7528_u57DF_u4FDD_u62A4"><span class="nav-number">6.4.</span> <span class="nav-text">作用域保护</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala_if_else"><span class="nav-number">7.</span> <span class="nav-text">scala if else</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala_u5FAA_u73AF"><span class="nav-number">8.</span> <span class="nav-text">scala循环</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#for_u5FAA_u73AF"><span class="nav-number">8.1.</span> <span class="nav-text">for循环</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#i_to_j"><span class="nav-number">8.2.</span> <span class="nav-text">i to j</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#i_until_j"><span class="nav-number">8.3.</span> <span class="nav-text">i until j</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#for_u96C6_u5408_u5FAA_u73AF"><span class="nav-number">8.4.</span> <span class="nav-text">for集合循环</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#for__u5FAA_u73AF_u8FC7_u6EE4"><span class="nav-number">8.5.</span> <span class="nav-text">for 循环过滤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#for__u4F7F_u7528_yield"><span class="nav-number">8.6.</span> <span class="nav-text">for 使用 yield</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala_u51FD_u6570"><span class="nav-number">9.</span> <span class="nav-text">scala函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u51FD_u6570_u58F0_u660E"><span class="nav-number">9.1.</span> <span class="nav-text">函数声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u51FD_u6570_u5B9A_u4E49"><span class="nav-number">9.2.</span> <span class="nav-text">函数定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scala_u51FD_u6570-_u51FD_u6570_u4F20_u540D_u8C03_u7528"><span class="nav-number">9.3.</span> <span class="nav-text">scala函数-函数传名调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scala_u51FD_u6570-_u6307_u5B9A_u51FD_u6570_u53C2_u6570_u540D"><span class="nav-number">9.4.</span> <span class="nav-text">scala函数-指定函数参数名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scala_u51FD_u6570-_u53EF_u53D8_u53C2_u6570"><span class="nav-number">9.5.</span> <span class="nav-text">scala函数-可变参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scala_u51FD_u6570-_u9ED8_u8BA4_u53C2_u6570_u503C"><span class="nav-number">9.6.</span> <span class="nav-text">scala函数-默认参数值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scala_u51FD_u6570-_u9AD8_u9636_u51FD_u6570"><span class="nav-number">9.7.</span> <span class="nav-text">scala函数-高阶函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scala_u51FD_u6570-_u51FD_u6570_u5D4C_u5957"><span class="nav-number">9.8.</span> <span class="nav-text">scala函数-函数嵌套</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scala_u51FD_u6570-_u533F_u540D_u51FD_u6570"><span class="nav-number">9.9.</span> <span class="nav-text">scala函数-匿名函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scala_u51FD_u6570-_u504F_u5E94_u7528_u51FD_u6570"><span class="nav-number">9.10.</span> <span class="nav-text">scala函数-偏应用函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scala_u51FD_u6570-_u51FD_u6570_u67EF_u91CC_u5316_28Currying_29"><span class="nav-number">9.11.</span> <span class="nav-text">scala函数-函数柯里化(Currying)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala_u95ED_u5305"><span class="nav-number">10.</span> <span class="nav-text">scala闭包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala_u6570_u7EC4"><span class="nav-number">11.</span> <span class="nav-text">scala数组</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala_u96C6_u5408"><span class="nav-number">12.</span> <span class="nav-text">scala集合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala_trait"><span class="nav-number">13.</span> <span class="nav-text">scala trait</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala_u7C7B_u548C_u5BF9_u8C61"><span class="nav-number">14.</span> <span class="nav-text">scala类和对象</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#scala_u7C7B"><span class="nav-number">14.1.</span> <span class="nav-text">scala类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scala_u5BF9_u8C61"><span class="nav-number">14.2.</span> <span class="nav-text">scala对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#apply_u65B9_u6CD5"><span class="nav-number">14.3.</span> <span class="nav-text">apply方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala_u6A21_u5F0F_u5339_u914D"><span class="nav-number">15.</span> <span class="nav-text">scala模式匹配</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala_u5F02_u5E38_u5904_u7406"><span class="nav-number">16.</span> <span class="nav-text">scala异常处理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#scala_u6587_u4EF6I/O"><span class="nav-number">17.</span> <span class="nav-text">scala文件I/O</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shi Yueqi</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://shiyueqi.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://shiyueqi.github.io/2017/08/08/scala语言简介及函数式编程/';
+          this.page.identifier = '2017/08/08/scala语言简介及函数式编程/';
+          this.page.title = 'scala语言简介及函数式编程';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://shiyueqi.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("N7gFtBpJT2kRFRxKVGQNisQ3-gzGzoHsz", "svhqcJfvubefdP37LD07sxhX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

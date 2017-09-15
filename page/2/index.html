@@ -310,6 +310,369 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/04/27/Kafka-0.10.2.0滚动升级手册/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shi Yueqi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/pug.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="石头头头的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/27/Kafka-0.10.2.0滚动升级手册/" itemprop="url">
+                  Kafka-0.10.2.0滚动升级手册
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-27T15:17:00+08:00">
+                2017-04-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术博客/" itemprop="url" rel="index">
+                    <span itemprop="name">技术博客</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/27/Kafka-0.10.2.0滚动升级手册/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/04/27/Kafka-0.10.2.0滚动升级手册/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/04/27/Kafka-0.10.2.0滚动升级手册/" class="leancloud_visitors" data-flag-title="Kafka-0.10.2.0滚动升级手册">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          一、Kafka-0.10.2.0滚动升级方案Kafka-0.10.2.0滚动升级方案
+二、Kafka-0.10.2.0兼容性Kafka broker
+0.10.2.0版本的brokers支持0.8.x或更高版本的客户端。
+Kafka客户端
+从0.10.2.0版本开始，Kafka的Java客户端(producer和consumer)实现了与部分老版本的broker(0.10.x)通信的兼容性。
+0.10.2.0版本的客户端可以与0.10.0或更高版本的broker通信。但是，如果broker的版本低于0.10.0，必须先升级所有Kafka集群中的brokers的版本，才可以继续升级客户端的版本。
+三、0.8.2.1向0.10.2.0滚动升级手册1. 安装配置Kafka-0.8.2.1https://shiyueqi.github.io/2017/04/27/Kafka-0.8.2.1安装配置/
+2. 安装Kafka-0.10.2.0下载地址：http://apache.claz.org/kafka/0.10.2.0/
+Kafka-0.10.2.0安装方法与0.8.2.1相同。安装完成后如
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/27/Kafka-0.10.2.0滚动升级手册/#далее" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/04/27/Kafka-流量控制Quota功能/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shi Yueqi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/pug.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="石头头头的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/04/27/Kafka-流量控制Quota功能/" itemprop="url">
+                  Kafka-流量控制Quota功能
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-27T13:23:00+08:00">
+                2017-04-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术博客/" itemprop="url" rel="index">
+                    <span itemprop="name">技术博客</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/04/27/Kafka-流量控制Quota功能/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/04/27/Kafka-流量控制Quota功能/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/04/27/Kafka-流量控制Quota功能/" class="leancloud_visitors" data-flag-title="Kafka-流量控制Quota功能">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          一、Quota 功能简介官方文档http://kafka.apache.org/documentation/#design_quotas
+二、Quota功能简介Kafka从0.9版本开始增加流量控制功能–Quotas，并在broker中增加了以下的配置。
+
+
+可以在broker的配置文件中增加相应的对producer和consumer的流量控制配置，即每秒生产/消费的byte数目大小。
+
+默认值是Long类型的最大值，即不限制流量，尽最大可能地生产/消费消息。
+
+但可以看到在新版的配置中，这两项配置已经被声明为Deprecated，即不再建议使用，且官方声明在未来的release版本中，会删除这两项配置。
+
+0.10版本的Kafka已经通过与Zookeeper结合来完成Quota的功能。将Quota限流的配置信息存储到ZK的结点中，这样配置一旦更新，可以立刻被所有的broker读取到，并且立即生效。这让我们可以更新Quota的配置，而不需要重启整体broker集群。因此，broker配置的限流功能会被废弃掉。
+
+
+三、Quota使用参考文档http://kafka.apache.org
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/27/Kafka-流量控制Quota功能/#далее" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/04/27/Kafka-0.8.2.1 producer&consumer示例/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -847,378 +1210,6 @@ initLimit=10
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/04/21/Kafka-开源monitor调研/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Shi Yueqi">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/pug.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="石头头头的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/21/Kafka-开源monitor调研/" itemprop="url">
-                  Kafka-开源monitor调研
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-21T11:12:00+08:00">
-                2017-04-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术博客/" itemprop="url" rel="index">
-                    <span itemprop="name">技术博客</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/04/21/Kafka-开源monitor调研/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/04/21/Kafka-开源monitor调研/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2017/04/21/Kafka-开源monitor调研/" class="leancloud_visitors" data-flag-title="Kafka-开源monitor调研">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          Kafka-开源monitor调研Kafka-web-console
-Kafka-web-console开源项目已不再继续维护，开源开发者推荐使用Kafka-manage进行替代。
-Scala语言开发。
-Github: https://github.com/claudemamo/kafka-web-console
-
-KafkaOffsetMonitor
-KafkaOffsetMonitor开源项目已不再继续开发。功能简单，直观，提供查询功能，jar包部署。
-Scala语言开发。
-Github: https://github.com/quantifind/KafkaOffsetMonitor
-
-Availability-Monitor-for-Kafka
-Availability-Monitor-for-Kafka是微软Microsoft开源的Kafka监控项目。使用简单，jar包部署。
-社区一般活跃，暂无release版本。
-Java语言开发；与maven集成；与SQL Server集成。
-最新支持到Kafka 0.8.1.1版本
-Github: https://github.com/
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/04/21/Kafka-开源monitor调研/#далее" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/04/21/Kafka-0.8.x,0.9.x,0.10.x版本差异/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Shi Yueqi">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/pug.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="石头头头的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/04/21/Kafka-0.8.x,0.9.x,0.10.x版本差异/" itemprop="url">
-                  Kafka-0.8.x,0.9.x,0.10.x版本差异
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-21T10:39:00+08:00">
-                2017-04-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/技术博客/" itemprop="url" rel="index">
-                    <span itemprop="name">技术博客</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/04/21/Kafka-0.8.x,0.9.x,0.10.x版本差异/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/04/21/Kafka-0.8.x,0.9.x,0.10.x版本差异/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2017/04/21/Kafka-0.8.x,0.9.x,0.10.x版本差异/" class="leancloud_visitors" data-flag-title="Kafka-0.8.x,0.9.x,0.10.x版本差异">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          Kafka版本差异Kafka 0.8 版本更新具有新特性
-High level api 和low level api。
-
-0.8版本支持high level api，0.7版本只支持low level api。
-
-从0.8版本开始，consumer不用关心自己消费那个broker、partition、offset，都集成在high lever api，同时新版本对于producer更新了自定义的partition的策略。
-
-
-
-0.8新版本partition支持独立备份replication factor，当partition发现宕机，启用replication factor。
- 同时，新版本对于partition与备份之间关系为一个为leader负责直接与consumer、producer交互，follower备份负责与leader通信，完成更新。（引入了相关leader-follower相关机制）。
-
-Offset Management
-
-在0.8.2之前，comsumer定期提交已经消费的kafka消息的offset位置到zookeeper中保存
- 对zookeeper而言，每次
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/04/21/Kafka-0.8.x,0.9.x,0.10.x版本差异/#далее" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1268,7 +1259,7 @@ Offset Management
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1279,7 +1270,7 @@ Offset Management
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1290,7 +1281,7 @@ Offset Management
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
