@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Confluent,Kafka,Ksql," />
+  <meta name="keywords" content="Confluent,KSQL,Kafka," />
 
 
 
@@ -90,8 +90,8 @@
 <meta name="description" content="1. Confluent简介1.1 Confluent 背景LinkedIn的Kafka研发团队，有个三人小组出来创业了。基于这项技术Jay Kreps带头创立了新公司Confluent，Confluent的产品围绕着Kafka做的。 Confluent 致力于为各行各业的公司提供实时数据处理服务的解决方案。该公司已获 LinkedIn 等公司的融资。
 1.2 Confluent 定位Kreps将">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Confluent&Ksql">
-<meta property="og:url" content="http://shiyueqi.github.io/2017/09/26/Confluent&Ksql/index.html">
+<meta property="og:title" content="Confluent & KSQL">
+<meta property="og:url" content="http://shiyueqi.github.io/2017/09/26/Confluent&KSQL/index.html">
 <meta property="og:site_name" content="石头头头的博客">
 <meta property="og:description" content="1. Confluent简介1.1 Confluent 背景LinkedIn的Kafka研发团队，有个三人小组出来创业了。基于这项技术Jay Kreps带头创立了新公司Confluent，Confluent的产品围绕着Kafka做的。 Confluent 致力于为各行各业的公司提供实时数据处理服务的解决方案。该公司已获 LinkedIn 等公司的融资。
 1.2 Confluent 定位Kreps将">
@@ -102,9 +102,11 @@
 <meta property="og:image" content="http://shiyueqi.github.io/images/confluent_platform_diagram.png">
 <meta property="og:image" content="http://shiyueqi.github.io/images/kafka-enterpise-graphic.png">
 <meta property="og:image" content="http://shiyueqi.github.io/images/confluentPackage.png">
-<meta property="og:updated_time" content="2017-09-27T07:09:28.975Z">
+<meta property="og:image" content="http://shiyueqi.github.io/images/KSQL-standalone-mode.png">
+<meta property="og:image" content="http://shiyueqi.github.io/images/KSQL-client-server.png">
+<meta property="og:updated_time" content="2017-09-27T09:13:26.819Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Confluent&Ksql">
+<meta name="twitter:title" content="Confluent & KSQL">
 <meta name="twitter:description" content="1. Confluent简介1.1 Confluent 背景LinkedIn的Kafka研发团队，有个三人小组出来创业了。基于这项技术Jay Kreps带头创立了新公司Confluent，Confluent的产品围绕着Kafka做的。 Confluent 致力于为各行各业的公司提供实时数据处理服务的解决方案。该公司已获 LinkedIn 等公司的融资。
 1.2 Confluent 定位Kreps将">
 
@@ -134,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://shiyueqi.github.io/2017/09/26/Confluent&Ksql/"/>
+  <link rel="canonical" href="http://shiyueqi.github.io/2017/09/26/Confluent&KSQL/"/>
 
 
 
 
 
-  <title> Confluent&Ksql | 石头头头的博客 </title>
+  <title> Confluent & KSQL | 石头头头的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -319,7 +321,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/09/26/Confluent&Ksql/">
+    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/09/26/Confluent&KSQL/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Shi Yueqi">
@@ -340,7 +342,7 @@
             
             
               
-                Confluent&Ksql
+                Confluent & KSQL
               
             
           </h1>
@@ -396,9 +398,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/09/26/Confluent&Ksql/#comments" itemprop="discussionUrl">
+                <a href="/2017/09/26/Confluent&KSQL/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/09/26/Confluent&Ksql/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/09/26/Confluent&KSQL/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -406,7 +408,7 @@
 
           
           
-             <span id="/2017/09/26/Confluent&Ksql/" class="leancloud_visitors" data-flag-title="Confluent&Ksql">
+             <span id="/2017/09/26/Confluent&KSQL/" class="leancloud_visitors" data-flag-title="Confluent & KSQL">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -559,7 +561,18 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ksql&gt; CREATE TABLE pageviews_regions AS SELECT gender, regionid , COUNT(*) AS numusers FROM pageviews_female WINDOW TUMBLING (size <span class="number">30</span> second) GROUP BY gender, regionid HAVING COUNT(*) &gt; <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">ksql&gt; DESCRIBE pageviews_regions;</span><br><span class="line"></span><br><span class="line"> Field    | Type            </span><br><span class="line">----------------------------</span><br><span class="line"> ROWTIME  | BIGINT          </span><br><span class="line"> ROWKEY   | VARCHAR(STRING) </span><br><span class="line"> GENDER   | VARCHAR(STRING) </span><br><span class="line"> REGIONID | VARCHAR(STRING) </span><br><span class="line"> NUMUSERS | BIGINT ·</span><br></pre></td></tr></table></figure>
 <p>查询<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ksql&gt; SELECT regionid, numusers FROM pageviews_regions LIMIT <span class="number">5</span>;</span><br><span class="line">Region_3 | <span class="number">2</span></span><br><span class="line">Region_7 | <span class="number">2</span></span><br><span class="line">Region_4 | <span class="number">2</span></span><br><span class="line">Region_4 | <span class="number">2</span></span><br><span class="line">Region_4 | <span class="number">3</span></span><br><span class="line">LIMIT reached <span class="keyword">for</span> the partition.</span><br><span class="line">Query terminated</span><br></pre></td></tr></table></figure></p>
 <h3 id="u67E5_u770B_u5168_u90E8_u6301_u4E45_u5316_u67E5_u8BE2_u8BED_u53E5"><a href="#u67E5_u770B_u5168_u90E8_u6301_u4E45_u5316_u67E5_u8BE2_u8BED_u53E5" class="headerlink" title="查看全部持久化查询语句"></a>查看全部持久化查询语句</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ksql&gt; SHOW QUERIES;</span><br><span class="line"></span><br><span class="line"> Query ID | Kafka Topic              | Query String                                                                                                                                                                                                                      </span><br><span class="line">-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span><br><span class="line"> <span class="number">1</span>        | PAGEVIEWS_FEMALE         | CREATE STREAM pageviews_female AS SELECT users_original.userid AS userid, pageid, regionid, gender FROM pageviews_original LEFT JOIN users_original ON pageviews_original.userid = users_original.userid WHERE gender = <span class="string">'FEMALE'</span>; </span><br><span class="line"> <span class="number">2</span>        | pageviews_enriched_r8_r9 | CREATE STREAM pageviews_female_like_89 WITH (kafka_topic=<span class="string">'pageviews_enriched_r8_r9'</span>, value_format=<span class="string">'DELIMITED'</span>) AS SELECT * FROM pageviews_female WHERE regionid LIKE <span class="string">'%_8'</span> OR regionid LIKE <span class="string">'%_9'</span>;                                </span><br><span class="line"> <span class="number">3</span>        | PAGEVIEWS_REGIONS        | CREATE TABLE pageviews_regions AS SELECT gender, regionid , COUNT(*) AS numusers FROM pageviews_female WINDOW TUMBLING (size <span class="number">30</span> second) GROUP BY gender, regionid HAVING COUNT(*) &gt; <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-<h1 id="7-__u53C2_u8003"><a href="#7-__u53C2_u8003" class="headerlink" title="7. 参考"></a>7. 参考</h1><ol>
+<h1 id="7-_KSQL__u67B6_u6784"><a href="#7-_KSQL__u67B6_u6784" class="headerlink" title="7. KSQL 架构"></a>7. KSQL 架构</h1><p>単例模式：<br><img src="/images/KSQL-standalone-mode.png" alt="KSQL-standalone-mode"></p>
+<p>Client-server模式：<br><img src="/images/KSQL-client-server.png" alt="KSQL-client-server"></p>
+<p>特点：</p>
+<ul>
+<li>KSQL CLI 是 client 端，是一个控制台。</li>
+<li>KSQL Engine 是 server 端，负责计算执行。</li>
+<li>client 与 server 通过 http 连接。</li>
+<li>Client-server 集群模式中，所有的 servers 共享用户提交的 KSQL 查询语句的计算任务。</li>
+<li>支持水平扩展。可动态添加 KSQL server 实例，以提升整体集群的容量和计算能力。</li>
+<li>可动态减少 KSQL server 实例，以降低整体集群的容量和计算能力。其余的 KSQL servers 会对集群全部的查询计算任务自动负载均衡。</li>
+</ul>
+<h1 id="8-__u53C2_u8003"><a href="#8-__u53C2_u8003" class="headerlink" title="8. 参考"></a>8. 参考</h1><ol>
 <li><a href="https://www.confluent.io/" title="https://www.confluent.io/" target="_blank" rel="external">https://www.confluent.io/</a></li>
 <li><a href="https://github.com/confluentinc/ksql" title="https://github.com/confluentinc/ksql" target="_blank" rel="external">https://github.com/confluentinc/ksql</a></li>
 </ol>
@@ -594,9 +607,9 @@
           
             <a href="/tags/Confluent/" rel="tag"># Confluent</a>
           
-            <a href="/tags/Kafka/" rel="tag"># Kafka</a>
+            <a href="/tags/KSQL/" rel="tag"># KSQL</a>
           
-            <a href="/tags/Ksql/" rel="tag"># Ksql</a>
+            <a href="/tags/Kafka/" rel="tag"># Kafka</a>
           
         </div>
       
@@ -718,7 +731,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -773,7 +786,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-_Confluent_u7B80_u4ECB"><span class="nav-number">1.</span> <span class="nav-text">1. Confluent简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1_Confluent__u80CC_u666F"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 Confluent 背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2_Confluent__u5B9A_u4F4D"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 Confluent 定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3_Confluent__u7EC4_u4EF6"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 Confluent 组件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-_Confluent_u4F7F_u7528"><span class="nav-number">2.</span> <span class="nav-text">2. Confluent使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1_Confluent__u4E0B_u8F7D"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 Confluent 下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2_Confluent__u542F_u52A8"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Confluent 启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u8981_u6C42"><span class="nav-number">2.2.1.</span> <span class="nav-text">要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u7EC4_u4EF6_u914D_u7F6E"><span class="nav-number">2.2.2.</span> <span class="nav-text">组件配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u542F_u52A8"><span class="nav-number">2.2.3.</span> <span class="nav-text">启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3_Confluent_Producer"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 Confluent Producer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4_Confluent_Consumer"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 Confluent Consumer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5__u9519_u8BEFschema"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 错误schema</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-_KSQL__u7B80_u4ECB"><span class="nav-number">3.</span> <span class="nav-text">3. KSQL 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-_KSQL__u7F16_u8BD1_26amp_3B_u542F_u52A8"><span class="nav-number">4.</span> <span class="nav-text">4. KSQL 编译&启动</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1__u8981_u6C42"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2__u7F16_u8BD1"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3__u542F_u52A8"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 启动</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-_KSQL__u751F_u4EA7_u6D88_u606F"><span class="nav-number">5.</span> <span class="nav-text">5. KSQL 生产消息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-_KSQL__u67E5_u8BE2"><span class="nav-number">6.</span> <span class="nav-text">6. KSQL 查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1__u521B_u5EFA_STREAM__u548C_TABLE"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 创建 STREAM 和 TABLE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#STREAM"><span class="nav-number">6.1.1.</span> <span class="nav-text">STREAM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TABLE"><span class="nav-number">6.1.2.</span> <span class="nav-text">TABLE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SHOW"><span class="nav-number">6.1.3.</span> <span class="nav-text">SHOW</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2__u67E5_u8BE2_u8BED_u53E5"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 查询语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT"><span class="nav-number">6.2.1.</span> <span class="nav-text">SELECT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6301_u4E45_u5316_u67E5_u8BE2"><span class="nav-number">6.2.2.</span> <span class="nav-text">持久化查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT__u67E5_u8BE2_u6301_u4E45_u5316_u67E5_u8BE2_u8BED_u53E5_u7684_u7ED3_u679C"><span class="nav-number">6.2.3.</span> <span class="nav-text">SELECT 查询持久化查询语句的结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LIKE__u5173_u952E_u5B57_26amp_3B_u6307_u5B9Atopic"><span class="nav-number">6.2.4.</span> <span class="nav-text">LIKE 关键字&指定topic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6EDA_u52A8_u65F6_u95F4_u7A97_u53E3_26amp_3B_u7EDF_u8BA1"><span class="nav-number">6.2.5.</span> <span class="nav-text">滚动时间窗口&统计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u67E5_u770B_u5168_u90E8_u6301_u4E45_u5316_u67E5_u8BE2_u8BED_u53E5"><span class="nav-number">6.2.6.</span> <span class="nav-text">查看全部持久化查询语句</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-__u53C2_u8003"><span class="nav-number">7.</span> <span class="nav-text">7. 参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-_Confluent_u7B80_u4ECB"><span class="nav-number">1.</span> <span class="nav-text">1. Confluent简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1_Confluent__u80CC_u666F"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 Confluent 背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2_Confluent__u5B9A_u4F4D"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 Confluent 定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3_Confluent__u7EC4_u4EF6"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 Confluent 组件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-_Confluent_u4F7F_u7528"><span class="nav-number">2.</span> <span class="nav-text">2. Confluent使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1_Confluent__u4E0B_u8F7D"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 Confluent 下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2_Confluent__u542F_u52A8"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Confluent 启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u8981_u6C42"><span class="nav-number">2.2.1.</span> <span class="nav-text">要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u7EC4_u4EF6_u914D_u7F6E"><span class="nav-number">2.2.2.</span> <span class="nav-text">组件配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u542F_u52A8"><span class="nav-number">2.2.3.</span> <span class="nav-text">启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3_Confluent_Producer"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 Confluent Producer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4_Confluent_Consumer"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 Confluent Consumer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5__u9519_u8BEFschema"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 错误schema</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-_KSQL__u7B80_u4ECB"><span class="nav-number">3.</span> <span class="nav-text">3. KSQL 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-_KSQL__u7F16_u8BD1_26amp_3B_u542F_u52A8"><span class="nav-number">4.</span> <span class="nav-text">4. KSQL 编译&启动</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1__u8981_u6C42"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2__u7F16_u8BD1"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3__u542F_u52A8"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 启动</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-_KSQL__u751F_u4EA7_u6D88_u606F"><span class="nav-number">5.</span> <span class="nav-text">5. KSQL 生产消息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-_KSQL__u67E5_u8BE2"><span class="nav-number">6.</span> <span class="nav-text">6. KSQL 查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1__u521B_u5EFA_STREAM__u548C_TABLE"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 创建 STREAM 和 TABLE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#STREAM"><span class="nav-number">6.1.1.</span> <span class="nav-text">STREAM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TABLE"><span class="nav-number">6.1.2.</span> <span class="nav-text">TABLE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SHOW"><span class="nav-number">6.1.3.</span> <span class="nav-text">SHOW</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2__u67E5_u8BE2_u8BED_u53E5"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 查询语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT"><span class="nav-number">6.2.1.</span> <span class="nav-text">SELECT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6301_u4E45_u5316_u67E5_u8BE2"><span class="nav-number">6.2.2.</span> <span class="nav-text">持久化查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT__u67E5_u8BE2_u6301_u4E45_u5316_u67E5_u8BE2_u8BED_u53E5_u7684_u7ED3_u679C"><span class="nav-number">6.2.3.</span> <span class="nav-text">SELECT 查询持久化查询语句的结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LIKE__u5173_u952E_u5B57_26amp_3B_u6307_u5B9Atopic"><span class="nav-number">6.2.4.</span> <span class="nav-text">LIKE 关键字&指定topic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6EDA_u52A8_u65F6_u95F4_u7A97_u53E3_26amp_3B_u7EDF_u8BA1"><span class="nav-number">6.2.5.</span> <span class="nav-text">滚动时间窗口&统计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u67E5_u770B_u5168_u90E8_u6301_u4E45_u5316_u67E5_u8BE2_u8BED_u53E5"><span class="nav-number">6.2.6.</span> <span class="nav-text">查看全部持久化查询语句</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-_KSQL__u67B6_u6784"><span class="nav-number">7.</span> <span class="nav-text">7. KSQL 架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-__u53C2_u8003"><span class="nav-number">8.</span> <span class="nav-text">8. 参考</span></a></li></ol></div>
             
 
           </div>
@@ -917,9 +930,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://shiyueqi.github.io/2017/09/26/Confluent&Ksql/';
-          this.page.identifier = '2017/09/26/Confluent&Ksql/';
-          this.page.title = 'Confluent&Ksql';
+          this.page.url = 'http://shiyueqi.github.io/2017/09/26/Confluent&KSQL/';
+          this.page.identifier = '2017/09/26/Confluent&KSQL/';
+          this.page.title = 'Confluent & KSQL';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://shiyueqi.disqus.com/embed.js';
