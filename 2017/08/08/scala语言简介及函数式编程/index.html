@@ -99,7 +99,7 @@ Odersky先前的工作是Generic Java和javac">
 Odersky先前的工作是Generic Java和javac">
 <meta property="og:image" content="http://shiyueqi.github.io/images/scala_home.jpg">
 <meta property="og:image" content="http://shiyueqi.github.io/images/scala_cmd.jpg">
-<meta property="og:updated_time" content="2017-09-15T09:43:18.038Z">
+<meta property="og:updated_time" content="2017-09-27T07:26:35.267Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="scala语言简介及函数式编程">
 <meta name="twitter:description" content="简介Scala 是 Scalable Language 的简写，是一门多范式的编程语言，一种类似java的编程语言，集成面向对象编程和函数式编程的各种特性。
@@ -520,7 +520,97 @@ Odersky先前的工作是Generic Java和javac">
 </li>
 <li>def main(args: Array[String]) - Scala程序从main()方法开始处理，这是每一个Scala程序的强制程序入口部分。</li>
 </ul>
-<h2 id="scala_u5173_u952E_u5B57"><a href="#scala_u5173_u952E_u5B57" class="headerlink" title="scala关键字"></a>scala关键字</h2><p>下表列出了 scala 保留关键字，我们不能使用以下关键字作为变量：<br>    <table><br>        <tr><br>            <td>abstract</td><br>            <td>case</td><br>            <td>catch</td><br>            <td>class</td><br>        </tr><br>        <tr><br>            <td>def</td><br>            <td>do</td><br>            <td>else</td><br>            <td>extends</td><br>        </tr><br>        <tr><br>            <td>false</td><br>            <td>final</td><br>            <td>finally</td><br>            <td>for</td><br>        </tr><br>        <tr><br>            <td>forSome</td><br>            <td>if</td><br>            <td>implicit</td><br>            <td>import</td><br>        </tr><br>        <tr><br>            <td>lazy</td><br>            <td>match</td><br>            <td>new</td><br>            <td>null</td><br>        </tr><br>        <tr><br>            <td>object</td><br>            <td>override</td><br>            <td>package</td><br>            <td>private</td><br>        </tr><br>        <tr><br>            <td>protected</td><br>            <td>return</td><br>            <td>sealed</td><br>            <td>super</td><br>        </tr><br>        <tr><br>            <td>this</td><br>            <td>throw</td><br>            <td>trait</td><br>            <td>try</td><br>        </tr><br>        <tr><br>            <td>true</td><br>            <td>type</td><br>            <td>val</td><br>            <td>var</td><br>        </tr><br>        <tr><br>            <td>while</td><br>            <td>with</td><br>            <td>yield</td><br>            <td>&nbsp;</td><br>        </tr><br>        <tr><br>            <td>-</td><br>            <td>:</td><br>            <td>=</td><br>            <td>=&gt;</td><br>        </tr><br>        <tr><br>            <td>&lt;-</td><br>            <td>&lt;:</td><br>            <td>&lt;%</td><br>            <td>&gt;:</td><br>        </tr><br>        <tr><br>            <td>#</td><br>            <td>@</td><br>            <td></td><br>            <td></td><br>        </tr><br>    </table></p>
+<h2 id="scala_u5173_u952E_u5B57"><a href="#scala_u5173_u952E_u5B57" class="headerlink" title="scala关键字"></a>scala关键字</h2><p>下表列出了 scala 保留关键字，我们不能使用以下关键字作为变量：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abstract</td>
+<td>case</td>
+<td>catch</td>
+<td>class</td>
+</tr>
+<tr>
+<td>def</td>
+<td>do</td>
+<td>else</td>
+<td>extends</td>
+</tr>
+<tr>
+<td>false</td>
+<td>final</td>
+<td>finally</td>
+<td>for</td>
+</tr>
+<tr>
+<td>forSome</td>
+<td>if</td>
+<td>implicit</td>
+<td>import</td>
+</tr>
+<tr>
+<td>lazy</td>
+<td>match</td>
+<td>new</td>
+<td>null</td>
+</tr>
+<tr>
+<td>object</td>
+<td>override</td>
+<td>package</td>
+<td>private</td>
+</tr>
+<tr>
+<td>protected</td>
+<td>return</td>
+<td>sealed</td>
+<td>super</td>
+</tr>
+<tr>
+<td>this</td>
+<td>throw</td>
+<td>trait</td>
+<td>try</td>
+</tr>
+<tr>
+<td>true</td>
+<td>type</td>
+<td>val</td>
+<td>var</td>
+</tr>
+<tr>
+<td>while</td>
+<td>with</td>
+<td>yield</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>-</td>
+<td>:</td>
+<td>=</td>
+<td>=&gt;</td>
+</tr>
+<tr>
+<td>&lt;-</td>
+<td>&lt;:</td>
+<td>&lt;%</td>
+<td>&gt;:</td>
+</tr>
+<tr>
+<td>#</td>
+<td>@</td>
+<td>catch</td>
+<td>class</td>
+</tr>
+</tbody>
+</table>
 <h2 id="scala__u6CE8_u91CA_uFF08_u5176_u5B9E_u8DDFjava_u4E00_u6837_uFF09"><a href="#scala__u6CE8_u91CA_uFF08_u5176_u5B9E_u8DDFjava_u4E00_u6837_uFF09" class="headerlink" title="scala 注释（其实跟java一样）"></a>scala 注释（其实跟java一样）</h2><p>Scala 同 Java 支持单行和多行注释。</p>
 <h2 id="u6362_u884C_u7B26"><a href="#u6362_u884C_u7B26" class="headerlink" title="换行符"></a>换行符</h2><p>Scala是面向行的语言，语句可以用分号（;）结束或换行符。Scala 程序里,语句末尾的分号通常是可选的。如果你愿意可以输入一个,但若一行里仅 有一个语句也可不写。另一方面,如果一行里写多个语句那么分号是需要的。例如</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> s = <span class="string">"hello world!"</span>; println(s)</span><br></pre></td></tr></table></figure>
