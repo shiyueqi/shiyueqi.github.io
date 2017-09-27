@@ -1,0 +1,1083 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Confluent,Kafka,Ksql," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/pug.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="1. Confluent简介1.1 Confluent 背景LinkedIn的Kafka研发团队，有个三人小组出来创业了。基于这项技术Jay Kreps带头创立了新公司Confluent，Confluent的产品围绕着Kafka做的。 Confluent 致力于为各行各业的公司提供实时数据处理服务的解决方案。该公司已获 LinkedIn 等公司的融资。
+1.2 Confluent 定位Kreps将">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Confluent&Ksql">
+<meta property="og:url" content="http://shiyueqi.github.io/2017/09/26/Confluent&Ksql/index.html">
+<meta property="og:site_name" content="石头头头的博客">
+<meta property="og:description" content="1. Confluent简介1.1 Confluent 背景LinkedIn的Kafka研发团队，有个三人小组出来创业了。基于这项技术Jay Kreps带头创立了新公司Confluent，Confluent的产品围绕着Kafka做的。 Confluent 致力于为各行各业的公司提供实时数据处理服务的解决方案。该公司已获 LinkedIn 等公司的融资。
+1.2 Confluent 定位Kreps将">
+<meta property="og:image" content="http://shiyueqi.github.io/images/confluent-platform-overview.png">
+<meta property="og:image" content="http://shiyueqi.github.io/images/confluentPlatform3.1.png">
+<meta property="og:image" content="http://shiyueqi.github.io/images/platform_chart_updated.png">
+<meta property="og:image" content="http://shiyueqi.github.io/images/streaming_platform_rev.png">
+<meta property="og:image" content="http://shiyueqi.github.io/images/confluent_platform_diagram.png">
+<meta property="og:image" content="http://shiyueqi.github.io/images/kafka-enterpise-graphic.png">
+<meta property="og:image" content="http://shiyueqi.github.io/images/confluentPackage.png">
+<meta property="og:updated_time" content="2017-09-27T07:09:28.975Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Confluent&Ksql">
+<meta name="twitter:description" content="1. Confluent简介1.1 Confluent 背景LinkedIn的Kafka研发团队，有个三人小组出来创业了。基于这项技术Jay Kreps带头创立了新公司Confluent，Confluent的产品围绕着Kafka做的。 Confluent 致力于为各行各业的公司提供实时数据处理服务的解决方案。该公司已获 LinkedIn 等公司的融资。
+1.2 Confluent 定位Kreps将">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://shiyueqi.github.io/2017/09/26/Confluent&Ksql/"/>
+
+
+
+
+
+  <title> Confluent&Ksql | 石头头头的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?5e9fafb0a8320f0ead8c2b80d6675a83";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">石头头头的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'cYmyKKAbtcky5-pLdKbh','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/09/26/Confluent&Ksql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shi Yueqi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/pug.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="石头头头的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Confluent&Ksql
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-26T19:03:00+08:00">
+                2017-09-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/技术博客/" itemprop="url" rel="index">
+                    <span itemprop="name">技术博客</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/26/Confluent&Ksql/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/09/26/Confluent&Ksql/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/09/26/Confluent&Ksql/" class="leancloud_visitors" data-flag-title="Confluent&Ksql">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-_Confluent_u7B80_u4ECB"><a href="#1-_Confluent_u7B80_u4ECB" class="headerlink" title="1. Confluent简介"></a>1. Confluent简介</h1><h2 id="1-1_Confluent__u80CC_u666F"><a href="#1-1_Confluent__u80CC_u666F" class="headerlink" title="1.1 Confluent 背景"></a>1.1 Confluent 背景</h2><p>LinkedIn的Kafka研发团队，有个三人小组出来创业了。基于这项技术Jay Kreps带头创立了新公司Confluent，Confluent的产品围绕着Kafka做的。 Confluent 致力于为各行各业的公司提供实时数据处理服务的解决方案。该公司已获 LinkedIn 等公司的融资。</p>
+<h2 id="1-2_Confluent__u5B9A_u4F4D"><a href="#1-2_Confluent__u5B9A_u4F4D" class="headerlink" title="1.2 Confluent 定位"></a>1.2 Confluent 定位</h2><p>Kreps将Kafka描述为LinkedIn的“中枢神经系统”，管理从各个应用程序汇聚到此的信息流，这些数据经过处理后再被分发到各处。</p>
+<p>不同于传统的企业信息列队系统，Kafka是以近乎实时的方式处理流经一个公司的所有数据，目前已经为LinkedIn, Netflix, Uber和Verizon建立了实时信息处理平台。</p>
+<p>因此，Confluent Platform 是一个流数据平台，能够组织管理来自不同数据源的数据，拥有稳定高效的系统。</p>
+<p><img src="/images/confluent-platform-overview.png" alt="Confluent Platform"></p>
+<p>流式数据处理平台不仅提供了应用系统传输数据的能力，又提供了连接数据源，应用系统，数据管道等所需的全部工具。</p>
+<p>Confluent Platform 可以低成本建立实时数据管道和流应用。通过将多个来源和位置的数据集成到一个中央数据流平台，Confluent Platform使您可以专注于如何从数据中获得商业价值而不是担心底层机制，如数据是如何传输或不同系统间的风险，异常。具体来说，Confluent Platform简化了连接数据源到Kafka，用Kafka构建应用程序，以及安全，监控和管理您的Kafka的基础设施。</p>
+<p><img src="/images/confluentPlatform3.1.png" alt="confluentPlatform3.1"></p>
+<p>传统架构模式：</p>
+<p><img src="/images/platform_chart_updated.png" alt="platform_chart_updated"></p>
+<p>Kafka–分布式流数据平台：</p>
+<p><img src="/images/streaming_platform_rev.png" alt="streaming_platform_rev"></p>
+<p>Confluent Platform–在Kafka基础上，更加完善的分布式数据流平台：</p>
+<p><img src="/images/confluent_platform_diagram.png" alt="confluent_platform_diagram"></p>
+<p>Confluent Platform:</p>
+<p><img src="/images/kafka-enterpise-graphic.png" alt="kafka-enterpise-graphic"></p>
+<p>总的来说，Confluent Platform平台的组件致力于通过统一而灵活的方式建立一个企业范围的数据流平台。</p>
+<h2 id="1-3_Confluent__u7EC4_u4EF6"><a href="#1-3_Confluent__u7EC4_u4EF6" class="headerlink" title="1.3 Confluent 组件"></a>1.3 Confluent 组件</h2><p><img src="/images/confluentPackage.png" alt="confluentPackage"></p>
+<p>Kafka组件：</p>
+<ul>
+<li>Kafka Java Clients(开源)。 Kafka Clients Java 库，向 kafka 写消息或者从 kafka 读消息。</li>
+<li>Kafka Streams（开源）。 Kafka Streams是一个流式数据处理库，使kafka成为功能齐全的流处理系统。</li>
+<li>Kafka Connect（开源）。 一种可扩展的和可靠的连接Kafka框架与外部系统（如数据库，键值存储，搜索索引和文件系统）的框架。</li>
+</ul>
+<p>除了Kafka以外， Confluent Platform 包括更多的工具和服务，使构建和管理数据流平台更加容易。</p>
+<p>Confluent Platform开源组件：</p>
+<ul>
+<li>Confluent Kafka Connectors（开源）。Kafka Connectors 中的 Kafka Connector API使得Kafka可与其他数据系统相连接，如Hadoop等。 Confluent 再次基础上完善了更多的connectors，包含当前大多数主流的数据源和数据接收器系统。</li>
+<li>Confluent Kafka Clients（开源）。其他编程语言的 Kafka Clients 库，包括C/C++，Python，Go，.Net等。</li>
+<li>Confluent Schema Registry（开源）。Schema 注册服务。确保每一个应用系统使用正确的schema写入数据，确保发送到同一topic的消息格式一致，保证兼容性。</li>
+<li>Confluent Kafka REST Proxy（开源）。应用系统通过RESTful HTTP服务，和kafka之间发送和接收消息。</li>
+</ul>
+<p>Confluent Platform闭源组件：</p>
+<ul>
+<li>Automatic Data Balancing（闭源）。数据自动负载均衡。</li>
+<li>Multi-Datacenter Replication（闭源）。多数据中心备份。</li>
+<li>Confluent Control Center（闭源）。最全面的管理和监控Kafka的GUI系统。</li>
+<li>JMS Client（闭源）。Kafka JMS 兼容组件。</li>
+</ul>
+<h1 id="2-_Confluent_u4F7F_u7528"><a href="#2-_Confluent_u4F7F_u7528" class="headerlink" title="2. Confluent使用"></a>2. Confluent使用</h1><h2 id="2-1_Confluent__u4E0B_u8F7D"><a href="#2-1_Confluent__u4E0B_u8F7D" class="headerlink" title="2.1 Confluent 下载"></a>2.1 Confluent 下载</h2><p>下载地址：<a href="https://www.confluent.io/download/" title="https://www.confluent.io/download/" target="_blank" rel="external">https://www.confluent.io/download/</a></p>
+<h2 id="2-2_Confluent__u542F_u52A8"><a href="#2-2_Confluent__u542F_u52A8" class="headerlink" title="2.2 Confluent 启动"></a>2.2 Confluent 启动</h2><h3 id="u8981_u6C42"><a href="#u8981_u6C42" class="headerlink" title="要求"></a>要求</h3><p>JAVA &gt;= 1.7</p>
+<h3 id="u7EC4_u4EF6_u914D_u7F6E"><a href="#u7EC4_u4EF6_u914D_u7F6E" class="headerlink" title="组件配置"></a>组件配置</h3><p>默认配置：</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Default Port</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Zookeeper</td>
+<td>2181</td>
+</tr>
+<tr>
+<td>Apache Kafka brokers (plain text)</td>
+<td>9092</td>
+</tr>
+<tr>
+<td>Schema Registry REST API</td>
+<td>8081</td>
+</tr>
+<tr>
+<td>REST Proxy</td>
+<td>8082</td>
+</tr>
+<tr>
+<td>Kafka Connect REST API</td>
+<td>8083</td>
+</tr>
+<tr>
+<td>Confluent Control Center</td>
+<td>9021</td>
+</tr>
+</tbody>
+</table>
+<h3 id="u542F_u52A8"><a href="#u542F_u52A8" class="headerlink" title="启动"></a>启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">confluent start schema-registry</span><br></pre></td></tr></table></figure>
+<p>可以看到输出如下的日志：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Starting zookeeper</span><br><span class="line">zookeeper is [UP]</span><br><span class="line">Starting kafka</span><br><span class="line">kafka is [UP]</span><br><span class="line">Starting schema-registry</span><br><span class="line">schema-registry is [UP]</span><br></pre></td></tr></table></figure></p>
+<p>也可单独启动每一个进程：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ./bin/zookeeper-server-start ./etc/kafka/zookeeper.properties</span><br><span class="line">$ ./bin/kafka-server-start ./etc/kafka/server.properties</span><br><span class="line">$ ./bin/schema-registry-start ./etc/schema-registry/schema-registry.properties</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-3_Confluent_Producer"><a href="#2-3_Confluent_Producer" class="headerlink" title="2.3 Confluent Producer"></a>2.3 Confluent Producer</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/kafka-avro-console-producer --broker-list localhost:<span class="number">9092</span> --topic <span class="built_in">test</span> --property value.schema=<span class="string">'&#123;"type":"record","name":"myrecord","fields":[&#123;"name":"f1","type":"string"&#125;]&#125;'</span></span><br></pre></td></tr></table></figure>
+<p>再持续输入待发送的消息<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">"f1"</span>: <span class="string">"value1"</span>&#125;</span><br><span class="line">&#123;<span class="string">"f1"</span>: <span class="string">"value2"</span>&#125;</span><br><span class="line">&#123;<span class="string">"f1"</span>: <span class="string">"value3"</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="2-4_Confluent_Consumer"><a href="#2-4_Confluent_Consumer" class="headerlink" title="2.4 Confluent Consumer"></a>2.4 Confluent Consumer</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/kafka-avro-console-consumer --topic <span class="built_in">test</span> --zookeeper localhost:<span class="number">2181</span> --from-beginning</span><br></pre></td></tr></table></figure>
+<h2 id="2-5__u9519_u8BEFschema"><a href="#2-5__u9519_u8BEFschema" class="headerlink" title="2.5 错误schema"></a>2.5 错误schema</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./bin/kafka-avro-console-producer --broker-list localhost:<span class="number">9092</span> --topic <span class="built_in">test</span> --property value.schema=<span class="string">'&#123;"type":"int"&#125;'</span></span><br></pre></td></tr></table></figure>
+<p>会出现如下的错误：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">org.apache.kafka.common.errors.SerializationException: Error registering Avro schema: <span class="string">"int"</span></span><br><span class="line">Caused by: io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException: Schema being registered is incompatible with the latest schema; error code: <span class="number">409</span></span><br><span class="line">       at io.confluent.kafka.schemaregistry.client.rest.utils.RestUtils.httpRequest(RestUtils.java:<span class="number">146</span>)</span><br><span class="line">       at io.confluent.kafka.schemaregistry.client.rest.utils.RestUtils.registerSchema(RestUtils.java:<span class="number">174</span>)</span><br><span class="line">       at io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient.registerAndGetId(CachedSchemaRegistryClient.java:<span class="number">51</span>)</span><br><span class="line">       at io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient.register(CachedSchemaRegistryClient.java:<span class="number">89</span>)</span><br><span class="line">       at io.confluent.kafka.serializers.AbstractKafkaAvroSerializer.serializeImpl(AbstractKafkaAvroSerializer.java:<span class="number">49</span>)</span><br><span class="line">       at io.confluent.kafka.formatter.AvroMessageReader.readMessage(AvroMessageReader.java:<span class="number">155</span>)</span><br><span class="line">       at kafka.tools.ConsoleProducer$.main(ConsoleProducer.scala:<span class="number">94</span>)</span><br><span class="line">       at kafka.tools.ConsoleProducer.main(ConsoleProducer.scala)</span><br></pre></td></tr></table></figure></p>
+<h1 id="3-_KSQL__u7B80_u4ECB"><a href="#3-_KSQL__u7B80_u4ECB" class="headerlink" title="3. KSQL 简介"></a>3. KSQL 简介</h1><p>KSQL 是 Kafka 的一个流式处理引擎。提供了对 Kafka 流处理一个简单的和完全交互式 SQL 接口；无需在使用 java 或 python 编写代码。KSQL 是开源的（Apache 2.0 licensed）、分布式、可扩展的、可靠的、实时的。它支持一系列强大的流处理的操作包括聚合，连接，窗口，会话化，以及其他更多功能。</p>
+<h1 id="4-_KSQL__u7F16_u8BD1_26amp_3B_u542F_u52A8"><a href="#4-_KSQL__u7F16_u8BD1_26amp_3B_u542F_u52A8" class="headerlink" title="4. KSQL 编译&amp;启动"></a>4. KSQL 编译&amp;启动</h1><h2 id="4-1__u8981_u6C42"><a href="#4-1__u8981_u6C42" class="headerlink" title="4.1 要求"></a>4.1 要求</h2><ul>
+<li>KSQL 目前是研发人员预览版，不要在生产环境使用</li>
+<li>Confluent Platform 3.3.0</li>
+<li>MAVEN</li>
+<li>GIT</li>
+<li>JAVA &gt;= 1.8</li>
+</ul>
+<h2 id="4-2__u7F16_u8BD1"><a href="#4-2__u7F16_u8BD1" class="headerlink" title="4.2 编译"></a>4.2 编译</h2><p>clone</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git@github.com:confluentinc/ksql.git</span><br></pre></td></tr></table></figure>
+<p>install</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ksql</span><br><span class="line">$ mvn clean compile install -DskipTests</span><br></pre></td></tr></table></figure>
+<h2 id="4-3__u542F_u52A8"><a href="#4-3__u542F_u52A8" class="headerlink" title="4.3 启动"></a>4.3 启动</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./bin/ksql-cli <span class="built_in">local</span></span><br></pre></td></tr></table></figure>
+<p>成功会如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">                   ======================================</span><br><span class="line">                   =      _  __ _____  ____  _          =</span><br><span class="line">                   =     | |/ // ____|/ __ \| |         =</span><br><span class="line">                   =     | <span class="string">' /| (___ | |  | | |         =</span><br><span class="line">                   =     |  &lt;  \___ \| |  | | |         =</span><br><span class="line">                   =     | . \ ____) | |__| | |____     =</span><br><span class="line">                   =     |_|\_\_____/ \___\_\______|    =</span><br><span class="line">                   =                                    =</span><br><span class="line">                   =   Streaming SQL Engine for Kafka   =</span><br><span class="line">Copyright 2017 Confluent Inc.                         </span><br><span class="line"></span><br><span class="line">CLI v0.1, Server v0.1 located at http://localhost:9098</span><br><span class="line"></span><br><span class="line">Having trouble? Type '</span><span class="built_in">help</span><span class="string">' (case-insensitive) for a rundown of how things work!</span><br><span class="line"></span><br><span class="line">ksql&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="5-_KSQL__u751F_u4EA7_u6D88_u606F"><a href="#5-_KSQL__u751F_u4EA7_u6D88_u606F" class="headerlink" title="5. KSQL 生产消息"></a>5. KSQL 生产消息</h1><p>使用 KSQL 提供的 examples 程序，每隔10s，持续地向 <code>pageviews</code> topic 发送一条消息，消息格式为 <code>DELIMITED</code> 格式。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ java -jar ksql-examples/target/ksql-examples-<span class="number">0.1</span>-SNAPSHOT-standalone.jar quickstart=pageviews format=delimited topic=pageviews maxInterval=<span class="number">10000</span></span><br></pre></td></tr></table></figure>
+<p>使用 KSQL 提供的 examples 程序，每隔10s，持续地向 <code>users</code> topic 发送一条消息，消息格式为 <code>JSON</code> 格式。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ java -jar ksql-examples/target/ksql-examples-<span class="number">0.1</span>-SNAPSHOT-standalone.jar quickstart=users format=json topic=users maxInterval=<span class="number">10000</span></span><br></pre></td></tr></table></figure>
+<h1 id="6-_KSQL__u67E5_u8BE2"><a href="#6-_KSQL__u67E5_u8BE2" class="headerlink" title="6. KSQL 查询"></a>6. KSQL 查询</h1><h2 id="6-1__u521B_u5EFA_STREAM__u548C_TABLE"><a href="#6-1__u521B_u5EFA_STREAM__u548C_TABLE" class="headerlink" title="6.1 创建 STREAM 和 TABLE"></a>6.1 创建 STREAM 和 TABLE</h2><h3 id="STREAM"><a href="#STREAM" class="headerlink" title="STREAM"></a>STREAM</h3><p>通过 Kafka topic <code>pageviews</code>，创建一个 STREAM，指定 <code>value_format</code> 格式为 <code>DELIMITED</code> 格式。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ksql&gt; CREATE STREAM pageviews_original (viewtime bigint, userid varchar, pageid varchar) WITH (kafka_topic=<span class="string">'pageviews'</span>, value_format=<span class="string">'DELIMITED'</span>);</span><br></pre></td></tr></table></figure>
+<p>使用 <code>DESCRIBE</code> 命令，查询刚刚新建的 STREAM。可以看到 KSQL 添加了额外的列，列名为 <code>ROWTIME</code>，相当于 Kafka 消息的时间戳；和额外的列，列名为 <code>ROWKEY</code>，相当于 Kafka 消息的key。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ksql&gt; DESCRIBE pageviews_original;</span><br><span class="line"></span><br><span class="line"> Field    | Type            </span><br><span class="line">----------------------------</span><br><span class="line"> ROWTIME  | BIGINT          </span><br><span class="line"> ROWKEY   | VARCHAR(STRING) </span><br><span class="line"> VIEWTIME | BIGINT          </span><br><span class="line"> USERID   | VARCHAR(STRING) </span><br><span class="line"> PAGEID   | VARCHAR(STRING)</span><br></pre></td></tr></table></figure>
+<h3 id="TABLE"><a href="#TABLE" class="headerlink" title="TABLE"></a>TABLE</h3><p>通过 Kafka topic <code>users</code>，创建一个 TABLE，指定 <code>users_original</code> 格式为 <code>JSON</code> 格式。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ksql&gt; CREATE TABLE users_original (registertime bigint, gender varchar, regionid varchar, userid varchar) WITH (kafka_topic=<span class="string">'users'</span>, value_format=<span class="string">'JSON'</span>);</span><br></pre></td></tr></table></figure>
+<p>使用 <code>DESCRIBE</code> 命令，查询刚刚新建的 TABLE。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ksql&gt; DESCRIBE users_original;</span><br><span class="line"></span><br><span class="line"> Field        | Type            </span><br><span class="line">--------------------------------</span><br><span class="line"> ROWTIME      | BIGINT          </span><br><span class="line"> ROWKEY       | VARCHAR(STRING) </span><br><span class="line"> REGISTERTIME | BIGINT          </span><br><span class="line"> GENDER       | VARCHAR(STRING) </span><br><span class="line"> REGIONID     | VARCHAR(STRING) </span><br><span class="line"> USERID       | VARCHAR(STRING)</span><br></pre></td></tr></table></figure>
+<h3 id="SHOW"><a href="#SHOW" class="headerlink" title="SHOW"></a>SHOW</h3><p>展示全部 STREAMS 和 TABLES</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ksql&gt; SHOW STREAMS;</span><br><span class="line"></span><br><span class="line"> Stream Name              | Kafka Topic              | Format    </span><br><span class="line">-----------------------------------------------------------------</span><br><span class="line"> PAGEVIEWS_ORIGINAL       | pageviews                | DELIMITED </span><br><span class="line"></span><br><span class="line">ksql&gt; SHOW TABLES;</span><br><span class="line"></span><br><span class="line"> Table Name        | Kafka Topic       | Format    | Windowed </span><br><span class="line">--------------------------------------------------------------</span><br><span class="line"> USERS_ORIGINAL    | users             | JSON      | <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h2 id="6-2__u67E5_u8BE2_u8BED_u53E5"><a href="#6-2__u67E5_u8BE2_u8BED_u53E5" class="headerlink" title="6.2 查询语句"></a>6.2 查询语句</h2><h3 id="SELECT"><a href="#SELECT" class="headerlink" title="SELECT"></a>SELECT</h3><p>使用 <code>SELECT</code> 语句创建一个 query ，并从 <code>STREAM</code> 中返回数据。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ksql&gt; SELECT pageid FROM pageviews_original LIMIT <span class="number">3</span>;</span><br><span class="line">Page_24</span><br><span class="line">Page_73</span><br><span class="line">Page_78</span><br><span class="line">LIMIT reached <span class="keyword">for</span> the partition.</span><br><span class="line">Query terminated</span><br><span class="line">ksql&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="u6301_u4E45_u5316_u67E5_u8BE2"><a href="#u6301_u4E45_u5316_u67E5_u8BE2" class="headerlink" title="持久化查询"></a>持久化查询</h3><p>在SELECT语句之前，使用 <code>CREATE STREAM</code> 关键字来创建持久化查询。与刚刚的非持久性的查询相比，持久化查询的结果会写入到一个 Kafka 的 <code>PAGEVIEWS_FEMALE</code> topic中去。如下的查询语句，通过和 <code>users_original</code> TABLE的 userid字段上做 <code>LEFT JOIN</code>操作，使得结果是在 <code>pageviews</code> STREAM 基础上，更加丰富的一种表现。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ksql&gt; CREATE STREAM pageviews_female AS SELECT users_original.userid AS userid, pageid, regionid, gender FROM pageviews_original LEFT JOIN users_original ON pageviews_original.userid = users_original.userid WHERE gender = <span class="string">'FEMALE'</span>;</span><br><span class="line"></span><br><span class="line">ksql&gt; DESCRIBE pageviews_female;</span><br><span class="line"> Field    | Type            </span><br><span class="line">----------------------------</span><br><span class="line"> ROWTIME  | BIGINT          </span><br><span class="line"> ROWKEY   | VARCHAR(STRING) </span><br><span class="line"> USERID   | VARCHAR(STRING) </span><br><span class="line"> PAGEID   | VARCHAR(STRING) </span><br><span class="line"> REGIONID | VARCHAR(STRING) </span><br><span class="line"> GENDER   | VARCHAR(STRING)</span><br></pre></td></tr></table></figure>
+<h3 id="SELECT__u67E5_u8BE2_u6301_u4E45_u5316_u67E5_u8BE2_u8BED_u53E5_u7684_u7ED3_u679C"><a href="#SELECT__u67E5_u8BE2_u6301_u4E45_u5316_u67E5_u8BE2_u8BED_u53E5_u7684_u7ED3_u679C" class="headerlink" title="SELECT 查询持久化查询语句的结果"></a>SELECT 查询持久化查询语句的结果</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ksql&gt; SELECT * FROM pageviews_female;</span><br><span class="line"><span class="number">1506483098313</span> | User_5 | User_5 | Page_31 | Region_9 | FEMALE</span><br><span class="line"><span class="number">1506483117603</span> | User_9 | User_9 | Page_12 | Region_4 | FEMALE</span><br><span class="line"><span class="number">1506483135819</span> | User_1 | User_1 | Page_31 | Region_8 | FEMALE</span><br><span class="line"><span class="number">1506483151852</span> | User_1 | User_1 | Page_26 | Region_8 | FEMALE</span><br><span class="line"><span class="number">1506483152310</span> | User_8 | User_8 | Page_34 | Region_7 | FEMALE</span><br><span class="line">^CQuery terminated</span><br></pre></td></tr></table></figure>
+<h3 id="LIKE__u5173_u952E_u5B57_26amp_3B_u6307_u5B9Atopic"><a href="#LIKE__u5173_u952E_u5B57_26amp_3B_u6307_u5B9Atopic" class="headerlink" title="LIKE 关键字&amp;指定topic"></a>LIKE 关键字&amp;指定topic</h3><p>创建新的持久化查询语句，使用 <code>LIKE</code> 关键字。且指定了输出 topic ，该持久化查询语句的结果会写入 Kafka 的 <code>pageviews_enriched_r8_r9</code> topic中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ksql&gt; CREATE STREAM pageviews_female_like_89 WITH (kafka_topic=<span class="string">'pageviews_enriched_r8_r9'</span>, value_format=<span class="string">'DELIMITED'</span>) AS SELECT * FROM pageviews_female WHERE regionid LIKE <span class="string">'%_8'</span> OR regionid LIKE <span class="string">'%_9'</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="u6EDA_u52A8_u65F6_u95F4_u7A97_u53E3_26amp_3B_u7EDF_u8BA1"><a href="#u6EDA_u52A8_u65F6_u95F4_u7A97_u53E3_26amp_3B_u7EDF_u8BA1" class="headerlink" title="滚动时间窗口&amp;统计"></a>滚动时间窗口&amp;统计</h3><p>创建持久化查询语句，对 <code>pageviews_female</code> STREAM， 在30s的滚动时间窗口内，进行计数。结果会写入到 <code>PAGEVIEWS_REGIONS</code> topic 中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ksql&gt; CREATE TABLE pageviews_regions AS SELECT gender, regionid , COUNT(*) AS numusers FROM pageviews_female WINDOW TUMBLING (size <span class="number">30</span> second) GROUP BY gender, regionid HAVING COUNT(*) &gt; <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">ksql&gt; DESCRIBE pageviews_regions;</span><br><span class="line"></span><br><span class="line"> Field    | Type            </span><br><span class="line">----------------------------</span><br><span class="line"> ROWTIME  | BIGINT          </span><br><span class="line"> ROWKEY   | VARCHAR(STRING) </span><br><span class="line"> GENDER   | VARCHAR(STRING) </span><br><span class="line"> REGIONID | VARCHAR(STRING) </span><br><span class="line"> NUMUSERS | BIGINT ·</span><br></pre></td></tr></table></figure>
+<p>查询<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ksql&gt; SELECT regionid, numusers FROM pageviews_regions LIMIT <span class="number">5</span>;</span><br><span class="line">Region_3 | <span class="number">2</span></span><br><span class="line">Region_7 | <span class="number">2</span></span><br><span class="line">Region_4 | <span class="number">2</span></span><br><span class="line">Region_4 | <span class="number">2</span></span><br><span class="line">Region_4 | <span class="number">3</span></span><br><span class="line">LIMIT reached <span class="keyword">for</span> the partition.</span><br><span class="line">Query terminated</span><br></pre></td></tr></table></figure></p>
+<h3 id="u67E5_u770B_u5168_u90E8_u6301_u4E45_u5316_u67E5_u8BE2_u8BED_u53E5"><a href="#u67E5_u770B_u5168_u90E8_u6301_u4E45_u5316_u67E5_u8BE2_u8BED_u53E5" class="headerlink" title="查看全部持久化查询语句"></a>查看全部持久化查询语句</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ksql&gt; SHOW QUERIES;</span><br><span class="line"></span><br><span class="line"> Query ID | Kafka Topic              | Query String                                                                                                                                                                                                                      </span><br><span class="line">-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span><br><span class="line"> <span class="number">1</span>        | PAGEVIEWS_FEMALE         | CREATE STREAM pageviews_female AS SELECT users_original.userid AS userid, pageid, regionid, gender FROM pageviews_original LEFT JOIN users_original ON pageviews_original.userid = users_original.userid WHERE gender = <span class="string">'FEMALE'</span>; </span><br><span class="line"> <span class="number">2</span>        | pageviews_enriched_r8_r9 | CREATE STREAM pageviews_female_like_89 WITH (kafka_topic=<span class="string">'pageviews_enriched_r8_r9'</span>, value_format=<span class="string">'DELIMITED'</span>) AS SELECT * FROM pageviews_female WHERE regionid LIKE <span class="string">'%_8'</span> OR regionid LIKE <span class="string">'%_9'</span>;                                </span><br><span class="line"> <span class="number">3</span>        | PAGEVIEWS_REGIONS        | CREATE TABLE pageviews_regions AS SELECT gender, regionid , COUNT(*) AS numusers FROM pageviews_female WINDOW TUMBLING (size <span class="number">30</span> second) GROUP BY gender, regionid HAVING COUNT(*) &gt; <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<h1 id="7-__u53C2_u8003"><a href="#7-__u53C2_u8003" class="headerlink" title="7. 参考"></a>7. 参考</h1><ol>
+<li><a href="https://www.confluent.io/" title="https://www.confluent.io/" target="_blank" rel="external">https://www.confluent.io/</a></li>
+<li><a href="https://github.com/confluentinc/ksql" title="https://github.com/confluentinc/ksql" target="_blank" rel="external">https://github.com/confluentinc/ksql</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Confluent/" rel="tag"># Confluent</a>
+          
+            <a href="/tags/Kafka/" rel="tag"># Kafka</a>
+          
+            <a href="/tags/Ksql/" rel="tag"># Ksql</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/13/Kafka反序列化漏洞/" rel="next" title="Kafka反序列化漏洞分析">
+                <i class="fa fa-chevron-left"></i> Kafka反序列化漏洞分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/pug.jpg"
+               alt="Shi Yueqi" />
+          <p class="site-author-name" itemprop="name">Shi Yueqi</p>
+           
+              <p class="site-description motion-element" itemprop="description">In me the tiger sniffs the rose.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/shiyueqi" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/shiyueqi107" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-_Confluent_u7B80_u4ECB"><span class="nav-number">1.</span> <span class="nav-text">1. Confluent简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1_Confluent__u80CC_u666F"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 Confluent 背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2_Confluent__u5B9A_u4F4D"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 Confluent 定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3_Confluent__u7EC4_u4EF6"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 Confluent 组件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-_Confluent_u4F7F_u7528"><span class="nav-number">2.</span> <span class="nav-text">2. Confluent使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1_Confluent__u4E0B_u8F7D"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 Confluent 下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2_Confluent__u542F_u52A8"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Confluent 启动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u8981_u6C42"><span class="nav-number">2.2.1.</span> <span class="nav-text">要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u7EC4_u4EF6_u914D_u7F6E"><span class="nav-number">2.2.2.</span> <span class="nav-text">组件配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u542F_u52A8"><span class="nav-number">2.2.3.</span> <span class="nav-text">启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3_Confluent_Producer"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 Confluent Producer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4_Confluent_Consumer"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 Confluent Consumer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5__u9519_u8BEFschema"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 错误schema</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-_KSQL__u7B80_u4ECB"><span class="nav-number">3.</span> <span class="nav-text">3. KSQL 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-_KSQL__u7F16_u8BD1_26amp_3B_u542F_u52A8"><span class="nav-number">4.</span> <span class="nav-text">4. KSQL 编译&启动</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1__u8981_u6C42"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2__u7F16_u8BD1"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3__u542F_u52A8"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 启动</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-_KSQL__u751F_u4EA7_u6D88_u606F"><span class="nav-number">5.</span> <span class="nav-text">5. KSQL 生产消息</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-_KSQL__u67E5_u8BE2"><span class="nav-number">6.</span> <span class="nav-text">6. KSQL 查询</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1__u521B_u5EFA_STREAM__u548C_TABLE"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 创建 STREAM 和 TABLE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#STREAM"><span class="nav-number">6.1.1.</span> <span class="nav-text">STREAM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TABLE"><span class="nav-number">6.1.2.</span> <span class="nav-text">TABLE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SHOW"><span class="nav-number">6.1.3.</span> <span class="nav-text">SHOW</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2__u67E5_u8BE2_u8BED_u53E5"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 查询语句</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT"><span class="nav-number">6.2.1.</span> <span class="nav-text">SELECT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6301_u4E45_u5316_u67E5_u8BE2"><span class="nav-number">6.2.2.</span> <span class="nav-text">持久化查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SELECT__u67E5_u8BE2_u6301_u4E45_u5316_u67E5_u8BE2_u8BED_u53E5_u7684_u7ED3_u679C"><span class="nav-number">6.2.3.</span> <span class="nav-text">SELECT 查询持久化查询语句的结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LIKE__u5173_u952E_u5B57_26amp_3B_u6307_u5B9Atopic"><span class="nav-number">6.2.4.</span> <span class="nav-text">LIKE 关键字&指定topic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6EDA_u52A8_u65F6_u95F4_u7A97_u53E3_26amp_3B_u7EDF_u8BA1"><span class="nav-number">6.2.5.</span> <span class="nav-text">滚动时间窗口&统计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u67E5_u770B_u5168_u90E8_u6301_u4E45_u5316_u67E5_u8BE2_u8BED_u53E5"><span class="nav-number">6.2.6.</span> <span class="nav-text">查看全部持久化查询语句</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-__u53C2_u8003"><span class="nav-number">7.</span> <span class="nav-text">7. 参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shi Yueqi</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://shiyueqi.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://shiyueqi.github.io/2017/09/26/Confluent&Ksql/';
+          this.page.identifier = '2017/09/26/Confluent&Ksql/';
+          this.page.title = 'Confluent&Ksql';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://shiyueqi.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("N7gFtBpJT2kRFRxKVGQNisQ3-gzGzoHsz", "svhqcJfvubefdP37LD07sxhX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
