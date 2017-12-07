@@ -1,0 +1,1027 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Kafka,benchmark," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/pug.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Kafka最佳实践">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka最佳实践">
+<meta property="og:url" content="http://shiyueqi.github.io/2017/09/21/Kafka最佳实践/index.html">
+<meta property="og:site_name" content="石头头头的博客">
+<meta property="og:description" content="Kafka最佳实践">
+<meta property="og:updated_time" content="2017-12-07T13:10:05.273Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kafka最佳实践">
+<meta name="twitter:description" content="Kafka最佳实践">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://shiyueqi.github.io/2017/09/21/Kafka最佳实践/"/>
+
+
+
+
+
+  <title> Kafka最佳实践 | 石头头头的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?5e9fafb0a8320f0ead8c2b80d6675a83";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">石头头头的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'cYmyKKAbtcky5-pLdKbh','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/09/21/Kafka最佳实践/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shi Yueqi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/pug.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="石头头头的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Kafka最佳实践
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-21T11:12:14+08:00">
+                2017-09-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kafka/" itemprop="url" rel="index">
+                    <span itemprop="name">Kafka</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/21/Kafka最佳实践/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/09/21/Kafka最佳实践/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/09/21/Kafka最佳实践/" class="leancloud_visitors" data-flag-title="Kafka最佳实践">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  Kafka最佳实践
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="broker_u914D_u7F6E"><a href="#broker_u914D_u7F6E" class="headerlink" title="broker配置"></a>broker配置</h2><p>broker配置文件为config/server.properties文件，配置内容主要分为以下几个模块，其他详细配置参见-<a href="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_user_guide/" title="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_user_guide/" target="_blank" rel="external">UPKafka用户手册</a>：</p>
+<h3 id="Server_Basics"><a href="#Server_Basics" class="headerlink" title="Server Basics"></a>Server Basics</h3><p>Kafka server 基本配置</p>
+<ul>
+<li>broker.id：是kafka集群server的唯一标识。</li>
+<li>delete.topic.enable：是否开启topic删除功能，可根据具体需求决定。开发测试环境推荐开启，生产环境推荐关闭。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The id of the broker. This must be set to a unique integer for each broker.</span></span><br><span class="line">broker.id=<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Switch to enable topic deletion or not, default value is false</span></span><br><span class="line"><span class="comment">#delete.topic.enable=false</span></span><br></pre></td></tr></table></figure>
+<h3 id="Socket_Server_Settings"><a href="#Socket_Server_Settings" class="headerlink" title="Socket Server Settings"></a>Socket Server Settings</h3><p>Kafka 网络相关配置</p>
+<ul>
+<li>listeners：由用户配置协议，ip，port。</li>
+<li>其他配置项，开发测试环境可使用默认配置；生产环境推荐如下配置。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The address the socket server listens on. It will get the value returned from</span></span><br><span class="line"><span class="comment"># java.net.InetAddress.getCanonicalHostName() if not configured.</span></span><br><span class="line"><span class="comment">#   FORMAT:</span></span><br><span class="line"><span class="comment">#     listeners = listener_name://host_name:port</span></span><br><span class="line"><span class="comment">#   EXAMPLE:</span></span><br><span class="line"><span class="comment">#     listeners = PLAINTEXT://your.host.name:9092</span></span><br><span class="line">listeners=PLAINTEXT://<span class="number">172.21</span>.<span class="number">195.89</span>:<span class="number">9092</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Hostname and port the broker will advertise to producers and consumers. If not set,</span></span><br><span class="line"><span class="comment"># it uses the value for "listeners" if configured.  Otherwise, it will use the value</span></span><br><span class="line"><span class="comment"># returned from java.net.InetAddress.getCanonicalHostName().</span></span><br><span class="line"><span class="comment">#advertised.listeners=PLAINTEXT://your.host.name:9092</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Maps listener names to security protocols, the default is for them to be the same. See the config documentation for more details</span></span><br><span class="line"><span class="comment">#listener.security.protocol.map=PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The number of threads that the server uses for receiving requests from the network and sending responses to the network</span></span><br><span class="line">num.network.threads=<span class="number">8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The number of threads that the server uses for processing requests, which may include disk I/O</span></span><br><span class="line">num.io.threads=<span class="number">8</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The send buffer (SO_SNDBUF) used by the socket server</span></span><br><span class="line">socket.send.buffer.bytes=<span class="number">1048576</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The receive buffer (SO_RCVBUF) used by the socket server</span></span><br><span class="line">socket.receive.buffer.bytes=<span class="number">1048576</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The maximum size of a request that the socket server will accept (protection against OOM)</span></span><br><span class="line">socket.request.max.bytes=<span class="number">104857600</span></span><br></pre></td></tr></table></figure>
+<h3 id="Log_Basics"><a href="#Log_Basics" class="headerlink" title="Log Basics"></a>Log Basics</h3><p>Kafka log 基本配置</p>
+<ul>
+<li>log.dirs：log文件存储路径</li>
+<li>num.partitions：topic默认的partitions数量。在创建topic时，一般会指定partitions数量，因此该配置项在上述条件下基本无用。为了防止在创建topic时，未指定partitions数量，因此推荐使用配置为3。</li>
+<li>其他配置推荐使用默认配置</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># A comma seperated list of directories under which to store log files</span></span><br><span class="line">log.dirs=/home/ggzjs/upkafka-logs</span><br><span class="line"></span><br><span class="line"><span class="comment"># The default number of log partitions per topic. More partitions allow greater</span></span><br><span class="line"><span class="comment"># parallelism for consumption, but this will also result in more files across</span></span><br><span class="line"><span class="comment"># the brokers.</span></span><br><span class="line">num.partitions=<span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The number of threads per data directory to be used for log recovery at startup and flushing at shutdown.</span></span><br><span class="line"><span class="comment"># This value is recommended to be increased for installations with data dirs located in RAID array.</span></span><br><span class="line">num.recovery.threads.per.data.dir=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h3 id="Internal_Topic_Settings"><a href="#Internal_Topic_Settings" class="headerlink" title="Internal Topic Settings"></a>Internal Topic Settings</h3><p>Kafka 内部topic配置</p>
+<ul>
+<li>开发测试环境推荐使用默认配置，均为1</li>
+<li>生产环境推荐如下配置，replication数量为3，isr数量为2。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The replication factor for the group metadata internal topics "__consumer_offsets" and "__transaction_state"</span></span><br><span class="line"><span class="comment"># For anything other than development testing, a value greater than 1 is recommended for to ensure availability such as 3.</span></span><br><span class="line">offsets.topic.replication.factor=<span class="number">3</span></span><br><span class="line">transaction.state.log.replication.factor=<span class="number">3</span></span><br><span class="line">transaction.state.log.min.isr=<span class="number">2</span></span><br></pre></td></tr></table></figure>
+<h3 id="Log_Flush_Policy"><a href="#Log_Flush_Policy" class="headerlink" title="Log Flush Policy"></a>Log Flush Policy</h3><p>Kafka log 刷盘、落盘机制</p>
+<ul>
+<li>log.flush.interval.messages：日志落盘消息条数间隔，即每接收到一定条数消息，即进行log落盘。</li>
+<li>log.flush.interval.ms：日志落盘时间间隔，单位ms，即每隔一定时间，即进行log落盘。</li>
+<li>强烈推荐开发、测试、生产环境均采用默认值，即不配置该配置，交由操作系统自行决定何时落盘，以提升性能。</li>
+<li>若对消息高可靠性要求较高的应用系统，可针对topic级别的配置，配置该属性。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Messages are immediately written to the filesystem but by default we only fsync() to sync</span></span><br><span class="line"><span class="comment"># the OS cache lazily. The following configurations control the flush of data to disk.</span></span><br><span class="line"><span class="comment"># There are a few important trade-offs here:</span></span><br><span class="line"><span class="comment">#    1. Durability: Unflushed data may be lost if you are not using replication.</span></span><br><span class="line"><span class="comment">#    2. Latency: Very large flush intervals may lead to latency spikes when the flush does occur as there will be a lot of data to flush.</span></span><br><span class="line"><span class="comment">#    3. Throughput: The flush is generally the most expensive operation, and a small flush interval may lead to exceessive seeks.</span></span><br><span class="line"><span class="comment"># The settings below allow one to configure the flush policy to flush data after a period of time or</span></span><br><span class="line"><span class="comment"># every N messages (or both). This can be done globally and overridden on a per-topic basis.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The number of messages to accept before forcing a flush of data to disk</span></span><br><span class="line"><span class="comment">#log.flush.interval.messages=10000</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The maximum amount of time a message can sit in a log before we force a flush</span></span><br><span class="line"><span class="comment">#log.flush.interval.ms=1000</span></span><br></pre></td></tr></table></figure>
+<h3 id="Log_Retention_Policy"><a href="#Log_Retention_Policy" class="headerlink" title="Log Retention Policy"></a>Log Retention Policy</h3><p>Kafka log保留策略配置</p>
+<ul>
+<li>log.retention.hours：日志保留时间，单位小时。和log.retention.minutes两个配置只需配置一项。</li>
+<li>log.retention.minutes：日志保留时间，单位分钟。和log.retention.hours两个配置只需配置一项。</li>
+<li>log.retention.bytes：日志保留大小。一topic的一partition下的所有日志大小总和达到该值，即进行日志清除任务。当日志保留时间或日志保留大小，任一条件满足即进行日志清除任务。</li>
+<li>log.segment.bytes：日志分段大小。即一topic的一partition下的所有日志会进行分段，达到该大小，即进行日志分段，滚动出新的日志文件。</li>
+<li>log.retention.check.interval.ms：日志保留策略定期检查时间间隔，单位ms。</li>
+<li>log.segment.delete.delay.ms：日志分段删除延迟时间间隔，单位ms。</li>
+<li>日志保留大小，保留时间以及日志分段大小可根据具体服务器磁盘空间大小，业务场景自行决定。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The following configurations control the disposal of log segments. The policy can</span></span><br><span class="line"><span class="comment"># be set to delete segments after a period of time, or after a given size has accumulated.</span></span><br><span class="line"><span class="comment"># A segment will be deleted whenever *either* of these criteria are met. Deletion always happens</span></span><br><span class="line"><span class="comment"># from the end of the log.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The minimum age of a log file to be eligible for deletion due to age</span></span><br><span class="line"><span class="comment">#log.retention.hours=168</span></span><br><span class="line">log.retention.minutes=<span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># A size-based retention policy for logs. Segments are pruned from the log as long as the remaining</span></span><br><span class="line"><span class="comment"># segments don't drop below log.retention.bytes. Functions independently of log.retention.hours.</span></span><br><span class="line"><span class="comment">#log.retention.bytes=1073741824</span></span><br><span class="line">log.retention.bytes=<span class="number">5368709120</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The maximum size of a log segment file. When this size is reached a new log segment will be created.</span></span><br><span class="line">log.segment.bytes=<span class="number">536870912</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The interval at which log segments are checked to see if they can be deleted according</span></span><br><span class="line"><span class="comment"># to the retention policies</span></span><br><span class="line">log.retention.check.interval.ms=<span class="number">300000</span></span><br><span class="line"></span><br><span class="line">log.segment.delete.delay.ms=<span class="number">60000</span></span><br><span class="line"></span><br><span class="line">log.cleaner.enable=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h3 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h3><p>Kafka zookeeper 配置</p>
+<ul>
+<li>zookeeper.connect：zk连接地址</li>
+<li>zookeeper.connection.timeout.ms：zk连接超时时间，默认6s。可根据具体的应用场景进行更改，特可采用如下配置。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Zookeeper connection string (see zookeeper docs for details).</span></span><br><span class="line"><span class="comment"># This is a comma separated host:port pairs, each corresponding to a zk</span></span><br><span class="line"><span class="comment"># server. e.g. "127.0.0.1:3000,127.0.0.1:3001,127.0.0.1:3002".</span></span><br><span class="line"><span class="comment"># You can also append an optional chroot string to the urls to specify the</span></span><br><span class="line"><span class="comment"># root directory for all kafka znodes.</span></span><br><span class="line">zookeeper.connect=<span class="number">172.21</span>.<span class="number">195.89</span>:<span class="number">2181</span>,<span class="number">172.21</span>.<span class="number">195.90</span>:<span class="number">2181</span>,<span class="number">172.21</span>.<span class="number">195.91</span>:<span class="number">2181</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Timeout in ms for connecting to zookeeper</span></span><br><span class="line">zookeeper.connection.timeout.ms=<span class="number">60000</span></span><br></pre></td></tr></table></figure>
+<h3 id="Group_Coordinator_Settings"><a href="#Group_Coordinator_Settings" class="headerlink" title="Group Coordinator Settings"></a>Group Coordinator Settings</h3><p>Kafka consumer group 协调配置</p>
+<ul>
+<li>生产环境推荐配置3000</li>
+<li>开发测试环境推荐配置0</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The following configuration specifies the time, in milliseconds, that the GroupCoordinator will delay the initial consumer rebalance.</span></span><br><span class="line"><span class="comment"># The rebalance will be further delayed by the value of group.initial.rebalance.delay.ms as new members join the group, up to a maximum of max.poll.interval.ms.</span></span><br><span class="line"><span class="comment"># The default value for this is 3 seconds.</span></span><br><span class="line"><span class="comment"># We override this to 0 here as it makes for a better out-of-the-box experience for development and testing.</span></span><br><span class="line"><span class="comment"># However, in production environments the default value of 3 seconds is more suitable as this will help to avoid unnecessary, and potentially expensive, rebalances during application startup.</span></span><br><span class="line">group.initial.rebalance.delay.ms=<span class="number">3000</span></span><br></pre></td></tr></table></figure>
+<h2 id="producer_u914D_u7F6E"><a href="#producer_u914D_u7F6E" class="headerlink" title="producer配置"></a>producer配置</h2><ul>
+<li>ProducerConfig.ACKS_CONFIG：producer发送消息，server端确认机制。可配置值为0，1，all。0时，producer只需发送，不需要server端确认接收，适合对消息可靠性不敏感的应用系统；1时，producer发送，需要server端该topic的leader确认接收，适合对消息可靠性相对敏感的应用系统；all时，producer发送，需要server端该topic的全部结点均确认接收，适合对消息可靠性特别敏感的应用系统；业务的应用系统可根据具体的应用场景自行决定采用何种策略。</li>
+<li>其他配置推荐使用默认值。</li>
+</ul>
+<p>代码示例详情参见Kafka 快速开始文档。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, <span class="string">"172.21.195.89:9092,172.21.195.90:9092,172.21.195.91:9092"</span>);</span><br><span class="line">props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, <span class="string">"org.apache.kafka.common.serialization.StringSerializer"</span>);</span><br><span class="line">props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, <span class="string">"org.apache.kafka.common.serialization.StringSerializer"</span>);</span><br><span class="line">props.put(ProducerConfig.ACKS_CONFIG, <span class="string">"1"</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="consumer_u914D_u7F6E"><a href="#consumer_u914D_u7F6E" class="headerlink" title="consumer配置"></a>consumer配置</h2><ul>
+<li>ConsumerConfig.GRO</li>
+<li>_ID_CONFIG：配置consumer的group id。由应用系统进行各自的配置。</li>
+<li>ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG：配置consumer消费消息自动提交消费记录。也可改为手动提交，由应用系统根据需求决定。</li>
+<li>其他配置推荐使用默认值。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, <span class="string">"172.21.195.89:9092,172.21.195.90:9092,172.21.195.91:9092"</span>);</span><br><span class="line">props.put(ConsumerConfig.GROUP_ID_CONFIG, <span class="string">"test_consumer_group"</span>);</span><br><span class="line">props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, <span class="string">"true"</span>);</span><br><span class="line">props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, <span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line">props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, <span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="u53C2_u8003_u8D44_u6599"><a href="#u53C2_u8003_u8D44_u6599" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li><a href="https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines" title="https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines" target="_blank" rel="external">Kafka官方性能测试报告</a></li>
+<li><a href="https://gist.github.com/jkreps/c7ddb4041ef62a900e6c" title="https://gist.github.com/jkreps/c7ddb4041ef62a900e6c" target="_blank" rel="external">Kafka官方性能测试配置参数</a></li>
+<li><a href="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_benchmark/" title="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_benchmark/" target="_blank" rel="external">UPKafka性能测试报告</a></li>
+<li><a href="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_user_guide/" title="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_user_guide/" target="_blank" rel="external">UPKafka用户手册</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kafka/" rel="tag"># Kafka</a>
+          
+            <a href="/tags/benchmark/" rel="tag"># benchmark</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/21/Kafka性能测试/" rel="next" title="Kafka性能测试">
+                <i class="fa fa-chevron-left"></i> Kafka性能测试
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/26/Confluent & KSQL/" rel="prev" title="Confluent & KSQL">
+                Confluent & KSQL <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/pug.jpg"
+               alt="Shi Yueqi" />
+          <p class="site-author-name" itemprop="name">Shi Yueqi</p>
+           
+              <p class="site-description motion-element" itemprop="description">In me the tiger sniffs the rose.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/shiyueqi" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/shiyueqi107" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#broker_u914D_u7F6E"><span class="nav-number">1.</span> <span class="nav-text">broker配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Server_Basics"><span class="nav-number">1.1.</span> <span class="nav-text">Server Basics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Socket_Server_Settings"><span class="nav-number">1.2.</span> <span class="nav-text">Socket Server Settings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Log_Basics"><span class="nav-number">1.3.</span> <span class="nav-text">Log Basics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Internal_Topic_Settings"><span class="nav-number">1.4.</span> <span class="nav-text">Internal Topic Settings</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Log_Flush_Policy"><span class="nav-number">1.5.</span> <span class="nav-text">Log Flush Policy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Log_Retention_Policy"><span class="nav-number">1.6.</span> <span class="nav-text">Log Retention Policy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Zookeeper"><span class="nav-number">1.7.</span> <span class="nav-text">Zookeeper</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Group_Coordinator_Settings"><span class="nav-number">1.8.</span> <span class="nav-text">Group Coordinator Settings</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#producer_u914D_u7F6E"><span class="nav-number">2.</span> <span class="nav-text">producer配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#consumer_u914D_u7F6E"><span class="nav-number">3.</span> <span class="nav-text">consumer配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u53C2_u8003_u8D44_u6599"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shi Yueqi</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://shiyueqi.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://shiyueqi.github.io/2017/09/21/Kafka最佳实践/';
+          this.page.identifier = '2017/09/21/Kafka最佳实践/';
+          this.page.title = 'Kafka最佳实践';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://shiyueqi.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("N7gFtBpJT2kRFRxKVGQNisQ3-gzGzoHsz", "svhqcJfvubefdP37LD07sxhX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
