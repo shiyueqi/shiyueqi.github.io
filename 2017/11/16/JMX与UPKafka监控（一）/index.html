@@ -1,0 +1,1016 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JMX,upKafka,upkafka监控," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/pug.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="JMX简介与UPKafka监控简介。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JMX与UPKafka监控（一）">
+<meta property="og:url" content="http://shiyueqi.github.io/2017/11/16/JMX与UPKafka监控（一）/index.html">
+<meta property="og:site_name" content="石头头头的博客">
+<meta property="og:description" content="JMX简介与UPKafka监控简介。">
+<meta property="og:image" content="http://shiyueqi.github.io/images/jmx_architecture.png">
+<meta property="og:image" content="http://shiyueqi.github.io/images/jmx_jconsole_server_demo.png">
+<meta property="og:image" content="http://shiyueqi.github.io/images/jmx_upkafka_zk_node.png">
+<meta property="og:image" content="http://shiyueqi.github.io/images/jmx_jconsole_upkafka_connect.png">
+<meta property="og:image" content="http://shiyueqi.github.io/images/jmx_jconsole_upkafka.png">
+<meta property="og:image" content="http://shiyueqi.github.io/images/jmx_upkafka_manager.png">
+<meta property="og:updated_time" content="2017-11-16T07:27:28.121Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JMX与UPKafka监控（一）">
+<meta name="twitter:description" content="JMX简介与UPKafka监控简介。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://shiyueqi.github.io/2017/11/16/JMX与UPKafka监控（一）/"/>
+
+
+
+
+
+  <title> JMX与UPKafka监控（一） | 石头头头的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?5e9fafb0a8320f0ead8c2b80d6675a83";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">石头头头的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'cYmyKKAbtcky5-pLdKbh','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/11/16/JMX与UPKafka监控（一）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shi Yueqi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/pug.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="石头头头的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                JMX与UPKafka监控（一）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-16T16:00:00+08:00">
+                2017-11-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/upkafka/" itemprop="url" rel="index">
+                    <span itemprop="name">upkafka</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/16/JMX与UPKafka监控（一）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/16/JMX与UPKafka监控（一）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/11/16/JMX与UPKafka监控（一）/" class="leancloud_visitors" data-flag-title="JMX与UPKafka监控（一）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  JMX简介与UPKafka监控简介。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-_u524D_u8A00"><a href="#1-_u524D_u8A00" class="headerlink" title="1.前言"></a>1.前言</h1><p>Kafka可以配置使用JMX进行运行状态的监控，既可以通过JDK自带Jconsole来观察结果，也可以通过Java API的方式来进行监控数据的调用获取，从而完成自己的监控平台。<br>关于监控指标的描述</p>
+<h1 id="2-JMX_u7B80_u4ECB"><a href="#2-JMX_u7B80_u4ECB" class="headerlink" title="2.JMX简介"></a>2.JMX简介</h1><p>JMX的全称为Java Management Extensions。 顾名思义，是管理Java的一种扩展。这种机制可以方便的管理、监控正在运行中的Java程序。常用于管理线程，内存，日志Level，服务重启，系统环境等。</p>
+<h2 id="JMX_u67B6_u6784"><a href="#JMX_u67B6_u6784" class="headerlink" title="JMX架构"></a>JMX架构</h2><p><img src="/images/jmx_architecture.png" alt="jmx_architecture"></p>
+<p>从图中可以看到，JMX的结构一共分为三层：</p>
+<p>1、基础层：主要是MBean，被管理的资源。</p>
+<p>基础层包括了一系列的接口定义和属性描述，通常JMX所管理的资源有一个或多个MBean组成，因此这个资源可以是任何由Java语言开发的组件。</p>
+<p>MBean：是Managed Bean的简称，可以翻译为“管理构件”。在JMX中MBean代表一个被管理的资源实例，通过MBean中暴露的方法和属性，外界可以获取被管理的资源的状态和操纵MBean的行为。事实上，MBean就是一个Java Object，同JavaBean模型一样，外界可获取Object的值和使用反射来调用Object的方法，只是MBean更为复杂和高级一些。MBean通过公共方法以及遵从特定的设计模式封装了属性和操作，以便暴露给管理应用程序。例如，一个只读属性在管理构件中只有Get方法，既有Get又有Set方法表示是一个可读写的属性。MBean分为如下四种，接下来主要介绍standard MBean。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>standard MBean</td>
+<td>这种类型的MBean最简单，它能管理的资源（包括属性，方法，时间）必须定义在接口中，然后MBean必须实现这个接口。它的命名也必须遵循一定的规范，例如我们的MBean为Hello，则接口必须为HelloMBean。</td>
+</tr>
+<tr>
+<td>dynamic MBean</td>
+<td>必须实现javax.management.DynamicMBean接口，所有的属性，方法都在运行时定义</td>
+</tr>
+<tr>
+<td>open MBean</td>
+<td>此MBean的规范还不完善，正在改进中</td>
+</tr>
+<tr>
+<td>model MBean</td>
+<td>与标准和动态MBean相比，你可以不用写MBean类，只需使用javax.management.modelmbean.RequiredModelMBean即可。RequiredModelMBean实现了ModelMBean接口，而ModelMBean扩展了DynamicMBean接口，因此与DynamicMBean相似，Model MBean的管理资源也是在运行时定义的。与DynamicMBean不同的是，DynamicMBean管理的资源一般定义在DynamicMBean中（运行时才决定管理那些资源），而model MBean管理的资源并不在MBean中，而是在外部（通常是一个类），只有在运行时，才通过set方法将其加入到model MBean中。</td>
+</tr>
+</tbody>
+</table>
+<p>2、代理层：MBeanServer，主要是提供对资源的注册和管理。</p>
+<p>MBeanServer： MBean生存在一个MBeanServer中。MBeanServer管理这些MBean，并且代理外界对它们的访问。并且MBeanServer提供了一种注册机制，使得外界可以通过名字来得到相应的MBean实例。</p>
+<p>Agent层管理相应的MBean资源，并且为远端用户提供访问的接口。Agent层主要定义了各种服务以及通信模型。该层的核心是MBeanServer,所有的MBean都要向它注册，才能被管理。注册在MBeanServer上的MBean并不直接和远程应用程序进行通信，他们通过协议适配器（Adapter）和连接器（Connector）进行通信。通常Agent层由一个MBeanServer和多个系统服务组成，JMX Agent并不关心它所管理的资源是什么。</p>
+<p>3、接入层：提供远程访问的入口。</p>
+<p>接入层关心Agent如何被远端用户访问的细节。它定义了一系列用来访问Agent的接口和组件，包括Adapter和Connector的描述。</p>
+<p>如果一个Java对象可以由一个遵循JMX规范的管理器应用管理，那么这个Java对象就可以由JMX管理资源。要使一个Java对象可管理，则必须创建相应的MBean对象，并通过这些MBean对象管理相应的Java对象。当拥有MBean类后，需要将其实例化并注册到MBeanServer上。</p>
+<h2 id="u7B80_u5355JMX_Server_Demo"><a href="#u7B80_u5355JMX_Server_Demo" class="headerlink" title="简单JMX Server Demo"></a>简单JMX Server Demo</h2><p>一个MBean定义一个接口，而且这个接口的名字必须是其被管理的资源的对象类的名称后面加上”MBean”。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">HelloMBean</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printHello</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printHello</span><span class="params">(String whoName)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Hello是实现MBean接口的类，然后将其注册到MBeanServer中就可以了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Hello</span> <span class="keyword">implements</span> <span class="title">HelloMBean</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Hello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Hello</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printHello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Hello world, "</span>+ name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printHello</span><span class="params">(String whoName)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Hello, "</span>+whoName);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>注册MBean，启动 connector。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleJmxServer</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String NAME = <span class="string">"HelloWorld"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> JMX_PORT = <span class="number">9999</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String DOMAIN_NAME = <span class="string">"jmxrmi"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> MalformedObjectNameException,</span><br><span class="line">            NotCompliantMBeanException, InstanceAlreadyExistsException,</span><br><span class="line">            MBeanRegistrationException, IOException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 首先建立一个MBeanServer,MBeanServer用来管理我们的MBean,通常是通过MBeanServer来获取我们MBean的信息，</span></span><br><span class="line">        <span class="comment">// 间接调用MBean的方法，然后生产我们的资源的一个对象。</span></span><br><span class="line">        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();</span><br><span class="line"></span><br><span class="line">        Hello hello = <span class="keyword">new</span> Hello(NAME);</span><br><span class="line">        ObjectName helloName = <span class="keyword">new</span> ObjectName(DOMAIN_NAME + <span class="string">":name="</span> + NAME);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 将 hello 这个对象注册到MBeanServer上去</span></span><br><span class="line">        mbs.registerMBean(hello, helloName);</span><br><span class="line"></span><br><span class="line">        Registry registry = LocateRegistry.createRegistry(JMX_PORT);</span><br><span class="line"></span><br><span class="line">        JMXServiceURL url = <span class="keyword">new</span> JMXServiceURL(<span class="string">"service:jmx:rmi:///jndi/rmi://localhost:"</span> + JMX_PORT + <span class="string">"/"</span> + DOMAIN_NAME);</span><br><span class="line">        JMXConnectorServer jmxConnector = JMXConnectorServerFactory.newJMXConnectorServer(url, <span class="keyword">null</span>, mbs);</span><br><span class="line">        jmxConnector.start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 使用 jconsole 连接 service:jmx:rmi:///jndi/rmi://localhost:9999/jmxrmi</span></span><br><span class="line">        <span class="comment">// 或直接使用 jconsole 连接 localhost:9999</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用JConsole查看注册到JMX的MBean。<br><img src="/images/jmx_jconsole_server_demo.png" alt="jmx_jconsole_server_demo"></p>
+<h2 id="JVM_u53C2_u6570_u542F_u52A8JMX"><a href="#JVM_u53C2_u6570_u542F_u52A8JMX" class="headerlink" title="JVM参数启动JMX"></a>JVM参数启动JMX</h2><p>因为java默认自带的了JMX RMI的连接器。所以，只需要在启动java程序的时候带上运行参数，就可以开启Agent的RMI协议的连接器。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=<span class="literal">false</span>  -Dcom.sun.management.jmxremote.ssl=<span class="literal">false</span> -Dcom.sun.management.jmxremote.port=<span class="number">9999</span></span><br></pre></td></tr></table></figure>
+<h2 id="JMX_Client_Demo"><a href="#JMX_Client_Demo" class="headerlink" title="JMX Client Demo"></a>JMX Client Demo</h2><p>也可以通过API的方式，来连接JMXConnectorServer管理MBean.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleJmxClient</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> JMX_PORT = <span class="number">9999</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String DOMAIN_NAME = <span class="string">"jmxrmi"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException,</span><br><span class="line">            MalformedObjectNameException, InstanceNotFoundException,</span><br><span class="line">            AttributeNotFoundException, InvalidAttributeValueException,</span><br><span class="line">            MBeanException, ReflectionException, IntrospectionException </span>&#123;</span><br><span class="line"></span><br><span class="line">        JMXServiceURL url = <span class="keyword">new</span> JMXServiceURL(<span class="string">"service:jmx:rmi:///jndi/rmi://localhost:"</span> + JMX_PORT + <span class="string">"/"</span> + DOMAIN_NAME);</span><br><span class="line">        JMXConnector jmxc = JMXConnectorFactory.connect(url);</span><br><span class="line">        MBeanServerConnection mbsc = jmxc.getMBeanServerConnection();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//print domains</span></span><br><span class="line">        System.out.println(<span class="string">"----------Domains----------"</span>);</span><br><span class="line">        String domains[] = mbsc.getDomains();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; domains.length; i++) &#123;</span><br><span class="line">            System.out.println(<span class="string">"Domain["</span> + i + <span class="string">"] = "</span> + domains[i]);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//MBean count</span></span><br><span class="line">        System.out.println(<span class="string">"----------MBeans Count----------"</span>);</span><br><span class="line">        System.out.println(<span class="string">"MBean count: "</span> + mbsc.getMBeanCount());</span><br><span class="line"></span><br><span class="line">        <span class="comment">//process attribute</span></span><br><span class="line">        System.out.println(<span class="string">"----------process attribute----------"</span>);</span><br><span class="line">        ObjectName mBeanName = <span class="keyword">new</span> ObjectName(DOMAIN_NAME + <span class="string">":name=HelloWorld"</span>);</span><br><span class="line">        mbsc.setAttribute(mBeanName, <span class="keyword">new</span> Attribute(<span class="string">"Name"</span>, <span class="string">"test_mbean_name"</span>));<span class="comment">//注意这里是Name而不是name</span></span><br><span class="line">        System.out.println(<span class="string">"Name:"</span> + mbsc.getAttribute(mBeanName, <span class="string">"Name"</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 通过代理，反射调用Hello中的printHello方法</span></span><br><span class="line">        System.out.println(<span class="string">"----------proxy----------"</span>);</span><br><span class="line">        HelloMBean proxy = MBeanServerInvocationHandler.newProxyInstance(mbsc, mBeanName, HelloMBean.class, <span class="keyword">false</span>);</span><br><span class="line">        proxy.printHello();</span><br><span class="line">        proxy.printHello(<span class="string">"proxy name"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 通过rmi的方式执行，反射调用</span></span><br><span class="line">        mbsc.invoke(mBeanName, <span class="string">"printHello"</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">        mbsc.invoke(mBeanName, <span class="string">"printHello"</span>, <span class="keyword">new</span> String[]&#123;<span class="string">"proxy name2"</span>&#125;, <span class="keyword">new</span> String[]&#123;String.class.getName()&#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//get mbean information</span></span><br><span class="line">        System.out.println(<span class="string">"----------mbean information----------"</span>);</span><br><span class="line">        MBeanInfo info = mbsc.getMBeanInfo(mBeanName);</span><br><span class="line">        System.out.println(<span class="string">"Hello Class: "</span> + info.getClassName());</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; info.getAttributes().length; i++) &#123;</span><br><span class="line">            System.out.println(<span class="string">"Hello Attribute:"</span> + info.getAttributes()[i].getName());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; info.getOperations().length; i++) &#123;</span><br><span class="line">            System.out.println(<span class="string">"Hello Operation:"</span> + info.getOperations()[i].getName());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//ObjectName of MBean</span></span><br><span class="line">        System.out.println(<span class="string">"----------all ObjectName----------"</span>);</span><br><span class="line">        Set&lt;ObjectInstance&gt; set = mbsc.queryMBeans(<span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">        <span class="keyword">for</span> (Iterator&lt;ObjectInstance&gt; it = set.iterator(); it.hasNext(); ) &#123;</span><br><span class="line">            ObjectInstance oi = it.next();</span><br><span class="line">            System.out.println(oi.getObjectName());</span><br><span class="line">        &#125;</span><br><span class="line">        jmxc.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="3-UPKafka_JMX"><a href="#3-UPKafka_JMX" class="headerlink" title="3.UPKafka JMX"></a>3.UPKafka JMX</h1><h2 id="u5F00_u542FJMX_u7AEF_u53E3"><a href="#u5F00_u542FJMX_u7AEF_u53E3" class="headerlink" title="开启JMX端口"></a>开启JMX端口</h2><p>修改bin/kafka-server-start.sh，添加JMX_PORT参数，添加后样子如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">"x$KAFKA_HEAP_OPTS"</span> = <span class="string">"x"</span> ]; then</span><br><span class="line">    export KAFKA_HEAP_OPTS=<span class="string">"-Xmx1G -Xms1G"</span></span><br><span class="line">    export JMX_PORT=<span class="string">"9999"</span></span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<p>可以看到jmx_port信息注册到zk结点。<br><img src="/images/jmx_upkafka_zk_node.png" alt="jmx_upkafka_zk_node"></p>
+<h2 id="JConsole_u76D1_u63A7UPKafka"><a href="#JConsole_u76D1_u63A7UPKafka" class="headerlink" title="JConsole监控UPKafka"></a>JConsole监控UPKafka</h2><p>通过Jconsole连接<br><img src="/images/jmx_jconsole_upkafka_connect.png" alt="jmx_jconsole_upkafka_connect"><br><img src="/images/jmx_jconsole_upkafka.png" alt="jmx_jconsole_upkafka"></p>
+<h2 id="API_u76D1_u63A7UPKafka"><a href="#API_u76D1_u63A7UPKafka" class="headerlink" title="API监控UPKafka"></a>API监控UPKafka</h2><p>Kafka Mbean定义参考：<a href="http://kafka.apache.org/documentation.html#monitoring" title="http://kafka.apache.org/documentation.html#monitoring" target="_blank" rel="external">http://kafka.apache.org/documentation.html#monitoring</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UPKafkaMonitor</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String MESSAGE_IN_PER_SEC = <span class="string">"kafka.server:type=BrokerTopicMetrics,name=MessagesInPerSec"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String BYTES_IN_PER_SEC = <span class="string">"kafka.server:type=BrokerTopicMetrics,name=BytesInPerSec"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String BYTES_OUT_PER_SEC = <span class="string">"kafka.server:type=BrokerTopicMetrics,name=BytesOutPerSec"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String BYTES_REJECTED_PER_SEC = <span class="string">"kafka.server:type=BrokerTopicMetrics,name=BytesRejectedPerSec"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String FAILED_FETCH_REQUESTS_PER_SEC = <span class="string">"kafka.server:type=BrokerTopicMetrics,name=FailedFetchRequestsPerSec"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String FAILED_PRODUCE_REQUESTS_PER_SEC = <span class="string">"kafka.server:type=BrokerTopicMetrics,name=FailedProduceRequestsPerSec"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String PRODUCE_REQUEST_PER_SEC = <span class="string">"kafka.network:type=RequestMetrics,name=RequestsPerSec,request=Produce"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String JXM_URL = <span class="string">"service:jmx:rmi:///jndi/rmi://172.18.55.21:9999/jmxrmi"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">extractMonitorData</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            MBeanServerConnection jmxConnection = <span class="keyword">this</span>.getMBeanServerConnection(JXM_URL);</span><br><span class="line"></span><br><span class="line">            ObjectName messageCountObj = <span class="keyword">new</span> ObjectName(MESSAGE_IN_PER_SEC);</span><br><span class="line">            ObjectName bytesInPerSecObj = <span class="keyword">new</span> ObjectName(BYTES_IN_PER_SEC);</span><br><span class="line">            ObjectName bytesOutPerSecObj = <span class="keyword">new</span> ObjectName(BYTES_OUT_PER_SEC);</span><br><span class="line">            ObjectName bytesRejectedPerSecObj = <span class="keyword">new</span> ObjectName(BYTES_REJECTED_PER_SEC);</span><br><span class="line">            ObjectName failedFetchRequestsPerSecObj = <span class="keyword">new</span> ObjectName(FAILED_FETCH_REQUESTS_PER_SEC);</span><br><span class="line">            ObjectName failedProduceRequestsPerSecObj = <span class="keyword">new</span> ObjectName(FAILED_PRODUCE_REQUESTS_PER_SEC);</span><br><span class="line">            ObjectName produceRequestPerSecObj = <span class="keyword">new</span> ObjectName(PRODUCE_REQUEST_PER_SEC);</span><br><span class="line"></span><br><span class="line">            printObjectNameDetails(messageCountObj, <span class="string">"Messages in /sec"</span>, jmxConnection);</span><br><span class="line">            printObjectNameDetails(bytesInPerSecObj, <span class="string">"Bytes in /sec"</span>, jmxConnection);</span><br><span class="line">            printObjectNameDetails(bytesOutPerSecObj, <span class="string">"Bytes out /sec"</span>, jmxConnection);</span><br><span class="line">            printObjectNameDetails(bytesRejectedPerSecObj, <span class="string">"Bytes rejected /sec"</span>, jmxConnection);</span><br><span class="line">            printObjectNameDetails(failedFetchRequestsPerSecObj, <span class="string">"Failed fetch request /sec"</span>, jmxConnection);</span><br><span class="line">            printObjectNameDetails(failedProduceRequestsPerSecObj, <span class="string">"Failed produce request /sec"</span>, jmxConnection);</span><br><span class="line">            printObjectNameDetails(produceRequestPerSecObj, <span class="string">"Produce request in /sec"</span>, jmxConnection);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> UPKafkaMonitor().extractMonitorData();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 获得 MBeanServer 的连接</span><br><span class="line">     *</span><br><span class="line">     * <span class="doctag">@param</span> jmxUrl</span><br><span class="line">     * <span class="doctag">@return</span></span><br><span class="line">     * <span class="doctag">@throws</span> IOException</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> MBeanServerConnection <span class="title">getMBeanServerConnection</span><span class="params">(String jmxUrl)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        JMXServiceURL url = <span class="keyword">new</span> JMXServiceURL(jmxUrl);</span><br><span class="line">        JMXConnector jmxc = JMXConnectorFactory.connect(url, <span class="keyword">null</span>);</span><br><span class="line">        MBeanServerConnection mbsc = jmxc.getMBeanServerConnection();</span><br><span class="line">        <span class="keyword">return</span> mbsc;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 打印 ObjectName 对象详细信息</span><br><span class="line">     * <span class="doctag">@param</span> objectName</span><br><span class="line">     * <span class="doctag">@param</span> printTitle</span><br><span class="line">     * <span class="doctag">@param</span> jmxConnection</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">printObjectNameDetails</span><span class="params">(ObjectName objectName, String printTitle, MBeanServerConnection jmxConnection)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"----------"</span>+ printTitle +<span class="string">"----------"</span>);</span><br><span class="line">            System.out.println(<span class="string">"TotalCount: "</span> + (Long) jmxConnection.getAttribute(objectName, <span class="string">"Count"</span>));</span><br><span class="line">            System.out.println(<span class="string">"MeanRate: "</span> + String.format(<span class="string">"%.2f"</span>, (<span class="keyword">double</span>) jmxConnection.getAttribute(objectName, <span class="string">"MeanRate"</span>)));</span><br><span class="line">            System.out.println(<span class="string">"OneMinuteRate: "</span> + String.format(<span class="string">"%.2f"</span>, (<span class="keyword">double</span>) jmxConnection.getAttribute(objectName, <span class="string">"OneMinuteRate"</span>)));</span><br><span class="line">            System.out.println(<span class="string">"FiveMinuteRate: "</span> + String.format(<span class="string">"%.2f"</span>, (<span class="keyword">double</span>) jmxConnection.getAttribute(objectName, <span class="string">"FiveMinuteRate"</span>)));</span><br><span class="line">            System.out.println(<span class="string">"FifteenMinuteRate: "</span> + String.format(<span class="string">"%.2f"</span>, (<span class="keyword">double</span>) jmxConnection.getAttribute(objectName, <span class="string">"FifteenMinuteRate"</span>)));</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="API_u76D1_u63A7_u7ED3_u679C"><a href="#API_u76D1_u63A7_u7ED3_u679C" class="headerlink" title="API监控结果"></a>API监控结果</h2><p>运行程序，可以看到打印如下信息：<br>分别是消息接收情况统计，bytes接收统计，bytes输出统计，bytes拒绝统计，失败拉取请求统计，失败生产消息统计，生产消息统计。</p>
+<p>每一项统计均包括总量统计，平均速率，最近一分钟速率，最近5分钟速率，最近15分钟速率。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">----------Messages <span class="keyword">in</span> /sec----------</span><br><span class="line">TotalCount: <span class="number">106883</span></span><br><span class="line">MeanRate: <span class="number">1.30</span></span><br><span class="line">OneMinuteRate: <span class="number">0.00</span></span><br><span class="line">FiveMinuteRate: <span class="number">0.00</span></span><br><span class="line">FifteenMinuteRate: <span class="number">0.00</span></span><br><span class="line">----------Bytes <span class="keyword">in</span> /sec----------</span><br><span class="line">TotalCount: <span class="number">8795044</span></span><br><span class="line">MeanRate: <span class="number">107.26</span></span><br><span class="line">OneMinuteRate: <span class="number">0.00</span></span><br><span class="line">FiveMinuteRate: <span class="number">0.00</span></span><br><span class="line">FifteenMinuteRate: <span class="number">0.00</span></span><br><span class="line">----------Bytes out /sec----------</span><br><span class="line">TotalCount: <span class="number">8763647</span></span><br><span class="line">MeanRate: <span class="number">106.88</span></span><br><span class="line">OneMinuteRate: <span class="number">0.00</span></span><br><span class="line">FiveMinuteRate: <span class="number">0.00</span></span><br><span class="line">FifteenMinuteRate: <span class="number">0.00</span></span><br><span class="line">----------Bytes rejected /sec----------</span><br><span class="line">TotalCount: <span class="number">0</span></span><br><span class="line">MeanRate: <span class="number">0.00</span></span><br><span class="line">OneMinuteRate: <span class="number">0.00</span></span><br><span class="line">FiveMinuteRate: <span class="number">0.00</span></span><br><span class="line">FifteenMinuteRate: <span class="number">0.00</span></span><br><span class="line">----------Failed fetch request /sec----------</span><br><span class="line">TotalCount: <span class="number">0</span></span><br><span class="line">MeanRate: <span class="number">0.00</span></span><br><span class="line">OneMinuteRate: <span class="number">0.00</span></span><br><span class="line">FiveMinuteRate: <span class="number">0.00</span></span><br><span class="line">FifteenMinuteRate: <span class="number">0.00</span></span><br><span class="line">----------Failed produce request /sec----------</span><br><span class="line">TotalCount: <span class="number">0</span></span><br><span class="line">MeanRate: <span class="number">0.00</span></span><br><span class="line">OneMinuteRate: <span class="number">0.00</span></span><br><span class="line">FiveMinuteRate: <span class="number">0.00</span></span><br><span class="line">FifteenMinuteRate: <span class="number">0.00</span></span><br><span class="line">----------Produce request <span class="keyword">in</span> /sec----------</span><br><span class="line">TotalCount: <span class="number">100000</span></span><br><span class="line">MeanRate: <span class="number">1.22</span></span><br><span class="line">OneMinuteRate: <span class="number">0.00</span></span><br><span class="line">FiveMinuteRate: <span class="number">0.00</span></span><br><span class="line">FifteenMinuteRate: <span class="number">0.00</span></span><br></pre></td></tr></table></figure>
+<h2 id="UPKafka__u76D1_u63A7_u5E73_u53F0"><a href="#UPKafka__u76D1_u63A7_u5E73_u53F0" class="headerlink" title="UPKafka 监控平台"></a>UPKafka 监控平台</h2><p>Kafka-manager使用JMX与Kafka集群进行通信，获取统计监控信息。可以看到监控信息正是刚刚使用JAVA API获取的监控信息。<br><img src="/images/jmx_upkafka_manager.png" alt="jmx_upkafka_manager"></p>
+<h1 id="4-_u53C2_u8003_u94FE_u63A5"><a href="#4-_u53C2_u8003_u94FE_u63A5" class="headerlink" title="4.参考链接"></a>4.参考链接</h1><ol>
+<li><a href="https://github.com/apache/kafka/" title="https://github.com/apache/kafka/" target="_blank" rel="external">https://github.com/apache/kafka/</a></li>
+<li><a href="http://kafka.apache.org/" title="http://kafka.apache.org/" target="_blank" rel="external">http://kafka.apache.org/</a></li>
+<li><a href="http://kafka.apache.org/documentation.html#monitoring" title="http://kafka.apache.org/documentation.html#monitoring" target="_blank" rel="external">http://kafka.apache.org/documentation.html#monitoring</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JMX/" rel="tag"># JMX</a>
+          
+            <a href="/tags/upKafka/" rel="tag"># upKafka</a>
+          
+            <a href="/tags/upkafka监控/" rel="tag"># upkafka监控</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/26/Confluent & KSQL/" rel="next" title="Confluent & KSQL">
+                <i class="fa fa-chevron-left"></i> Confluent & KSQL
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/pug.jpg"
+               alt="Shi Yueqi" />
+          <p class="site-author-name" itemprop="name">Shi Yueqi</p>
+           
+              <p class="site-description motion-element" itemprop="description">In me the tiger sniffs the rose.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/shiyueqi" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/shiyueqi107" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-_u524D_u8A00"><span class="nav-number">1.</span> <span class="nav-text">1.前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-JMX_u7B80_u4ECB"><span class="nav-number">2.</span> <span class="nav-text">2.JMX简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JMX_u67B6_u6784"><span class="nav-number">2.1.</span> <span class="nav-text">JMX架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u7B80_u5355JMX_Server_Demo"><span class="nav-number">2.2.</span> <span class="nav-text">简单JMX Server Demo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM_u53C2_u6570_u542F_u52A8JMX"><span class="nav-number">2.3.</span> <span class="nav-text">JVM参数启动JMX</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMX_Client_Demo"><span class="nav-number">2.4.</span> <span class="nav-text">JMX Client Demo</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-UPKafka_JMX"><span class="nav-number">3.</span> <span class="nav-text">3.UPKafka JMX</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u5F00_u542FJMX_u7AEF_u53E3"><span class="nav-number">3.1.</span> <span class="nav-text">开启JMX端口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JConsole_u76D1_u63A7UPKafka"><span class="nav-number">3.2.</span> <span class="nav-text">JConsole监控UPKafka</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API_u76D1_u63A7UPKafka"><span class="nav-number">3.3.</span> <span class="nav-text">API监控UPKafka</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API_u76D1_u63A7_u7ED3_u679C"><span class="nav-number">3.4.</span> <span class="nav-text">API监控结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UPKafka__u76D1_u63A7_u5E73_u53F0"><span class="nav-number">3.5.</span> <span class="nav-text">UPKafka 监控平台</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-_u53C2_u8003_u94FE_u63A5"><span class="nav-number">4.</span> <span class="nav-text">4.参考链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shi Yueqi</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://shiyueqi.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://shiyueqi.github.io/2017/11/16/JMX与UPKafka监控（一）/';
+          this.page.identifier = '2017/11/16/JMX与UPKafka监控（一）/';
+          this.page.title = 'JMX与UPKafka监控（一）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://shiyueqi.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("N7gFtBpJT2kRFRxKVGQNisQ3-gzGzoHsz", "svhqcJfvubefdP37LD07sxhX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
