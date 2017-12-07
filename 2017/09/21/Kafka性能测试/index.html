@@ -1,0 +1,1143 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Kafka,benchmark," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/pug.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Kafka性能测试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka性能测试">
+<meta property="og:url" content="http://shiyueqi.github.io/2017/09/21/Kafka性能测试/index.html">
+<meta property="og:site_name" content="石头头头的博客">
+<meta property="og:description" content="Kafka性能测试">
+<meta property="og:updated_time" content="2017-12-07T13:05:12.806Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kafka性能测试">
+<meta name="twitter:description" content="Kafka性能测试">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://shiyueqi.github.io/2017/09/21/Kafka性能测试/"/>
+
+
+
+
+
+  <title> Kafka性能测试 | 石头头头的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?5e9fafb0a8320f0ead8c2b80d6675a83";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">石头头头的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'cYmyKKAbtcky5-pLdKbh','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/09/21/Kafka性能测试/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shi Yueqi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/pug.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="石头头头的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Kafka性能测试
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-21T11:11:14+08:00">
+                2017-09-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kafka/" itemprop="url" rel="index">
+                    <span itemprop="name">Kafka</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/21/Kafka性能测试/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/09/21/Kafka性能测试/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/09/21/Kafka性能测试/" class="leancloud_visitors" data-flag-title="Kafka性能测试">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  Kafka性能测试
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="u670D_u52A1_u5668"><a href="#u670D_u52A1_u5668" class="headerlink" title="服务器"></a>服务器</h2><h3 id="u6D4B_u8BD5_u670D_u52A1_u5668"><a href="#u6D4B_u8BD5_u670D_u52A1_u5668" class="headerlink" title="测试服务器"></a><strong>测试服务器</strong></h3><p>172.21.195.89, 172.21.195.90, 172.21.195.91</p>
+<h3 id="u6D4B_u8BD5_u670D_u52A1_u5668_u914D_u7F6E"><a href="#u6D4B_u8BD5_u670D_u52A1_u5668_u914D_u7F6E" class="headerlink" title="测试服务器配置"></a><strong>测试服务器配置</strong></h3><ul>
+<li>CPU：4核，Intel Core Processor (Broadwell)，2198.724 MHZ</li>
+<li>内存：8G</li>
+<li>网络：万兆网</li>
+<li>磁盘：NAS存储</li>
+</ul>
+<p>CPU详细信息：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line">processor       : <span class="number">0</span></span><br><span class="line">vendor_id       : GenuineIntel</span><br><span class="line">cpu family      : <span class="number">6</span></span><br><span class="line">model           : <span class="number">60</span></span><br><span class="line">model name      : Intel Core Processor (Haswell, no TSX)</span><br><span class="line">stepping        : <span class="number">1</span></span><br><span class="line">microcode       : <span class="number">0</span>x1</span><br><span class="line">cpu MHz         : <span class="number">2593.992</span></span><br><span class="line">cache size      : <span class="number">4096</span> KB</span><br><span class="line">physical id     : <span class="number">0</span></span><br><span class="line">siblings        : <span class="number">1</span></span><br><span class="line">core id         : <span class="number">0</span></span><br><span class="line">cpu cores       : <span class="number">1</span></span><br><span class="line">apicid          : <span class="number">0</span></span><br><span class="line">initial apicid  : <span class="number">0</span></span><br><span class="line">fpu             : yes</span><br><span class="line">fpu_exception   : yes</span><br><span class="line">cpuid level     : <span class="number">13</span></span><br><span class="line">wp              : yes</span><br><span class="line">flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm arat fsgsbase bmi1 avx2 smep bmi2 erms invpcid xsaveopt</span><br><span class="line">bogomips        : <span class="number">5187.98</span></span><br><span class="line">clflush size    : <span class="number">64</span></span><br><span class="line">cache_alignment : <span class="number">64</span></span><br><span class="line">address sizes   : <span class="number">40</span> bits physical, <span class="number">48</span> bits virtual</span><br><span class="line">power management:</span><br><span class="line"></span><br><span class="line">processor       : <span class="number">1</span></span><br><span class="line">vendor_id       : GenuineIntel</span><br><span class="line">cpu family      : <span class="number">6</span></span><br><span class="line">model           : <span class="number">60</span></span><br><span class="line">model name      : Intel Core Processor (Haswell, no TSX)</span><br><span class="line">stepping        : <span class="number">1</span></span><br><span class="line">microcode       : <span class="number">0</span>x1</span><br><span class="line">cpu MHz         : <span class="number">2593.992</span></span><br><span class="line">cache size      : <span class="number">4096</span> KB</span><br><span class="line">physical id     : <span class="number">1</span></span><br><span class="line">siblings        : <span class="number">1</span></span><br><span class="line">core id         : <span class="number">0</span></span><br><span class="line">cpu cores       : <span class="number">1</span></span><br><span class="line">apicid          : <span class="number">1</span></span><br><span class="line">initial apicid  : <span class="number">1</span></span><br><span class="line">fpu             : yes</span><br><span class="line">fpu_exception   : yes</span><br><span class="line">cpuid level     : <span class="number">13</span></span><br><span class="line">wp              : yes</span><br><span class="line">flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm arat fsgsbase bmi1 avx2 smep bmi2 erms invpcid xsaveopt</span><br><span class="line">bogomips        : <span class="number">5187.98</span></span><br><span class="line">clflush size    : <span class="number">64</span></span><br><span class="line">cache_alignment : <span class="number">64</span></span><br><span class="line">address sizes   : <span class="number">40</span> bits physical, <span class="number">48</span> bits virtual</span><br><span class="line">power management:</span><br><span class="line"></span><br><span class="line">processor       : <span class="number">2</span></span><br><span class="line">vendor_id       : GenuineIntel</span><br><span class="line">cpu family      : <span class="number">6</span></span><br><span class="line">model           : <span class="number">60</span></span><br><span class="line">model name      : Intel Core Processor (Haswell, no TSX)</span><br><span class="line">stepping        : <span class="number">1</span></span><br><span class="line">microcode       : <span class="number">0</span>x1</span><br><span class="line">cpu MHz         : <span class="number">2593.992</span></span><br><span class="line">cache size      : <span class="number">4096</span> KB</span><br><span class="line">physical id     : <span class="number">2</span></span><br><span class="line">siblings        : <span class="number">1</span></span><br><span class="line">core id         : <span class="number">0</span></span><br><span class="line">cpu cores       : <span class="number">1</span></span><br><span class="line">apicid          : <span class="number">2</span></span><br><span class="line">initial apicid  : <span class="number">2</span></span><br><span class="line">fpu             : yes</span><br><span class="line">fpu_exception   : yes</span><br><span class="line">cpuid level     : <span class="number">13</span></span><br><span class="line">wp              : yes</span><br><span class="line">flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm arat fsgsbase bmi1 avx2 smep bmi2 erms invpcid xsaveopt</span><br><span class="line">bogomips        : <span class="number">5187.98</span></span><br><span class="line">clflush size    : <span class="number">64</span></span><br><span class="line">cache_alignment : <span class="number">64</span></span><br><span class="line">address sizes   : <span class="number">40</span> bits physical, <span class="number">48</span> bits virtual</span><br><span class="line">power management:</span><br><span class="line"></span><br><span class="line">processor       : <span class="number">3</span></span><br><span class="line">vendor_id       : GenuineIntel</span><br><span class="line">cpu family      : <span class="number">6</span></span><br><span class="line">model           : <span class="number">60</span></span><br><span class="line">model name      : Intel Core Processor (Haswell, no TSX)</span><br><span class="line">stepping        : <span class="number">1</span></span><br><span class="line">microcode       : <span class="number">0</span>x1</span><br><span class="line">cpu MHz         : <span class="number">2593.992</span></span><br><span class="line">cache size      : <span class="number">4096</span> KB</span><br><span class="line">physical id     : <span class="number">3</span></span><br><span class="line">siblings        : <span class="number">1</span></span><br><span class="line">core id         : <span class="number">0</span></span><br><span class="line">cpu cores       : <span class="number">1</span></span><br><span class="line">apicid          : <span class="number">3</span></span><br><span class="line">initial apicid  : <span class="number">3</span></span><br><span class="line">fpu             : yes</span><br><span class="line">fpu_exception   : yes</span><br><span class="line">cpuid level     : <span class="number">13</span></span><br><span class="line">wp              : yes</span><br><span class="line">flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl eagerfpu pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm arat fsgsbase bmi1 avx2 smep bmi2 erms invpcid xsaveopt</span><br><span class="line">bogomips        : <span class="number">5187.98</span></span><br><span class="line">clflush size    : <span class="number">64</span></span><br><span class="line">cache_alignment : <span class="number">64</span></span><br><span class="line">address sizes   : <span class="number">40</span> bits physical, <span class="number">48</span> bits virtual</span><br><span class="line">power management:</span><br></pre></td></tr></table></figure></p>
+<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><h3 id="Kafka_broker_u914D_u7F6E"><a href="#Kafka_broker_u914D_u7F6E" class="headerlink" title="Kafka broker配置"></a>Kafka broker配置</h3><p>JVM参数：-Xmx4G –Xms4G –Xmn3G。其他采用Kafka默认JVM配置。</p>
+<p>Kafka参数：</p>
+<ol>
+<li>关闭消息刷盘，由操作系统进行刷盘，且官方推荐这样配置，能最大化保证吞吐量。</li>
+<li>Log segment大小为500M，经测试配置为1G时，基本无性能影响。因为UPKafka的写日志为append模式，与日志大小无关。</li>
+<li>单Partition总日志大小上限为5G（考虑服务器磁盘空间可能不足）。</li>
+<li>日志清除时间为10mins（考虑服务器磁盘空间可能不足）。</li>
+<li>其他配置参见 <a href="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_best_practice/" title="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_best_practice/" target="_blank" rel="external">Kafka 最佳实践</a>。</li>
+</ol>
+<h3 id="Kafka_u6D4B_u8BD5_u65B9_u6848"><a href="#Kafka_u6D4B_u8BD5_u65B9_u6848" class="headerlink" title="Kafka测试方案"></a>Kafka测试方案</h3><ol>
+<li>新建topic： topic_log_replica_6_1，表示该topic有6个partition（多partition，为了增大吞吐量），1个replication（即无备份，消除replica同步的影响，提升吞吐量）</li>
+<li>新建topic： topic_log_replica_1_1，表示该topic有1个partition，1个replication（即无备份，消除replica同步的影响，提升吞吐量）</li>
+<li>单producer进程实例，进程内启动1000个并发线程，每个线程循环1000次。</li>
+<li>消息大小分别为100byte，1k，4k，10k，20k，40k，100k，200k，400k。</li>
+<li>分别进行acks=0和acks=1时的性能测试。</li>
+<li>JVM参数：-Xmx4G –Xms4G –Xmn3G –Xss256k（数据为400k时，采用-Xss512k）。</li>
+<li>消息体较大时，并发线程适当减少</li>
+</ol>
+<h2 id="Log4j_26amp_3BLog4j2"><a href="#Log4j_26amp_3BLog4j2" class="headerlink" title="Log4j&amp;Log4j2"></a>Log4j&amp;Log4j2</h2><p>这一部分的测试主要分为三个部分，Log4j，Log4j2 Sync(Log4j2 同步模式)，Log4j2 Async(Log4j2 异步模式)</p>
+<h3 id="Log4j_26amp_3BLog4j2_u6D4B_u8BD5_u65B9_u6848"><a href="#Log4j_26amp_3BLog4j2_u6D4B_u8BD5_u65B9_u6848" class="headerlink" title="Log4j&amp;Log4j2测试方案"></a>Log4j&amp;Log4j2测试方案</h3><ol>
+<li>单进程实例，进程内1000个并发线程写日志，每个线程循环1000次</li>
+<li>每条日志大小分别为100byte，1k，4k，10k，20k，40k，100k，200k，400k。</li>
+<li>JVM参数：-Xmx4G –Xms4G –Xmn3G –Xss256k（数据为400k时，采用-Xss512k）。</li>
+<li>消息体较大时，并发线程适当减少</li>
+</ol>
+<h2 id="u6027_u80FD_u6D4B_u8BD5_u7ED3_u679C"><a href="#u6027_u80FD_u6D4B_u8BD5_u7ED3_u679C" class="headerlink" title="性能测试结果"></a>性能测试结果</h2><p>性能测试结果TPS对比：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>100byte</th>
+<th>1k</th>
+<th>4k</th>
+<th>10k</th>
+<th>20k</th>
+<th>40k</th>
+<th>100k</th>
+<th>200k</th>
+<th>400k</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Log4j</td>
+<td>252080</td>
+<td>88550</td>
+<td>41220</td>
+<td>21886</td>
+<td>12498</td>
+<td>7000</td>
+<td>2808</td>
+<td>1366</td>
+<td>763</td>
+</tr>
+<tr>
+<td>Log4j2 Sync</td>
+<td>302847</td>
+<td>154250</td>
+<td>47542</td>
+<td>23629</td>
+<td>13342</td>
+<td>7147</td>
+<td>2824</td>
+<td>1466</td>
+<td>837</td>
+</tr>
+<tr>
+<td>Log4j2 Async</td>
+<td>1244942</td>
+<td><strong>351865</strong></td>
+<td>75307</td>
+<td>33799</td>
+<td>17213</td>
+<td>8300</td>
+<td>3086</td>
+<td>1714</td>
+<td>944</td>
+</tr>
+<tr>
+<td>UPKafka Partion=6 Replica=1 Acks=0</td>
+<td><strong>1285314</strong></td>
+<td>343434</td>
+<td><strong>117955</strong></td>
+<td><strong>49906</strong></td>
+<td><strong>24904</strong></td>
+<td><strong>13761</strong></td>
+<td><strong>6484</strong></td>
+<td><strong>3463</strong></td>
+<td><strong>1623</strong></td>
+</tr>
+<tr>
+<td>UPKafka Partion=6 Replica=1 Acks=1</td>
+<td>1274192</td>
+<td>340797</td>
+<td>111610</td>
+<td>49134</td>
+<td>23887</td>
+<td>12178</td>
+<td>6255</td>
+<td>3067</td>
+<td>1527</td>
+</tr>
+<tr>
+<td>UPKafka Partion=1 Replica=1 Acks=0</td>
+<td>1272578</td>
+<td>238823</td>
+<td>81231</td>
+<td>32914</td>
+<td>16548</td>
+<td>8980</td>
+<td>4777</td>
+<td>2673</td>
+<td>1360</td>
+</tr>
+<tr>
+<td>UPKafka Partion=1 Replica=1 Acks=1</td>
+<td>1286008</td>
+<td>233131</td>
+<td>80089</td>
+<td>32497</td>
+<td>16148</td>
+<td>7986</td>
+<td>4472</td>
+<td>2561</td>
+<td>1355</td>
+</tr>
+<tr>
+<td>UPKafka Partion=6 Replica=3 Acks=0</td>
+<td>1074183</td>
+<td>214996</td>
+<td>58859</td>
+<td>26446</td>
+<td>12519</td>
+<td>5634</td>
+<td>1980</td>
+<td>1073</td>
+<td>564</td>
+</tr>
+<tr>
+<td>UPKafka Partion=6 Replica=3 Acks=1</td>
+<td>1096138</td>
+<td>214325</td>
+<td>62529</td>
+<td>26456</td>
+<td>13047</td>
+<td>4473</td>
+<td>2444</td>
+<td>988</td>
+<td>512</td>
+</tr>
+<tr>
+<td>UPKafka Partion=6 Replica=3 Acks=all</td>
+<td>992194</td>
+<td>148245</td>
+<td>40282</td>
+<td>16249</td>
+<td>8452</td>
+<td>3230</td>
+<td>1826</td>
+<td>1001</td>
+<td>503</td>
+</tr>
+</tbody>
+</table>
+<p>注：</p>
+<ol>
+<li>以上测试每一项均经过5~10次不等的测试，取最高值。</li>
+<li>当消息体大小为100K~400K时，采用8~200的并发线程进行性能测试。</li>
+<li>UPKafka的性能测试均值比较接近于最高值。</li>
+<li>Log4j的性能测试均值与最高值相差较大。</li>
+<li>Log4j2的性能优于Log4j很多。</li>
+<li>当replica=1时，Acks=1 和 Acks=all 效果是均等的，所以当 Partion=6 Replica=1 和 Partion=1 Replica=1 时，只给出了 Acks=0 和 Acks=1 的测试数据。当 Partion=6 Replica=3 时，给出了 Acks=0 、 Acks=1 和 Acks=all 的测试数据。 </li>
+</ol>
+<h2 id="u6D4B_u8BD5_u7ED3_u8BBA"><a href="#u6D4B_u8BD5_u7ED3_u8BBA" class="headerlink" title="测试结论"></a>测试结论</h2><ol>
+<li>UPKafka性能全面优于Log4j和Log4j2。</li>
+<li>集群共用同一个NAS存储，因此同时进行写磁盘操作，会对性能造成影响。</li>
+<li>UPKafka-producer单进程对UPKafka集群进行性能测试，无法压满UPKafka集群的全部能力。</li>
+<li>UPKafka集群性能瓶颈在磁盘I/O，当网络I/O不存在瓶颈时，基本可以达到磁盘能写入多少数据，UPKafka内存就可以接收多少数据。</li>
+<li>UPKafka-producer API默认采用异步发送模式，因此acks=0和acks=1性能测试结果比较接近。但是acks=all时，性能就差很多。</li>
+</ol>
+<h2 id="u5B98_u65B9_u6027_u80FD_u6D4B_u8BD5_u62A5_u544A"><a href="#u5B98_u65B9_u6027_u80FD_u6D4B_u8BD5_u62A5_u544A" class="headerlink" title="官方性能测试报告"></a>官方性能测试报告</h2><ol>
+<li><a href="https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines" title="https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines" target="_blank" rel="external">Kafka官方性能测试报告</a></li>
+<li><a href="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_best_practice/" title="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_best_practice/" target="_blank" rel="external">UPKafka 最佳实践</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kafka/" rel="tag"># Kafka</a>
+          
+            <a href="/tags/benchmark/" rel="tag"># benchmark</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/13/Kafka反序列化漏洞/" rel="next" title="Kafka反序列化漏洞分析">
+                <i class="fa fa-chevron-left"></i> Kafka反序列化漏洞分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/26/Confluent & KSQL/" rel="prev" title="Confluent & KSQL">
+                Confluent & KSQL <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/pug.jpg"
+               alt="Shi Yueqi" />
+          <p class="site-author-name" itemprop="name">Shi Yueqi</p>
+           
+              <p class="site-description motion-element" itemprop="description">In me the tiger sniffs the rose.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/shiyueqi" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/shiyueqi107" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#u670D_u52A1_u5668"><span class="nav-number">1.</span> <span class="nav-text">服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#u6D4B_u8BD5_u670D_u52A1_u5668"><span class="nav-number">1.1.</span> <span class="nav-text">测试服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u6D4B_u8BD5_u670D_u52A1_u5668_u914D_u7F6E"><span class="nav-number">1.2.</span> <span class="nav-text">测试服务器配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka"><span class="nav-number">2.</span> <span class="nav-text">Kafka</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Kafka_broker_u914D_u7F6E"><span class="nav-number">2.1.</span> <span class="nav-text">Kafka broker配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kafka_u6D4B_u8BD5_u65B9_u6848"><span class="nav-number">2.2.</span> <span class="nav-text">Kafka测试方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Log4j_26amp_3BLog4j2"><span class="nav-number">3.</span> <span class="nav-text">Log4j&Log4j2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Log4j_26amp_3BLog4j2_u6D4B_u8BD5_u65B9_u6848"><span class="nav-number">3.1.</span> <span class="nav-text">Log4j&Log4j2测试方案</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u6027_u80FD_u6D4B_u8BD5_u7ED3_u679C"><span class="nav-number">4.</span> <span class="nav-text">性能测试结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u6D4B_u8BD5_u7ED3_u8BBA"><span class="nav-number">5.</span> <span class="nav-text">测试结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5B98_u65B9_u6027_u80FD_u6D4B_u8BD5_u62A5_u544A"><span class="nav-number">6.</span> <span class="nav-text">官方性能测试报告</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shi Yueqi</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://shiyueqi.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://shiyueqi.github.io/2017/09/21/Kafka性能测试/';
+          this.page.identifier = '2017/09/21/Kafka性能测试/';
+          this.page.title = 'Kafka性能测试';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://shiyueqi.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("N7gFtBpJT2kRFRxKVGQNisQ3-gzGzoHsz", "svhqcJfvubefdP37LD07sxhX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
