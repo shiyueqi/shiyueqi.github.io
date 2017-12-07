@@ -1,0 +1,1047 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Kafka," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/pug.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Kafka最佳实践">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka快速开始">
+<meta property="og:url" content="http://shiyueqi.github.io/2017/09/21/Kafka快速开始/index.html">
+<meta property="og:site_name" content="石头头头的博客">
+<meta property="og:description" content="Kafka最佳实践">
+<meta property="og:image" content="http://shiyueqi.github.io/./media/zookeeper_myid.jpg">
+<meta property="og:updated_time" content="2017-12-07T13:13:44.840Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kafka快速开始">
+<meta name="twitter:description" content="Kafka最佳实践">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://shiyueqi.github.io/2017/09/21/Kafka快速开始/"/>
+
+
+
+
+
+  <title> Kafka快速开始 | 石头头头的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?5e9fafb0a8320f0ead8c2b80d6675a83";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">石头头头的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'cYmyKKAbtcky5-pLdKbh','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/09/21/Kafka快速开始/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shi Yueqi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/pug.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="石头头头的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Kafka快速开始
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-21T11:13:14+08:00">
+                2017-09-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kafka/" itemprop="url" rel="index">
+                    <span itemprop="name">Kafka</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/21/Kafka快速开始/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/09/21/Kafka快速开始/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/09/21/Kafka快速开始/" class="leancloud_visitors" data-flag-title="Kafka快速开始">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  Kafka最佳实践
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="zookeeper_u914D_u7F6E"><a href="#zookeeper_u914D_u7F6E" class="headerlink" title="zookeeper配置"></a>zookeeper配置</h2><h3 id="Zookeeper_u4E0B_u8F7D"><a href="#Zookeeper_u4E0B_u8F7D" class="headerlink" title="Zookeeper下载"></a>Zookeeper下载</h3><p>下载地址：<a href="http://apache.claz.org/zookeeper/zookeeper-3.4.10/" target="_blank" rel="external">http://apache.claz.org/zookeeper/zookeeper-3.4.10/</a></p>
+<p>下载成功后，执行命令，完成解压缩<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf zookeeper-<span class="number">3.4</span>.<span class="number">10</span>.tar.gz</span><br></pre></td></tr></table></figure></p>
+<h3 id="Zookeeper_u914D_u7F6E"><a href="#Zookeeper_u914D_u7F6E" class="headerlink" title="Zookeeper配置"></a>Zookeeper配置</h3><p>Zookeeper推荐使用集群模式，且推荐使用奇数台实例部署（zookeeper特性：集群中只要有过半的机器是正常工作的，那么整个集群对外就是可用的，对于集群部署2n或2n-1个zookeeper实例，对实例宕机数量的容忍度是一样的，都是n-1。所以为了更加高效和节省资源，推荐奇数台实例部署模式）。在这里，采用3台实例部署为例（ip地址为172.21.198.89，172.21.198.90，172.21.198.91）。</p>
+<p>首先配置第一个zookeeper实例，ip地址为172.21.198.89，进入zookeeper下conf目录，配置zoo.cfg文件。配置信息如下：</p>
+<pre><code># The number of milliseconds of each tick
+tickTime=2000
+# The number of ticks that the initial
+# synchronization phase can take
+initLimit=10
+# The number of ticks that can pass between
+# sending a request and getting an acknowledgement
+syncLimit=5
+
+# the directory where the snapshot is stored.
+# do not use /tmp for storage, /tmp here is just
+# example sakes.
+dataDir=/home/ggzjs/zookeeper/zookeeper-3.4.10/data/data
+dataLogDir=/home/ggzjs/zookeeper/zookeeper-3.4.10/data/log
+
+# the port at which the clients will connect
+clientPort=2181
+# the maximum number of client connections.
+# increase this if you need to handle more clients
+#maxClientCnxns=60
+#
+# Be sure to read the maintenance section of the
+# administrator guide before turning on autopurge.
+#
+# http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance
+#
+# The number of snapshots to retain in dataDir
+#autopurge.snapRetainCount=3
+# Purge task interval in hours
+# Set to &quot;0&quot; to disable auto purge feature
+#autopurge.purgeInterval=1
+server.1=172.21.195.89:2889:3889
+server.2=172.21.195.90:2889:3889
+server.3=172.21.195.91:2889:3889
+</code></pre><h3 id="u53C2_u6570_u8BF4_u660E"><a href="#u53C2_u6570_u8BF4_u660E" class="headerlink" title="参数说明"></a>参数说明</h3><ul>
+<li>tickTime：zookeeper中使用的基本时间单位, 毫秒值.</li>
+<li>initLimit：zookeeper集群中的包含多台server, 其中一台为leader, 集群中其余的server为follower. initLimit参数配置初始化连接时, follower和leader之间的最长同步等待初始化时间. 此时该参数设置为10, 说明时间限制为10倍tickTime, 即10*2000=20000ms=20s.</li>
+<li>syncLimit：该参数配置Zookeeper集群中leader实例和follower实例之间发送消息, 请求和应答的最大时间长度. 此时该参数设置为5, 说明时间限制为5倍tickTime, 即10000ms=10s.</li>
+<li>dataDir：数据目录. 可以是任意目录。设置为/home/ggzjs/zookeeper/zookeeper-3.4.10/data/data，即当前zookeeper安装目录下的/data/data目录。</li>
+<li>dataLogDir：log目录, 同样可以是任意目录. 如果没有设置该参数, 将使用和dataDir相同的设置。设置为/home/ggzjs/zookeeper/zookeeper-3.4.10/data/log，即当前zookeeper安装目录下的/data/log目录。</li>
+<li>clientPort：监听client连接的端口号.在集群模式中，各个实例的clientPort必须不同。但在集群模式中，建议相同，均配置为2181。</li>
+<li>server.X=A:B:C 其中X是一个数字, 表示这是第几号server。 A是该server所在的IP地址。 B配置该server和集群中的leader交换消息所使用的端口。 C配置选举leader时所使用的端口。由于配置的是集群模式,推荐使用相同的port。</li>
+<li><p>myid文件：在集群模式和集群模式中，需要在刚刚设置的dataDir目录下，创建一个myid文件，输入对应唯一标识号。如刚刚设置的Zookeeper为集群中第一台，即设置myid中值为1。该数字必须和zoo.cfg文件中的server.X中的X一一对应。</p>
+<p>  <img src="/./media/zookeeper_myid.jpg" alt="zookeeper_myid"></p>
+</li>
+</ul>
+<h3 id="u7B2C_u4E8C_u53F0_u3001_u7B2C_u4E09_u53F0zookeeper_u5B9E_u4F8B_u914D_u7F6E"><a href="#u7B2C_u4E8C_u53F0_u3001_u7B2C_u4E09_u53F0zookeeper_u5B9E_u4F8B_u914D_u7F6E" class="headerlink" title="第二台、第三台zookeeper实例配置"></a>第二台、第三台zookeeper实例配置</h3><p>由于采用了3台实例部署（ip地址为172.21.198.89，172.21.198.90，172.21.198.91），且zookeeper安装路径一致，且端口采用均一致，因此配置文件完全一样。只需在dataDir路径下，新建myid文件，输入对应的唯一标识号。在这里，172.21.198.89为1，172.21.198.90为2，172.21.198.91为3。</p>
+<h3 id="Zookeeper_u542F_u52A8"><a href="#Zookeeper_u542F_u52A8" class="headerlink" title="Zookeeper启动"></a>Zookeeper启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh bin/zkServer.sh satrt</span><br></pre></td></tr></table></figure>
+<h2 id="upkafka_u914D_u7F6E"><a href="#upkafka_u914D_u7F6E" class="headerlink" title="upkafka配置"></a>upkafka配置</h2><h3 id="upkafka_u4E0B_u8F7D"><a href="#upkafka_u4E0B_u8F7D" class="headerlink" title="upkafka下载"></a>upkafka下载</h3><p><a href="http://172.17.254.218/upkafka-dist/upkafka_1.2.11-1.0.tgz" title="http://172.17.254.218/upkafka-dist/upkafka_1.2.11-1.0.tgz" target="_blank" rel="external">upkafka_1.2.11-1.0.tgz</a>，</p>
+<p><a href="http://172.17.254.218/upkafka-dist/upkafka_1.2.12-1.0.tgz" title="http://172.17.254.218/upkafka-dist/upkafka_1.2.12-1.0.tgz" target="_blank" rel="external">upkafka_1.2.12-1.0.tgz</a></p>
+<ul>
+<li>upkafka_1.2.11-1.0.tgz 使用scala-2.11,需要JDK 7</li>
+<li>upkafka_1.2.12-1.0.tgz 使用scala-2.12,需要JDK 8</li>
+<li>推荐使用upkafka_1.2.11-1.0.tgz<h3 id="upkafka_u5B89_u88C5"><a href="#upkafka_u5B89_u88C5" class="headerlink" title="upkafka安装"></a>upkafka安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf upkafka_1.<span class="number">2.11</span>-<span class="number">1.0</span>.tgz</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="upkafka_u914D_u7F6E-1"><a href="#upkafka_u914D_u7F6E-1" class="headerlink" title="upkafka配置"></a>upkafka配置</h3><p>采用3台实例部署，ip地址为172.21.198.89，172.21.198.90，172.21.198.91。</p>
+<p>配置第一台 upkafka 实例</p>
+<p>首先进入第一台 upkafka 实例 config 目录，配置server.properties文件。其中几个最关键的参数如下，其他详细配置参见-<a href="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_user_guide/" title="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_user_guide/" target="_blank" rel="external">UPKafka用户手册</a>：</p>
+<pre><code>broker.id=0  
+listeners=PLAINTEXT://172.21.195.89:9092
+log.dirs=/home/ggzjs/upkafka-logs
+zookeeper.connect=172.21.195.89:2181,172.21.195.90:2181,172.21.195.91:2181
+</code></pre><p>参数说明:</p>
+<ul>
+<li>broker.id：表示Kafka集群中当前broker的id，需保证唯一</li>
+<li>listeners：部署的broker占用ip:port</li>
+<li>log.dirs：指定当前broker的logs存放地址</li>
+<li>zookeeper.connect：指定Zookeeper集群。upkafka 依赖Zookeeper，会将配置信息，消费者状态，topic信息等内容写入到Zookeeper结点中。</li>
+</ul>
+<p>第二台，第三台 upkafka实例同理配置，需指定各自的唯一broker.id，以及listeners。 若安装路径一直，log.dirs和zookeeper.connect配置，在三台实例中是相同的。</p>
+<h3 id="upkafka_u542F_u52A8"><a href="#upkafka_u542F_u52A8" class="headerlink" title="upkafka启动"></a>upkafka启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh ./bin/kafka-server-start.sh -daemon ./config/server.properties</span><br></pre></td></tr></table></figure>
+<h3 id="upkafka_u547D_u4EE4"><a href="#upkafka_u547D_u4EE4" class="headerlink" title="upkafka命令"></a>upkafka命令</h3><p>1.创建topic<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh kafka-topics.sh --create --topic topic_1 --partitions <span class="number">2</span> --replication-factor <span class="number">2</span> --zookeeper <span class="number">172.21</span>.<span class="number">195.89</span>:<span class="number">2181</span>,<span class="number">172.21</span>.<span class="number">195.90</span>:<span class="number">2181</span>,<span class="number">172.21</span>.<span class="number">195.91</span>:<span class="number">2181</span></span><br></pre></td></tr></table></figure></p>
+<p>参数说明：</p>
+<ul>
+<li>–topic：指定topic名称</li>
+<li>–partitions：指定当前topic的partitions（分区）数量</li>
+<li>–replication-factor：指定当前topic每一个partition的replica数量</li>
+<li>–zookeeper：指定Zookeeper集群地址</li>
+</ul>
+<p>2.查看topic列表<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh kafka-topics.sh --list --zookeeper <span class="number">172.21</span>.<span class="number">195.89</span>:<span class="number">2181</span>,<span class="number">172.21</span>.<span class="number">195.90</span>:<span class="number">2181</span>,<span class="number">172.21</span>.<span class="number">195.91</span>:<span class="number">2181</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="producer_demo"><a href="#producer_demo" class="headerlink" title="producer demo"></a>producer demo</h2><p>如下代码示例是最简单的一个Producer同步发送消息的demo。必须要配置如下参数：</p>
+<ul>
+<li>topic</li>
+<li>broker 集群地址</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.kafka.clients.producer.KafkaProducer;</span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.clients.producer.ProducerConfig;</span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.clients.producer.ProducerRecord;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Properties;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.ExecutionException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProducerMain</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span>  <span class="keyword">static</span> <span class="keyword">final</span> String UPKAFKA_TOPIC = <span class="string">"test_topic"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String BROKERS_ADDRESS = <span class="string">"172.21.195.89:9092,172.21.195.90:9092,172.21.195.91:9092"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> REQUEST_REQUIRED_ACKS = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String MESSAGE_PRE = <span class="string">"message_"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> KafkaProducer&lt;String, String&gt; producer;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ProducerMain</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        producer = <span class="keyword">new</span> KafkaProducer&lt;String, String&gt;(buildProperties());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Properties <span class="title">buildProperties</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BROKERS_ADDRESS);</span><br><span class="line">        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, <span class="string">"org.apache.kafka.common.serialization.StringSerializer"</span>);</span><br><span class="line">        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, <span class="string">"org.apache.kafka.common.serialization.StringSerializer"</span>);</span><br><span class="line">        props.put(ProducerConfig.ACKS_CONFIG, String.valueOf(REQUEST_REQUIRED_ACKS));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> props;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 开始生产msg</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++) &#123;</span><br><span class="line">            String message = ProducerMain.MESSAGE_PRE + i;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                producer.send(<span class="keyword">new</span> ProducerRecord&lt;String, String&gt;(ProducerMain.UPKAFKA_TOPIC, message)).get();</span><br><span class="line">                System.out.println(<span class="string">"produce: "</span> + message + <span class="string">" success."</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">                System.out.println(<span class="string">"produce: "</span> + message + <span class="string">" fail."</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">                System.out.println(<span class="string">"produce: "</span> + message + <span class="string">" fail."</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> ProducerMain().run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="consumer_demo"><a href="#consumer_demo" class="headerlink" title="consumer demo"></a>consumer demo</h2><p>如下代码示例是Consumer接收消息的demo。必须要配置如下参数：</p>
+<ul>
+<li>topic</li>
+<li>broker 集群地址</li>
+<li>consumer group</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.kafka.clients.consumer.ConsumerConfig;</span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.clients.consumer.ConsumerRecord;</span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.clients.consumer.ConsumerRecords;</span><br><span class="line"><span class="keyword">import</span> org.apache.kafka.clients.consumer.KafkaConsumer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Collections;</span><br><span class="line"><span class="keyword">import</span> java.util.Properties;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * date: 2017/09/19 11:46.</span><br><span class="line"> * author: Yueqi Shi</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConsumerMain</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> KafkaConsumer&lt;String, String&gt; consumer;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String UPKAFKA_TOPIC = <span class="string">"test_topic"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String BROKERS_ADDRESS = <span class="string">"172.21.195.89:9092,172.21.195.90:9092,172.21.195.91:9092"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String COUSUMER_GROUP = <span class="string">"test_consumer_group"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConsumerMain</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        consumer = <span class="keyword">new</span> KafkaConsumer&lt;String, String&gt;(<span class="keyword">this</span>.buildProperties());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Properties <span class="title">buildProperties</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Properties props = <span class="keyword">new</span> Properties();</span><br><span class="line">        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BROKERS_ADDRESS);</span><br><span class="line">        props.put(ConsumerConfig.GROUP_ID_CONFIG, COUSUMER_GROUP);</span><br><span class="line">        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, <span class="string">"true"</span>);</span><br><span class="line">        props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, <span class="string">"1000"</span>);</span><br><span class="line">        props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, <span class="string">"30000"</span>);</span><br><span class="line">        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, <span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line">        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, <span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> props;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            consumer.subscribe(Collections.singletonList(UPKAFKA_TOPIC));</span><br><span class="line">            ConsumerRecords&lt;String, String&gt; records = consumer.poll(<span class="number">1000</span>);</span><br><span class="line">            System.out.println(records.count());</span><br><span class="line">            <span class="keyword">for</span> (ConsumerRecord&lt;String, String&gt; record : records) &#123;</span><br><span class="line">                System.out.println(<span class="string">"Received message: ("</span> + record.key() + <span class="string">", "</span> + record.value() + <span class="string">") at offset "</span> + record.offset());</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> ConsumerMain().run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kafka/" rel="tag"># Kafka</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/21/Kafka最佳实践/" rel="next" title="Kafka最佳实践">
+                <i class="fa fa-chevron-left"></i> Kafka最佳实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/26/Confluent & KSQL/" rel="prev" title="Confluent & KSQL">
+                Confluent & KSQL <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/pug.jpg"
+               alt="Shi Yueqi" />
+          <p class="site-author-name" itemprop="name">Shi Yueqi</p>
+           
+              <p class="site-description motion-element" itemprop="description">In me the tiger sniffs the rose.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/shiyueqi" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/shiyueqi107" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#zookeeper_u914D_u7F6E"><span class="nav-number">1.</span> <span class="nav-text">zookeeper配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Zookeeper_u4E0B_u8F7D"><span class="nav-number">1.1.</span> <span class="nav-text">Zookeeper下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Zookeeper_u914D_u7F6E"><span class="nav-number">1.2.</span> <span class="nav-text">Zookeeper配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u53C2_u6570_u8BF4_u660E"><span class="nav-number">1.3.</span> <span class="nav-text">参数说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#u7B2C_u4E8C_u53F0_u3001_u7B2C_u4E09_u53F0zookeeper_u5B9E_u4F8B_u914D_u7F6E"><span class="nav-number">1.4.</span> <span class="nav-text">第二台、第三台zookeeper实例配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Zookeeper_u542F_u52A8"><span class="nav-number">1.5.</span> <span class="nav-text">Zookeeper启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#upkafka_u914D_u7F6E"><span class="nav-number">2.</span> <span class="nav-text">upkafka配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#upkafka_u4E0B_u8F7D"><span class="nav-number">2.1.</span> <span class="nav-text">upkafka下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upkafka_u5B89_u88C5"><span class="nav-number">2.2.</span> <span class="nav-text">upkafka安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upkafka_u914D_u7F6E-1"><span class="nav-number">2.3.</span> <span class="nav-text">upkafka配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upkafka_u542F_u52A8"><span class="nav-number">2.4.</span> <span class="nav-text">upkafka启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#upkafka_u547D_u4EE4"><span class="nav-number">2.5.</span> <span class="nav-text">upkafka命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#producer_demo"><span class="nav-number">3.</span> <span class="nav-text">producer demo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#consumer_demo"><span class="nav-number">4.</span> <span class="nav-text">consumer demo</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shi Yueqi</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://shiyueqi.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://shiyueqi.github.io/2017/09/21/Kafka快速开始/';
+          this.page.identifier = '2017/09/21/Kafka快速开始/';
+          this.page.title = 'Kafka快速开始';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://shiyueqi.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("N7gFtBpJT2kRFRxKVGQNisQ3-gzGzoHsz", "svhqcJfvubefdP37LD07sxhX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

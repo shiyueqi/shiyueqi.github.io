@@ -93,7 +93,7 @@
 <meta property="og:url" content="http://shiyueqi.github.io/2017/09/21/Kafka性能测试/index.html">
 <meta property="og:site_name" content="石头头头的博客">
 <meta property="og:description" content="Kafka性能测试">
-<meta property="og:updated_time" content="2017-12-07T13:05:12.806Z">
+<meta property="og:updated_time" content="2017-12-07T13:17:58.616Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka性能测试">
 <meta name="twitter:description" content="Kafka性能测试">
@@ -441,10 +441,10 @@
 <p>Kafka参数：</p>
 <ol>
 <li>关闭消息刷盘，由操作系统进行刷盘，且官方推荐这样配置，能最大化保证吞吐量。</li>
-<li>Log segment大小为500M，经测试配置为1G时，基本无性能影响。因为UPKafka的写日志为append模式，与日志大小无关。</li>
+<li>Log segment大小为500M，经测试配置为1G时，基本无性能影响。因为 Kafka 的写日志为append模式，与日志大小无关。</li>
 <li>单Partition总日志大小上限为5G（考虑服务器磁盘空间可能不足）。</li>
 <li>日志清除时间为10mins（考虑服务器磁盘空间可能不足）。</li>
-<li>其他配置参见 <a href="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_best_practice/" title="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_best_practice/" target="_blank" rel="external">Kafka 最佳实践</a>。</li>
+<li>其他配置参见 <a href="https://shiyueqi.github.io/2017/09/21/Kafka%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/" title="https://shiyueqi.github.io/2017/09/21/Kafka%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/">Kafka 最佳实践</a>。</li>
 </ol>
 <h3 id="Kafka_u6D4B_u8BD5_u65B9_u6848"><a href="#Kafka_u6D4B_u8BD5_u65B9_u6848" class="headerlink" title="Kafka测试方案"></a>Kafka测试方案</h3><ol>
 <li>新建topic： topic_log_replica_6_1，表示该topic有6个partition（多partition，为了增大吞吐量），1个replication（即无备份，消除replica同步的影响，提升吞吐量）</li>
@@ -516,7 +516,7 @@
 <td>944</td>
 </tr>
 <tr>
-<td>UPKafka Partion=6 Replica=1 Acks=0</td>
+<td>Kafka Partion=6 Replica=1 Acks=0</td>
 <td><strong>1285314</strong></td>
 <td>343434</td>
 <td><strong>117955</strong></td>
@@ -528,7 +528,7 @@
 <td><strong>1623</strong></td>
 </tr>
 <tr>
-<td>UPKafka Partion=6 Replica=1 Acks=1</td>
+<td>Kafka Partion=6 Replica=1 Acks=1</td>
 <td>1274192</td>
 <td>340797</td>
 <td>111610</td>
@@ -540,7 +540,7 @@
 <td>1527</td>
 </tr>
 <tr>
-<td>UPKafka Partion=1 Replica=1 Acks=0</td>
+<td>Kafka Partion=1 Replica=1 Acks=0</td>
 <td>1272578</td>
 <td>238823</td>
 <td>81231</td>
@@ -552,7 +552,7 @@
 <td>1360</td>
 </tr>
 <tr>
-<td>UPKafka Partion=1 Replica=1 Acks=1</td>
+<td>Kafka Partion=1 Replica=1 Acks=1</td>
 <td>1286008</td>
 <td>233131</td>
 <td>80089</td>
@@ -564,7 +564,7 @@
 <td>1355</td>
 </tr>
 <tr>
-<td>UPKafka Partion=6 Replica=3 Acks=0</td>
+<td>Kafka Partion=6 Replica=3 Acks=0</td>
 <td>1074183</td>
 <td>214996</td>
 <td>58859</td>
@@ -576,7 +576,7 @@
 <td>564</td>
 </tr>
 <tr>
-<td>UPKafka Partion=6 Replica=3 Acks=1</td>
+<td>Kafka Partion=6 Replica=3 Acks=1</td>
 <td>1096138</td>
 <td>214325</td>
 <td>62529</td>
@@ -588,7 +588,7 @@
 <td>512</td>
 </tr>
 <tr>
-<td>UPKafka Partion=6 Replica=3 Acks=all</td>
+<td>Kafka Partion=6 Replica=3 Acks=all</td>
 <td>992194</td>
 <td>148245</td>
 <td>40282</td>
@@ -605,21 +605,21 @@
 <ol>
 <li>以上测试每一项均经过5~10次不等的测试，取最高值。</li>
 <li>当消息体大小为100K~400K时，采用8~200的并发线程进行性能测试。</li>
-<li>UPKafka的性能测试均值比较接近于最高值。</li>
+<li>Kafka 的性能测试均值比较接近于最高值。</li>
 <li>Log4j的性能测试均值与最高值相差较大。</li>
 <li>Log4j2的性能优于Log4j很多。</li>
 <li>当replica=1时，Acks=1 和 Acks=all 效果是均等的，所以当 Partion=6 Replica=1 和 Partion=1 Replica=1 时，只给出了 Acks=0 和 Acks=1 的测试数据。当 Partion=6 Replica=3 时，给出了 Acks=0 、 Acks=1 和 Acks=all 的测试数据。 </li>
 </ol>
 <h2 id="u6D4B_u8BD5_u7ED3_u8BBA"><a href="#u6D4B_u8BD5_u7ED3_u8BBA" class="headerlink" title="测试结论"></a>测试结论</h2><ol>
-<li>UPKafka性能全面优于Log4j和Log4j2。</li>
+<li>Kafka 性能全面优于Log4j和Log4j2。</li>
 <li>集群共用同一个NAS存储，因此同时进行写磁盘操作，会对性能造成影响。</li>
-<li>UPKafka-producer单进程对UPKafka集群进行性能测试，无法压满UPKafka集群的全部能力。</li>
-<li>UPKafka集群性能瓶颈在磁盘I/O，当网络I/O不存在瓶颈时，基本可以达到磁盘能写入多少数据，UPKafka内存就可以接收多少数据。</li>
-<li>UPKafka-producer API默认采用异步发送模式，因此acks=0和acks=1性能测试结果比较接近。但是acks=all时，性能就差很多。</li>
+<li>Kafka-producer单进程对 Kafka 集群进行性能测试，无法压满 Kafka 集群的全部能力。</li>
+<li>Kafka 集群性能瓶颈在磁盘I/O，当网络I/O不存在瓶颈时，基本可以达到磁盘能写入多少数据，Kafka 内存就可以接收多少数据。</li>
+<li>Kafka-producer API默认采用异步发送模式，因此acks=0和acks=1性能测试结果比较接近。但是acks=all时，性能就差很多。</li>
 </ol>
 <h2 id="u5B98_u65B9_u6027_u80FD_u6D4B_u8BD5_u62A5_u544A"><a href="#u5B98_u65B9_u6027_u80FD_u6D4B_u8BD5_u62A5_u544A" class="headerlink" title="官方性能测试报告"></a>官方性能测试报告</h2><ol>
 <li><a href="https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines" title="https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines" target="_blank" rel="external">Kafka官方性能测试报告</a></li>
-<li><a href="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_best_practice/" title="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_best_practice/" target="_blank" rel="external">UPKafka 最佳实践</a></li>
+<li><a href="https://shiyueqi.github.io/2017/09/21/Kafka%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/" title="https://shiyueqi.github.io/2017/09/21/Kafka%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/">Kafka 最佳实践</a></li>
 </ol>
 
       
@@ -756,7 +756,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
