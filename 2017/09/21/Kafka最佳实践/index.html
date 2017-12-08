@@ -93,7 +93,7 @@
 <meta property="og:url" content="http://shiyueqi.github.io/2017/09/21/Kafka最佳实践/index.html">
 <meta property="og:site_name" content="石头头头的博客">
 <meta property="og:description" content="Kafka最佳实践">
-<meta property="og:updated_time" content="2017-12-07T13:15:58.903Z">
+<meta property="og:updated_time" content="2017-12-08T01:36:46.899Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka最佳实践">
 <meta name="twitter:description" content="Kafka最佳实践">
@@ -429,7 +429,7 @@
       
 
       
-        <h2 id="broker_u914D_u7F6E"><a href="#broker_u914D_u7F6E" class="headerlink" title="broker配置"></a>broker配置</h2><p>broker配置文件为config/server.properties文件，配置内容主要分为以下几个模块，其他详细配置参见-<a href="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_user_guide/" title="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_user_guide/" target="_blank" rel="external">UPKafka用户手册</a>：</p>
+        <h2 id="broker_u914D_u7F6E"><a href="#broker_u914D_u7F6E" class="headerlink" title="broker配置"></a>broker配置</h2><p>broker配置文件为config/server.properties文件，配置内容主要分为以下几个模块，其他详细配置参见-<a href="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_user_guide/" title="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_user_guide/" target="_blank" rel="external">Kafka用户手册</a>：</p>
 <h3 id="Server_Basics"><a href="#Server_Basics" class="headerlink" title="Server Basics"></a>Server Basics</h3><p>Kafka server 基本配置</p>
 <ul>
 <li>broker.id：是kafka集群server的唯一标识。</li>
@@ -448,7 +448,7 @@
 <li>num.partitions：topic默认的partitions数量。在创建topic时，一般会指定partitions数量，因此该配置项在上述条件下基本无用。为了防止在创建topic时，未指定partitions数量，因此推荐使用配置为3。</li>
 <li>其他配置推荐使用默认配置</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># A comma seperated list of directories under which to store log files</span></span><br><span class="line">log.dirs=/home/ggzjs/upkafka-logs</span><br><span class="line"></span><br><span class="line"><span class="comment"># The default number of log partitions per topic. More partitions allow greater</span></span><br><span class="line"><span class="comment"># parallelism for consumption, but this will also result in more files across</span></span><br><span class="line"><span class="comment"># the brokers.</span></span><br><span class="line">num.partitions=<span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The number of threads per data directory to be used for log recovery at startup and flushing at shutdown.</span></span><br><span class="line"><span class="comment"># This value is recommended to be increased for installations with data dirs located in RAID array.</span></span><br><span class="line">num.recovery.threads.per.data.dir=<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># A comma seperated list of directories under which to store log files</span></span><br><span class="line">log.dirs=/home/ggzjs/kafka-logs</span><br><span class="line"></span><br><span class="line"><span class="comment"># The default number of log partitions per topic. More partitions allow greater</span></span><br><span class="line"><span class="comment"># parallelism for consumption, but this will also result in more files across</span></span><br><span class="line"><span class="comment"># the brokers.</span></span><br><span class="line">num.partitions=<span class="number">3</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The number of threads per data directory to be used for log recovery at startup and flushing at shutdown.</span></span><br><span class="line"><span class="comment"># This value is recommended to be increased for installations with data dirs located in RAID array.</span></span><br><span class="line">num.recovery.threads.per.data.dir=<span class="number">1</span></span><br></pre></td></tr></table></figure>
 <h3 id="Internal_Topic_Settings"><a href="#Internal_Topic_Settings" class="headerlink" title="Internal Topic Settings"></a>Internal Topic Settings</h3><p>Kafka 内部topic配置</p>
 <ul>
 <li>开发测试环境推荐使用默认配置，均为1</li>
@@ -502,8 +502,8 @@
 <h2 id="u53C2_u8003_u8D44_u6599"><a href="#u53C2_u8003_u8D44_u6599" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
 <li><a href="https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines" title="https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines" target="_blank" rel="external">Kafka官方性能测试报告</a></li>
 <li><a href="https://gist.github.com/jkreps/c7ddb4041ef62a900e6c" title="https://gist.github.com/jkreps/c7ddb4041ef62a900e6c" target="_blank" rel="external">Kafka官方性能测试配置参数</a></li>
-<li><a href="https://shiyueqi.github.io/2017/09/21/Kafka%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" title="https://shiyueqi.github.io/2017/09/21/Kafka%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/">UPKafka性能测试报告</a></li>
-<li><a href="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_user_guide/" title="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_user_guide/" target="_blank" rel="external">UPKafka用户手册</a></li>
+<li><a href="https://shiyueqi.github.io/2017/09/21/Kafka%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" title="https://shiyueqi.github.io/2017/09/21/Kafka%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/">Kafka性能测试报告</a></li>
+<li><a href="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_user_guide/" title="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_user_guide/" target="_blank" rel="external">Kafka用户手册</a></li>
 </ol>
 
       
@@ -559,8 +559,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/09/21/Kafka快速开始/" rel="prev" title="Kafka快速开始">
-                Kafka快速开始 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/09/21/Kafka用户手册/" rel="prev" title="Kafka用户手册">
+                Kafka用户手册 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -640,7 +640,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

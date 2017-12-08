@@ -1,0 +1,1030 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Kafka," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/images/pug.jpg?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="Kafka-简介（二）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kafka-简介（二）">
+<meta property="og:url" content="http://shiyueqi.github.io/2017/09/21/Kafka-简介（二）/index.html">
+<meta property="og:site_name" content="石头头头的博客">
+<meta property="og:description" content="Kafka-简介（二）">
+<meta property="og:image" content="http://shiyueqi.github.io/images/kafka-apis.png">
+<meta property="og:image" content="http://shiyueqi.github.io/images/log_anatomy.png">
+<meta property="og:image" content="http://shiyueqi.github.io/images/log_consumer.png">
+<meta property="og:image" content="http://shiyueqi.github.io/images/consumer-groups.png">
+<meta property="og:updated_time" content="2017-12-08T01:32:47.687Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kafka-简介（二）">
+<meta name="twitter:description" content="Kafka-简介（二）">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://shiyueqi.github.io/2017/09/21/Kafka-简介（二）/"/>
+
+
+
+
+
+  <title> Kafka-简介（二） | 石头头头的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?5e9fafb0a8320f0ead8c2b80d6675a83";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">石头头头的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'cYmyKKAbtcky5-pLdKbh','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://shiyueqi.github.io/2017/09/21/Kafka-简介（二）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Shi Yueqi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/pug.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="石头头头的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Kafka-简介（二）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-21T11:17:14+08:00">
+                2017-09-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kafka/" itemprop="url" rel="index">
+                    <span itemprop="name">Kafka</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/21/Kafka-简介（二）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/09/21/Kafka-简介（二）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/09/21/Kafka-简介（二）/" class="leancloud_visitors" data-flag-title="Kafka-简介（二）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  Kafka-简介（二）
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Kafka_u662F_u4E00_u4E2A_u5206_u5E03_u5F0F_u6D41_u6570_u636E_u5E73_u53F0"><a href="#Kafka_u662F_u4E00_u4E2A_u5206_u5E03_u5F0F_u6D41_u6570_u636E_u5E73_u53F0" class="headerlink" title="Kafka是一个分布式流数据平台"></a>Kafka是一个分布式流数据平台</h2><p>一个流数据平台应该具有以下三个主要功能:</p>
+<ol>
+<li>允许发布和订阅流记录。 在这方面,它类似于一个消息队列或消息中间件。</li>
+<li>拥有容错的机制来进行流数据存储</li>
+<li>可实时地处理流数据 </li>
+</ol>
+<p>Kafka适用于什么样的应用？<br>常被用于两大类别的应用程序：</p>
+<ol>
+<li>在系统或应用程序之间，构建实时的、可靠的获取数据的流数据管道。</li>
+<li>构建传输或处理流数据的实时流式应用。</li>
+</ol>
+<p>了解Kafka如何做上述这些事情，让我们深入探索Kafka的功能。</p>
+<p>首先几个概念：</p>
+<ul>
+<li>Kafka作为集群运行在一个或多个服务器上。</li>
+<li>Kafka集群存储流记录，通过topic进行区别和分类。</li>
+<li>每条记录包含一个key，一个value，一个timestamp。</li>
+</ul>
+<p>Kafka有四个核心api：</p>
+<ul>
+<li>Producer API：应用程序发布流数据记录到一个或多个Kafka的topics。</li>
+<li>Consumer API：应用程序可以订阅、消费一个或多个topics，并可对数据进行适当的处理。</li>
+<li>Streams API：应用程序可以作为流处理器，将一个或多个topics作为输入流进行消费；并生产一个输出流输出到一个或多个topics。高效地将输入流转换为输出流。</li>
+<li>Conector API：可以构建和运行可重用的生产者或消费者,连接topics到现有的应用程序或数据系统。 例如,一个关系型数据库的connector可以捕获表的每一个变化。</li>
+</ul>
+<p>Kafka的client端和server端之间，通过一个简单的、高性能、语言无关的TCP协议进行通信。 该TCP协议随着Kafka的迭代更新，而有多个版本，但是实现了向后兼容。 Kafka提供Java客户端API,同时还有多种其他语言的客户端API（待实现、引入）。</p>
+<p><img src="/images/kafka-apis.png" alt="kafka-apis"></p>
+<h2 id="Topics_u548CLogs"><a href="#Topics_u548CLogs" class="headerlink" title="Topics和Logs"></a>Topics和Logs</h2><p>topic是producer（生产者）发布的同一类消息的分类名称或者说是同一类消息的主题。在Kafka中，一个topic通常有多个订阅者进行消息消费。也就是说，一个topic可以有0个，1个或更多的consumers来订阅消息数据。</p>
+<p>对于每个topic，Kafka集群维护分区日志如下图所示：</p>
+<p><img src="/images/log_anatomy.png" alt="log_anatomy"></p>
+<p>每个partition（分区）都是一个有序，消息记录顺序不可变，且向末尾不断追加新的消息的一种存储结构化的日志提交记录的数据结构。分区中的每一条消息记录都会被分配一个唯一的序列id–offset。</p>
+<p>Kafka集群会保留所有已被发布的消息记录，不论该记录是否被消费，当然也可通过配置更改日志保留的生存周期。例如，日志的生存周期策略设置为2天，当消息被发布到server端后，在这之后的两天内，该消息可以被消费。之后，消息将被删除，以释放磁盘空间。Kafka的性能与存储的消息大小无关，因此，存储数据一段时间对于性能没有影响。</p>
+<p><img src="/images/log_consumer.png" alt="log_consumer"></p>
+<p>每个consumer上保存的唯一元数据就是当前consumer在log中消费的offset或者说是position。consumer来对offset进行控制：一般来说，一个consumer的offset随着其不断消费消息而线性增加。但正由于consumer来控制对log消费的偏移量，因此，consumer也可在他想要消费的任何位置开始进行消费。比如，consumer可以重置offset到一个older的offset值，以便可以进行消息重消费。或者offset跳到最近，并从当前开始消费。</p>
+<p>上述功能的组合意味着consumer非常的轻量级，对集群和其他consumers没有任何影响。比如，可以使用命令行工具来对任何topic，消费其末尾的数据，而对现有的消费该topic的consumers没有任何影响。</p>
+<h2 id="u5206_u533APartition"><a href="#u5206_u533APartition" class="headerlink" title="分区Partition"></a>分区Partition</h2><p>Log的partitions均匀分布在Kafka server集群中，每个server处理若干partitions的数据请求。每一个partition可配置若干replica（备份）数量，以增加容错性。</p>
+<p>每一个partition，Kafka集群中会有一台server作为leader，若干个servers作为follower（根据配置replica数量而定）。leader负责处理当前partition的所有的读和写的请求，followers负责备份数据。如果leader宕机或停止运行，followers中的一个会自动成为新的leader。Kafka集群中每一个server会存储多个topics的多个partitions，会在一些partitions中作为leader，其他一些partitions作为followers，已达到整体集群的负载均衡。</p>
+<h2 id="Producers"><a href="#Producers" class="headerlink" title="Producers"></a>Producers</h2><p>Producers（生产者）生产、发布数据到topics。消息发送时，Producer负责分配该消息发送到topic的哪个partition上。默认是通过轮训方式，实现partition的数据分配负载均衡。用户也可在消息发送时，指定消息的key，从而指定分配的partition（用户可以自己实现消息的partition分配算法，根据一定规则，对所有的消息指定特定的key，从而负载均衡）</p>
+<h2 id="Consumers"><a href="#Consumers" class="headerlink" title="Consumers"></a>Consumers</h2><p>每一个Consumer（消费者）需要配置自己的consumer group来标识自己的身份。发布到topic的每一条消息，只会被发送到订阅该topic的consumer group集群中的一台consumer实例。消费者实例可以在不同的进程内，或在不同的服务器机器内。</p>
+<p>如果所有的消费者实例拥有统一的consumer group，那么被订阅的topic的消息数据将会负载均衡分配到consumer集群的实例中。比如，第一条消息发送到实例1，第二条消息发送到实例2，第三条消息发送到实例3…。</p>
+<p>如果所有的消费者实例拥有不一样的consumer group，那么被订阅的topic的消息数据将会以broadcast（广播）的方式分配到每一台consumer实例。</p>
+<p><img src="/images/consumer-groups.png" alt="consumer-groups"></p>
+<p>如上图，Kafka集群有两个servers实例，保存了4个partitions（P0-P3），有2个consumer groups。Consumer group A有两个consumer实例，group B有4个consumer实例。</p>
+<p>通常情况下，topics一般的consumer groups的数量不是很大，每一个consumer group都是一个逻辑订阅。为了增加扩展性和容错性，每一个consumer group都由若干个consumer实例组成。这其实就是发布-订阅模式的定义，只是订阅者是consumers集群，而不是一个单独的进程或实例。</p>
+<p>在Kafka中实现的consumer的消费方式是将日志中的partition分配到消费者实例中，这样每个实例在任何时间点都是对其消费的partitions的独占使用者。上述consumer group成员关系的维护是由Kafka的协议动态地处理。如果新的实例加入consumer group，group中的其他实例所占有的partitions会被分配给新的实例；如果一个实例宕机，它所占有的partitions会被分配给其他存货的consumer实例。</p>
+<p>Kafka只保证在同一partition中消息是有序的；而在一个topic的多个partitions中，消息的顺序性无法保证。每个分区排序结合分区数据的能力,大多数应用程序的关键是充分的。 </p>
+<p>如果要求topic下的所有的消息记录保证顺序性，只能配置topic只有一个partition,这样由于partition内保持消息顺序一致性，因此也保证了topic所有消息的顺序性。但这样也意味着对于每个consumer group来说，只有一个consumer实例会进行消息消费。</p>
+<h2 id="u6D88_u606F_u987A_u5E8F_u6027_26amp_3B_u53EF_u9760_u6027_u4FDD_u8BC1"><a href="#u6D88_u606F_u987A_u5E8F_u6027_26amp_3B_u53EF_u9760_u6027_u4FDD_u8BC1" class="headerlink" title="消息顺序性&amp;可靠性保证"></a>消息顺序性&amp;可靠性保证</h2><p>Kafka有以下保证：</p>
+<ul>
+<li>一个Producer发送消息到指定topic partition时，消息会确保顺序性，即消息在Kafka server的存储顺序性会与消息发送的顺序性保持一致。比如，一个producer发送了消息M1和M2，M1先发送，那么在topic的partition存储时，M1的地址偏移量（offset）会比M2的小，即M1先保存，M2后保存。</li>
+<li>一个Consumer实例消费消息时，收到的消息顺序性会与消息在partition存储的顺序性一致，即地址偏移量（offset）小的消息一定会被小消费。</li>
+<li>如果一个topic有N个replica，将可以容忍N-1个servers宕机，而不会丢失已提交的消息数据记录。</li>
+</ul>
+<h2 id="Kafka_u4F5C_u4E3A_u6D88_u606F_u4E2D_u95F4_u4EF6"><a href="#Kafka_u4F5C_u4E3A_u6D88_u606F_u4E2D_u95F4_u4EF6" class="headerlink" title="Kafka作为消息中间件"></a>Kafka作为消息中间件</h2><p>传统的消息中间件通常有两个模型:queue(队列)和publish-subscribe（发布-订阅）。在队列的模型中,consumers组成consumers pool，consumers会从server读取数据，每条消息记录会分配到consumers pool中的一个consumer;在发布-订阅模型中，消息记录会广播给所有的消费者。每两种模型均有各自的长处和不足。队列模型的优势在于,它允许您将不同的消息记录根据一定规则，发送到多个consumer实例进行处理,这即表示可水平扩展，增加并发处理能力。但不足之处,队列不支持multi-subscriber（对同一message，多订阅），一旦一个consumer实例处理读取了消息记录，该消息就不会再被消费。发布-订阅模型允许广播数据到多个进程,但无法进行水平扩展，因为每一条消息会广播发送到每一个subscriber（订阅者）。</p>
+<p>Kafka中的Consumer group的设计概念，包含了上述两种概念。作为队列，consumer group允许您将不同的消息记录根据一定规则，发送到多个consumer实例进行处理。作为publish-subscribe（发布-订阅）模型，Kafka允许你广播消息到多个consumer groups中。</p>
+<p>Kafka的模型优势在于它所有的topics均有以下两种配置：既可以水平扩展处理进程，又支持multi-subscriber（多订阅）。而不需要用户考虑选择一个或者另一个。</p>
+<p>Kafka相比于传统的消息中间件，拥有更高的可靠性确保消息的顺序性。</p>
+<p>一个传统的消息队列在sever端顺序性地保存消息记录。如果多个consumers对队列进行消费，那么消息记录会被按照其存储的顺序，而被发送出去。然而，即使server发送消息按照消息的存储顺序，消息记录是异步地发送到consumers，因此他们可能在不同的consumers时，顺序性已被破坏，无法保证。这实际上意味着记录的顺序性在并发的消费过程中已丢失。 消息中间件通常通过一个“独家消费”的概念,来解决该问题。即只允许一个进程来进行消费的的队列,但当然,这意味着没有并行处理。</p>
+<p>Kafka在这方面做得更好。通过一个并发的概念–topics内部的partition，Kafka既能够提供消息顺序性的保证；也可以通过多个consumer实例进程的并发处理，完成消息的负载均衡。这是通过将topic的partitions分配给consumer group中的consumers,这样保证每个partition都只被consumer group中的一个consumer消费，并且消费的消息保证了顺序性。同时由于有很多partitions，通过分配到不同的consumer实例中，完成了负载均衡。但是要注意,consumer group中的consumers的数量不可以比partitions的数量多，否则会有部分consumers空闲。</p>
+<h2 id="Kafka_u4F5C_u4E3A_u5B58_u50A8_u7CFB_u7EDF"><a href="#Kafka_u4F5C_u4E3A_u5B58_u50A8_u7CFB_u7EDF" class="headerlink" title="Kafka作为存储系统"></a>Kafka作为存储系统</h2><p>任何的消息队列为了使得消息发布与消息订阅消费解耦，消息队列会为了正在传输的动态消息充当存储的角色。 而Kafka与其不同的是,它是一个很好的存储系统。</p>
+<p>写入Kafka的数据会被写入磁盘，并会被备份，以增加容错性。 Kafka允许producers等待消息发送成功的确认反馈，这样直到消息被完全复制备份才会被认为是写入完成。保证消息持久化的成功，即使server端写入失败。</p>
+<p>Kafka所使用的磁盘存储结构扩展性很好。不论server上的持久化数据有50KB还是50TB，Kafka的性能会一直很好。即，持久化数据量大小对Kafka性能无影响。</p>
+<p>由于重视存储,允许客户端控制他们各自的消息读取位置,也可将Kafka作为一种特殊用途的分布式文件系统,致力于高性能、低延迟提交日志存储、复制和传输。</p>
+<h2 id="Kafka_u7684_u6D41_u5904_u7406"><a href="#Kafka_u7684_u6D41_u5904_u7406" class="headerlink" title="Kafka的流处理"></a>Kafka的流处理</h2><p>Kafka不仅仅限于读、写、存储流式数据，目的更是可以实时地处理流式数据。</p>
+<p>在Kafka中，任何以topic的持续的流式数据作为输入流，基于数据做一些处理，产生持续的数据流并输出到另一个topic的过程，都是流式处理过程。</p>
+<p>例如,零售应用程序可能以销售额和货物作为输入流,基于上述数据进行计算，产生重排序的数据和建议零售价的输出流。</p>
+<p>基于Producer和Consumer API可以直接做一些简单的处理过程。然而对于更复杂的转换，Kafka提供了一个完全集成的Streams API。这一功能支持构建复杂的流式数据聚合或加入流式的处理过程的应用程序。</p>
+<p>此工具帮助解决这种类型的应用程序所面临的困难问题:处理无序的数据,对输入流数据再加工,执行有状态的计算等。</p>
+<p>Streams API基于Kafka原始的核心模块构建，并提供以下功能：在面对输入流时，使用Producer API和Consumer API；在面对有状态的存储，使用Kafka；在面对容错机制时，在流式处理过程实例中，均使用相同的group。</p>
+<h2 id="Kafka_u529F_u80FD_u805A_u5408"><a href="#Kafka_u529F_u80FD_u805A_u5408" class="headerlink" title="Kafka功能聚合"></a>Kafka功能聚合</h2><p>消息中间件、存储和流式处理的组合看起来并不常见，但是对于Kafka来说，如果想作为一个流式平台，这是必不可少的。</p>
+<p>一个分布式文件系统，比如HDFS允许批量存储静态文件。这样一个支持存储和处理历史数据的系统是非常有效的。</p>
+<p>传统的消息中间件支持处理在用户订阅后，到达的新的消息。按照这种方式架构设计的应用程序将会处理未来到达的消息。</p>
+<p>Kafka包含了这两种能力,Kafka的这种功能的组合对于作为流数据应用和流数据管道的平台是非常重要的。</p>
+<p>通过结合存储和低延迟订阅,流数据应用程序可以以同样的方式，对待和处理过去的存量数据和未来的新的数据。比如一个应用程序可以处理历史存储的存量数据，当它到达最后一个记录时，应用程序不需要停止，而是当新的数据的到来，可以继续保持处理。 对于批处理应用和消息驱动的应用，这是一个广义的流处理的概念。</p>
+<p>流数据管道也是同样的，使用Kafka的组合订阅模式，可以对实时的事件获得低延迟的流数据管道;可靠的数据存储能力使得Kafka在面对以下场景时，可以安全保证重要数据的可靠性-1.保证数据准确送达；2.仅周期性的加载数据的脱机系统的集成；3.可长期维护的应用程序。Kafka的流式处理组件，使得当数据到达即进行传输，变为可能。</p>
+<p>更多关于可靠性、API和功能的信息，见Kafka的其余的文档。</p>
+<h2 id="u53C2_u8003_u8D44_u6599"><a href="#u53C2_u8003_u8D44_u6599" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="http://kafka.apache.org/documentation/" title="http://kafka.apache.org/documentation/" target="_blank" rel="external">http://kafka.apache.org/documentation/</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Kafka/" rel="tag"># Kafka</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/21/Kafka-简介（一）/" rel="next" title="Kafka-简介（一）">
+                <i class="fa fa-chevron-left"></i> Kafka-简介（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/21/Kafka使用场景/" rel="prev" title="Kafka-使用场景">
+                Kafka-使用场景 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/pug.jpg"
+               alt="Shi Yueqi" />
+          <p class="site-author-name" itemprop="name">Shi Yueqi</p>
+           
+              <p class="site-description motion-element" itemprop="description">In me the tiger sniffs the rose.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/shiyueqi" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/shiyueqi107" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka_u662F_u4E00_u4E2A_u5206_u5E03_u5F0F_u6D41_u6570_u636E_u5E73_u53F0"><span class="nav-number">1.</span> <span class="nav-text">Kafka是一个分布式流数据平台</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Topics_u548CLogs"><span class="nav-number">2.</span> <span class="nav-text">Topics和Logs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5206_u533APartition"><span class="nav-number">3.</span> <span class="nav-text">分区Partition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Producers"><span class="nav-number">4.</span> <span class="nav-text">Producers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Consumers"><span class="nav-number">5.</span> <span class="nav-text">Consumers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u6D88_u606F_u987A_u5E8F_u6027_26amp_3B_u53EF_u9760_u6027_u4FDD_u8BC1"><span class="nav-number">6.</span> <span class="nav-text">消息顺序性&可靠性保证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka_u4F5C_u4E3A_u6D88_u606F_u4E2D_u95F4_u4EF6"><span class="nav-number">7.</span> <span class="nav-text">Kafka作为消息中间件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka_u4F5C_u4E3A_u5B58_u50A8_u7CFB_u7EDF"><span class="nav-number">8.</span> <span class="nav-text">Kafka作为存储系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka_u7684_u6D41_u5904_u7406"><span class="nav-number">9.</span> <span class="nav-text">Kafka的流处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka_u529F_u80FD_u805A_u5408"><span class="nav-number">10.</span> <span class="nav-text">Kafka功能聚合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u53C2_u8003_u8D44_u6599"><span class="nav-number">11.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Shi Yueqi</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://shiyueqi.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://shiyueqi.github.io/2017/09/21/Kafka-简介（二）/';
+          this.page.identifier = '2017/09/21/Kafka-简介（二）/';
+          this.page.title = 'Kafka-简介（二）';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://shiyueqi.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("N7gFtBpJT2kRFRxKVGQNisQ3-gzGzoHsz", "svhqcJfvubefdP37LD07sxhX");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
