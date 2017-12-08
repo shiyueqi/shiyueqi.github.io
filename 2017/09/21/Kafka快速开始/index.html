@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Kafka," />
+  <meta name="keywords" content="Kafka,消息中间件," />
 
 
 
@@ -87,17 +87,17 @@
 
 
 
-<meta name="description" content="Kafka最佳实践">
+<meta name="description" content="Kafka快速开始">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kafka快速开始">
 <meta property="og:url" content="http://shiyueqi.github.io/2017/09/21/Kafka快速开始/index.html">
 <meta property="og:site_name" content="石头头头的博客">
-<meta property="og:description" content="Kafka最佳实践">
+<meta property="og:description" content="Kafka快速开始">
 <meta property="og:image" content="http://shiyueqi.github.io/./media/zookeeper_myid.jpg">
-<meta property="og:updated_time" content="2017-12-08T01:45:14.571Z">
+<meta property="og:updated_time" content="2017-12-08T02:01:56.946Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka快速开始">
-<meta name="twitter:description" content="Kafka最佳实践">
+<meta name="twitter:description" content="Kafka快速开始">
 
 
 
@@ -415,7 +415,7 @@
 
           
               <div class="post-description">
-                  Kafka最佳实践
+                  Kafka快速开始
               </div>
           
 
@@ -494,7 +494,7 @@ server.3=172.21.195.91:2889:3889
 <h3 id="kafka_u5B89_u88C5"><a href="#kafka_u5B89_u88C5" class="headerlink" title="kafka安装"></a>kafka安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf kafka_2.<span class="number">11</span>-<span class="number">0.11</span>.<span class="number">0.0</span>.tgz</span><br></pre></td></tr></table></figure>
 <h3 id="kafka_u914D_u7F6E-1"><a href="#kafka_u914D_u7F6E-1" class="headerlink" title="kafka配置"></a>kafka配置</h3><p>采用3台实例部署，ip地址为172.21.198.89，172.21.198.90，172.21.198.91。</p>
 <p>配置第一台 kafka 实例</p>
-<p>首先进入第一台 kafka 实例 config 目录，配置server.properties文件。其中几个最关键的参数如下，其他详细配置参见-<a href="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_user_guide/" title="http://172.17.254.218:8089/doc_center/site/upkafka/upkafka_user_guide/" target="_blank" rel="external">Kafka用户手册</a>：</p>
+<p>首先进入第一台 kafka 实例 config 目录，配置server.properties文件。其中几个最关键的参数如下，其他详细配置参见-<a href="https://shiyueqi.github.io/2017/09/21/Kafka%E7%94%A8%E6%88%B7%E6%89%8B%E5%86%8C/" title="https://shiyueqi.github.io/2017/09/21/Kafka%E7%94%A8%E6%88%B7%E6%89%8B%E5%86%8C/">Kafka用户手册</a>：</p>
 <pre><code>broker.id=0  
 listeners=PLAINTEXT://172.21.195.89:9092
 log.dirs=/home/ggzjs/kafka-logs
@@ -560,6 +560,8 @@ zookeeper.connect=172.21.195.89:2181,172.21.195.90:2181,172.21.195.91:2181
           
             <a href="/tags/Kafka/" rel="tag"># Kafka</a>
           
+            <a href="/tags/消息中间件/" rel="tag"># 消息中间件</a>
+          
         </div>
       
 
@@ -571,8 +573,8 @@ zookeeper.connect=172.21.195.89:2181,172.21.195.90:2181,172.21.195.91:2181
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/21/Kafka用户手册/" rel="next" title="Kafka用户手册">
-                <i class="fa fa-chevron-left"></i> Kafka用户手册
+              <a href="/2017/09/21/Kafka最佳实践/" rel="next" title="Kafka最佳实践">
+                <i class="fa fa-chevron-left"></i> Kafka最佳实践
               </a>
             
           </div>
@@ -581,8 +583,8 @@ zookeeper.connect=172.21.195.89:2181,172.21.195.90:2181,172.21.195.91:2181
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/09/21/Kafka-简介（一）/" rel="prev" title="Kafka-简介（一）">
-                Kafka-简介（一） <i class="fa fa-chevron-right"></i>
+              <a href="/2017/09/21/Kafka用户手册/" rel="prev" title="Kafka用户手册">
+                Kafka用户手册 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -684,7 +686,7 @@ zookeeper.connect=172.21.195.89:2181,172.21.195.90:2181,172.21.195.91:2181
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
